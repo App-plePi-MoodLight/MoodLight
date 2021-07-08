@@ -21,12 +21,17 @@ import kotlinx.coroutines.launch
 
 class LoginActivity : AppCompatActivity() {
 
-    private lateinit var auth: FirebaseAuth
+    private val auth: FirebaseAuth
+    private val initialActivity: InitialActivity
+
+    init {
+        auth = Firebase.auth
+        initialActivity = InitialActivity.initialActivity as InitialActivity
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
-        val initialActivity: InitialActivity = InitialActivity.initialActivity as InitialActivity
-        auth = Firebase.auth
 
         findViewById<AppCompatButton>(R.id.loginBtn).setOnClickListener {
             val email: String = findViewById<EditText>(R.id.loginIdEtv).text.toString()

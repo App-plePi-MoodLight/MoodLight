@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".screen.login.LoginActivity">
+
+    <EditText
+        android:id="@+id/loginIdEtv"
+        android:layout_width="0dp"
+        android:layout_height="60sp"
+        android:layout_margin="20sp"
+        android:hint="이메일 입력"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.45" />
+
+    <EditText
+        android:id="@+id/loginPasswordEtv"
+        android:layout_width="0dp"
+        android:layout_height="60sp"
+        android:layout_margin="20sp"
+        android:hint="비밀번호 입력"
+        android:inputType="textPassword"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/loginIdEtv" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/loginBtn"
+        android:layout_width="0dp"
+        android:layout_height="60sp"
+        android:layout_margin="20sp"
+        android:text="로그인"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/loginPasswordEtv" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

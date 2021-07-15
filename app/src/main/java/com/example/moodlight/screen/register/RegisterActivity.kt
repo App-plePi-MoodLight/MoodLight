@@ -6,6 +6,7 @@ import android.util.Log
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.widget.AppCompatButton
+import androidx.lifecycle.ViewModelProvider
 import com.example.moodlight.R
 import com.example.moodlight.util.FirebaseUtil
 import com.google.firebase.auth.FirebaseAuth
@@ -15,24 +16,28 @@ import com.google.firebase.ktx.Firebase
 
 class RegisterActivity : AppCompatActivity() {
 
-    private lateinit var auth: FirebaseAuth
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register)
-        auth = Firebase.auth
 
-        findViewById<AppCompatButton>(R.id.registerBtn).setOnClickListener {
+        val registerFragment1 = RegisterFragment1();
+
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.registerFrame, registerFragment1)
+            .commit()
+
+/*        findViewById<AppCompatButton>(R.id.registerBtn).setOnClickListener {
 
             val email : String = findViewById<EditText>(R.id.registerIdEtv).text.toString()
             val password : String = findViewById<EditText>(R.id.registerPasswordEtv).text.toString()
             val nickname : String = findViewById<EditText>(R.id.registerNicknameEtv).text.toString()
-            auth.createUserWithEmailAndPassword(email, password)
+            FirebaseUtil.getAuth().createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this) { task ->
                     if (task.isSuccessful) {
                         val map = hashMapOf(
                             "nickname" to nickname
                         )
-                        FirebaseFirestore.getInstance().collection("users")
+                        FirebaseUtil.getFireStoreInstance().collection("users")
                             .document(FirebaseUtil.getUid())
                             .set(map)
                             .addOnSuccessListener {
@@ -50,6 +55,6 @@ class RegisterActivity : AppCompatActivity() {
                             Toast.LENGTH_SHORT).show()
                     }
                 }
-        }
+        }*/
     }
 }

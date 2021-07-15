@@ -12,6 +12,7 @@ import com.example.moodlight.database.UserData
 import com.example.moodlight.database.UserDatabase
 import com.example.moodlight.screen.MainActivity
 import com.example.moodlight.screen.initial.InitialActivity
+import com.example.moodlight.util.FirebaseUtil
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
@@ -21,13 +22,7 @@ import kotlinx.coroutines.launch
 
 class LoginActivity : AppCompatActivity() {
 
-    private val auth: FirebaseAuth
-    private val initialActivity: InitialActivity
-
-    init {
-        auth = Firebase.auth
-        initialActivity = InitialActivity.initialActivity as InitialActivity
-    }
+    private val initialActivity: InitialActivity = InitialActivity.initialActivity as InitialActivity
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,14 +32,14 @@ class LoginActivity : AppCompatActivity() {
             val email: String = findViewById<EditText>(R.id.loginIdEtv).text.toString()
             val password: String = findViewById<EditText>(R.id.loginPasswordEtv).text.toString()
 
-            auth.signInWithEmailAndPassword(email, password)
+            FirebaseUtil.getAuth().signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this) { task ->
                     if (task.isSuccessful) {
                         // Sign in success, update UI with the signed-in user's information
                         val userData = UserData(email, password)
 
                         val db = UserDatabase.getInstance(applicationContext)
-                        CoroutineScope(Dispatchers.IO).launch {
+                            CoroutineScope(Dispatchers.IO).launch {
                             db!!.userDao().insert(userData)
                         }
 

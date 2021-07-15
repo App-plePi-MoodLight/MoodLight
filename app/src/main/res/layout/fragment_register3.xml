@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".screen.register.RegisterFragment3">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.example.moodlight.screen.register.RegisterViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/register3Tv1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="25sp"
+            android:fontFamily="@font/roboto_bold"
+            android:text="닉네임 입력"
+            android:textColor="#000000"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <EditText
+            android:id="@+id/register3Etv1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="20sp"
+            android:backgroundTint="#000000"
+            android:fontFamily="@font/roboto_medium"
+            android:hint="닉네임을 입력해주세요"
+            android:inputType="text"
+            android:text="@={viewModel.nickname}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/register3Tv1" />
+
+
+        <ImageView
+            android:id="@+id/register3Iv1"
+            android:layout_width="15sp"
+            android:layout_height="15sp"
+            android:layout_marginStart="20sp"
+            android:src="@drawable/img_carbon_information"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="@id/register3Tv2"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/register3Tv2" />
+
+        <TextView
+            android:id="@+id/register3Tv2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5sp"
+
+            android:layout_marginTop="10sp"
+            android:fontFamily="@font/roboto_medium"
+            android:visibility="invisible"
+            app:layout_constraintStart_toEndOf="@id/register3Iv1"
+            app:layout_constraintTop_toBottomOf="@id/register3Etv1" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/register3Btn1"
+            android:layout_width="0dp"
+            android:layout_height="55sp"
+            android:layout_marginStart="20sp"
+            android:layout_marginEnd="20sp"
+            android:layout_marginBottom="32sp"
+            android:background="@drawable/btn_design_1"
+            android:enabled="false"
+            android:fontFamily="@font/roboto_bold"
+            android:text="다음"
+            android:textSize="15sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

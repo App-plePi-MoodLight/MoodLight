@@ -13,6 +13,10 @@ import com.example.moodlight.databinding.FragmentMain2Binding
 import com.example.moodlight.util.DataType
 import java.util.*
 import kotlin.collections.ArrayList
+import com.example.moodlight.screen.main2.diaryRecyclerview.data.DateAdapter
+import com.example.moodlight.screen.main2.diaryRecyclerview.data.DateClass
+import com.example.moodlight.screen.main2.diaryRecyclerview.data.QnAData
+import java.util.*
 
 class MainFragment2 : Fragment() {
 
@@ -28,6 +32,7 @@ class MainFragment2 : Fragment() {
     }
 
     private lateinit var binding : FragmentMain2Binding
+    var list : ArrayList<DateClass> = ArrayList()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -153,4 +158,14 @@ class MainFragment2 : Fragment() {
         setCalendar()
     }
 
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        val data : ArrayList<QnAData> = ArrayList()
+        data.add(QnAData("오늘 점심은 뭐 먹죠?", "점심을 먹죠 ㅎㅎ"))
+        data.add(QnAData("오늘 저녁은 뭐 먹죠?", "저녁을 먹죠 ㅎㅎ"))
+        list.add(DateClass("3월 16일", data))
+        list.add(DateClass("4월 16일", data))
+        binding.recycler.adapter = DateAdapter(requireContext(), list)
+        binding.recycler.setHasFixedSize(true)
+    }
 }

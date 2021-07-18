@@ -1,16 +1,13 @@
-package com.example.moodlight.screen.main2
+package com.example.moodlight.screen.main2.calendar
 
-import android.content.Context
 import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.moodlight.R
 import com.example.moodlight.util.DataType
-import kotlin.collections.ArrayList
 
 class Main2CalendarAdapter (val viewModel : Main2CalendarViewModel) :
     RecyclerView.Adapter<Main2CalendarAdapter.CalendarViewHolder>() {

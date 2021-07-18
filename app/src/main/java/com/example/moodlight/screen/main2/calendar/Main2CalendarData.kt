@@ -1,4 +1,4 @@
-package com.example.moodlight.screen.main2
+package com.example.moodlight.screen.main2.calendar
 
 data class Main2CalendarData(
     var day : String,

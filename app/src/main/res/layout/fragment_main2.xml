@@ -2,7 +2,6 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".screen.main2.MainFragment2">
 
     <data>
@@ -42,6 +41,8 @@
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:onClick="@{fragment::minusMonth}"
+            android:src="@drawable/left_btn"
+            android:background="#ffffff"
             android:layout_marginEnd="10sp"
             app:layout_constraintEnd_toStartOf="@id/main2DateTv"
             app:layout_constraintTop_toTopOf="@id/main2DateTv"
@@ -78,6 +79,7 @@
             />
         
         <LinearLayout
+            android:id="@+id/main2CalendarLayout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toBottomOf="@id/main2DateTv"
@@ -170,26 +172,13 @@
 
         </LinearLayout>
 
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:fontFamily="@font/roboto_bold"
-                android:text="나의 감정일지"
-                android:textColor="#212121"
-                android:textSize="18sp" />
-        </Toolbar>
-
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraintLayout"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             app:layout_constraintHeight_percent="0.4"
-            app:layout_constraintTop_toBottomOf="@+id/main2Toolbar" />
+            app:layout_constraintTop_toBottomOf="@+id/main2Toolbar"
+            tools:layout_editor_absoluteX="0dp" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler"
@@ -199,7 +188,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
+            app:layout_constraintTop_toBottomOf="@+id/main2CalendarLayout" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

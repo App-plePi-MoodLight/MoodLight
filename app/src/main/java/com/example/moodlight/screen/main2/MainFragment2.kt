@@ -51,6 +51,7 @@ class MainFragment2 : Fragment() {
 
         val adapter : Main2CalendarAdapter = Main2CalendarAdapter(calendarViewModel)
         binding.main2CalendarRecyclerView.adapter = adapter
+        calendarViewModel.today = calendarHelper.getDate()
 
         setCalendar()
     }

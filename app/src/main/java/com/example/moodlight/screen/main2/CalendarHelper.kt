@@ -28,6 +28,10 @@ class CalendarHelper {
         return calendar.get(Calendar.YEAR)
     }
 
+    fun getDate () : Int {
+        return calendar.get(Calendar.DATE)
+    }
+
     fun getStartDayOfWeek (): Int {
         val cal : Calendar = calendar
         cal.set(Calendar.DAY_OF_MONTH, 1)

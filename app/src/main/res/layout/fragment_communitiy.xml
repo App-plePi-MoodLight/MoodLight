@@ -4,12 +4,18 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+        <variable
+            name="fragment"
+            type="com.example.moodlight.screen.main1.CommunitiyFragment" />
+        <variable
+            name="color"
+            type="com.example.moodlight.screen.main1.ColorModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".screen.main1.CommunityActivity">
+        tools:context=".screen.main1.CommunitiyFragment">
 
         <Toolbar
             android:id="@+id/community_toolbar"
@@ -45,8 +51,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/community_toolbar"/>
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/answer_btn"
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/answerBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
@@ -54,22 +60,25 @@
             android:layout_marginLeft="30dp"
             android:padding="15dp"
             app:cornerRadius="30dp"
-            android:backgroundTint="#c4c4c4"
+            android:background="@drawable/btn_happy_background"
             android:text="답변하기"
             android:textSize="15sp"
             android:textColor="#ffffff"
             android:fontFamily="@font/roboto_bold"
+            android:onClick="@{fragment::intentAnswer}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/today_question"/>
 
         <ImageView
-            android:id="@+id/comment_icon1"
+            android:id="@+id/comment_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="17dp"
+            android:src="@drawable/comment_icon"
+            app:layout_constraintBottom_toBottomOf="@+id/hint_text"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/hint_text"/>
+            app:layout_constraintTop_toTopOf="@id/hint_text" />
 
         <TextView
             android:id="@+id/hint_text"
@@ -78,11 +87,14 @@
             android:layout_marginTop="40dp"
             android:layout_marginLeft="8dp"
             android:text="다른 사람들의 답변에 댓글을 남겨보세요"
-            app:layout_constraintStart_toStartOf="@id/comment_icon1"
+            android:textSize="14sp"
+            android:textColor="#000000"
+            android:fontFamily="@font/roboto_medium"
+            app:layout_constraintStart_toEndOf="@id/comment_icon"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/answer_btn"
+            app:layout_constraintTop_toBottomOf="@id/answerBtn"
             app:layout_constraintHorizontal_bias="0.0"/>
-        
+
         <androidx.recyclerview.widget.RecyclerView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:drawable="@drawable/track_unselect_happy"
+        android:state_checked="false"/>
+
+    <item
+        android:drawable="@drawable/track_select_happy"
+        android:state_checked="true"/>
+</selector>

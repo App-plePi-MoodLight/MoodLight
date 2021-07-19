@@ -16,4 +16,11 @@
         <item name="windowNoTitle">true</item>
         <!-- no Title Bar -->
     </style>
+    <style name="switchHappy" parent="TextAppearance.AppCompat.Widget.Switch">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="track">@drawable/switch_happy</item>
+        <item name="android:thumb">@drawable/switch_thumb_happy</item>
+        <item name="switchMinWidth">48dp</item>
+    </style>
 </resources>

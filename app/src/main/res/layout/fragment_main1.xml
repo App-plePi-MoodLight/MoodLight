@@ -4,13 +4,16 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+        <variable
+            name="fragment"
+            type="com.example.moodlight.screen.main1.MainFragment1" />
+
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".screen.main1.MainFragment1">
 
-        <!-- TODO: Update blank fragment layout -->
         <TextView
             android:id="@+id/todaymood"
             android:layout_width="wrap_content"
@@ -41,8 +44,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="18dp">
                 <ImageButton
+                    android:id="@+id/happy"
                     android:layout_width="82dp"
                     android:layout_height="82dp"
+                    android:onClick="@{fragment::setMood}"
                     />
                 <TextView
                     android:layout_width="wrap_content"
@@ -62,8 +67,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="18dp">
                 <ImageButton
+                    android:id="@+id/mad"
                     android:layout_width="82dp"
                     android:layout_height="82dp"
+                    android:onClick="@{fragment::setMood}"
                     />
 
                 <TextView
@@ -83,8 +90,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="18dp">
                 <ImageButton
+                    android:id="@+id/sad"
                     android:layout_width="82dp"
                     android:layout_height="82dp"
+                    android:onClick="@{fragment::setMood}"
                     />
                 <TextView
                     android:layout_width="wrap_content"
@@ -104,20 +113,19 @@
             android:id="@+id/enterbtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
             android:layout_marginBottom="30dp"
-            android:layout_marginLeft="16dp"
+            android:backgroundTint="#212121"
+            android:fontFamily="@font/roboto_bold"
+            android:onClick="@{fragment::changeFragment}"
             android:paddingTop="16dp"
             android:paddingBottom="16dp"
-            app:cornerRadius="7dp"
-            android:backgroundTint="#212121"
-            android:textSize="15sp"
             android:text="입장하기"
-            android:fontFamily="@font/roboto_bold"
+            android:textSize="15sp"
+            app:cornerRadius="7dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/moodpicker"
-            app:layout_constraintVertical_bias="1.0"/>
+            app:layout_constraintStart_toStartOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

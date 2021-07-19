@@ -33,28 +33,29 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom">
-
             <com.google.android.material.bottomnavigation.BottomNavigationView
                 android:id="@+id/bottomNavigation"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:clickable="false"
-                app:backgroundTint="@android:color/transparent"
+                app:itemTextColor="@color/bottom_bar_item_selected"
+                app:itemIconTint="@color/bottom_bar_item_selected"
+                app:backgroundTint="@color/fui_transparent"
                 app:elevation="0dp"
                 app:menu="@menu/menu" />
 
         </FrameLayout>
-
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/faBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
             android:elevation="4dp"
-            app:backgroundTint="@color/purple_500"
+            app:backgroundTint="@color/black"
             app:layout_anchor="@id/bottombar_main"
             app:rippleColor="@android:color/white"
+            android:src="@drawable/ic_post"
+            app:fabCustomSize="80dp"
+            app:maxImageSize="45dp"
             app:tint="@android:color/white" />
-
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
-
 </androidx.constraintlayout.widget.ConstraintLayout>

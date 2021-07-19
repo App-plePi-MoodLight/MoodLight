@@ -2,7 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:id="@+id/main2"
         android:title="프로필"
-        android:icon="@drawable/ic_launcher_foreground"
+        android:icon="@drawable/ic_group"
         />
     <item
         android:checked="false"
@@ -10,6 +10,6 @@
         android:enabled="false"/>
     <item android:id="@+id/main3"
         android:title="설정"
-        android:icon="@drawable/ic_launcher_foreground"
+        android:icon="@drawable/ic_setting"
         />
 </menu>

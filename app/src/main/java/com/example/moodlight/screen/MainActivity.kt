@@ -1,8 +1,11 @@
 package com.example.moodlight.screen
 
+import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.example.moodlight.R
 import com.example.moodlight.screen.main1.MainFragment1
@@ -29,6 +32,9 @@ class MainActivity : AppCompatActivity() {
         if (networkStatus == NetworkStatus.TYPE_NOT_CONNECTED) {
             Toast.makeText(baseContext, "무드등을 이용하시려면 Wifi연결이 필요합니다.", Toast.LENGTH_SHORT).show()
         }
+//        val navView: BottomNavigationView = findViewById(R.id.bottomNavigation)
+//// sets background color for the whole bar
+//        navView.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimaryDark))
 
         findViewById<BottomNavigationView>(R.id.bottomNavigation).setOnItemSelectedListener { item ->
             when (item.itemId) {

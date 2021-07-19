@@ -1,5 +1,7 @@
 package com.example.moodlight.screen.main2
 
+import android.content.ContentValues.TAG
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -38,7 +40,6 @@ class MainFragment2 : Fragment() {
     var list : ArrayList<DateClass> = ArrayList()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
     }
 
     override fun onCreateView(
@@ -51,8 +52,19 @@ class MainFragment2 : Fragment() {
         binding.fragment = this
         Log.e("version","3")
         setUi()
-
+        dataLoding()
         return binding.root
+    }
+
+    private fun dataLoding() {
+        val data : ArrayList<QnAData> = ArrayList()
+        data.add(QnAData("오늘 점심은 뭐 먹죠?", "점심을 먹죠 ㅎㅎ"))
+        data.add(QnAData("오늘 저녁은 뭐 먹죠?", "저녁을 먹죠 ㅎㅎ"))
+        list.add(DateClass("3월 16일", data))
+        list.add(DateClass("4월 16일", data))
+        binding.recycler.adapter = DateAdapter(requireContext(), list)
+        binding.recycler.setHasFixedSize(true)
+        Log.d(TAG, "onActivityCreated: 내 리스트 data$data $list")
     }
 
     private fun setUi () {
@@ -161,14 +173,5 @@ class MainFragment2 : Fragment() {
         setCalendar()
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        val data : ArrayList<QnAData> = ArrayList()
-        data.add(QnAData("오늘 점심은 뭐 먹죠?", "점심을 먹죠 ㅎㅎ"))
-        data.add(QnAData("오늘 저녁은 뭐 먹죠?", "저녁을 먹죠 ㅎㅎ"))
-        list.add(DateClass("3월 16일", data))
-        list.add(DateClass("4월 16일", data))
-        binding.recycler.adapter = DateAdapter(requireContext(), list)
-        binding.recycler.setHasFixedSize(true)
-    }
+
 }

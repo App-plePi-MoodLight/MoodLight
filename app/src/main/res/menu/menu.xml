@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:id="@+id/main1"
-        android:title="포스트"
-        android:icon="@drawable/ic_launcher_foreground"
-        />
     <item android:id="@+id/main2"
         android:title="프로필"
-        android:icon="@drawable/ic_launcher_foreground"
+        android:icon="@drawable/ic_group"
         />
+    <item
+        android:checked="false"
+        android:title=""
+        android:enabled="false"/>
     <item android:id="@+id/main3"
         android:title="설정"
-        android:icon="@drawable/ic_launcher_foreground"
+        android:icon="@drawable/ic_setting"
         />
 </menu>

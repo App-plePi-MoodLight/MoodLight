@@ -31,4 +31,7 @@ class  DateAdapter(val context: Context, val DataList: ArrayList<DateClass>): Re
     }
     override fun getItemCount() = DataList.size
 
+    override fun getItemViewType(position: Int): Int {
+        return position
+    }
 }

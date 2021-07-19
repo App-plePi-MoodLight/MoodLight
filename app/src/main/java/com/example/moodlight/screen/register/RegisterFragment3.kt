@@ -1,5 +1,6 @@
 package com.example.moodlight.screen.register
 
+import android.content.ContentValues.TAG
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
@@ -13,6 +14,7 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.example.moodlight.Hash.sha
 import com.example.moodlight.R
 import com.example.moodlight.database.UserData
 import com.example.moodlight.database.UserDatabase
@@ -45,6 +47,9 @@ class RegisterFragment3 : Fragment() {
         )
         binding.viewModel = viewModel
         lateinit var nicknameArray: ArrayList<String>
+
+
+        Log.d(TAG, "onCreateView: 비밀번호 ${sha.encryptSHA(viewModel.password.value)}")
 
         CoroutineScope(Dispatchers.IO).launch {
             FirebaseUtil.getFireStoreInstance().collection("users")
@@ -128,8 +133,8 @@ class RegisterFragment3 : Fragment() {
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     val map = hashMapOf(
-                        "nickname" to nickname
-
+                        "nickname" to nickname,
+                        "password" to sha.encryptSHA(viewModel.password.value)
                     )
 
                     CoroutineScope(Dispatchers.IO).launch {
@@ -181,9 +186,7 @@ class RegisterFragment3 : Fragment() {
                                 }
                             }
                     }
-
                 }
-
             }
     }
 }

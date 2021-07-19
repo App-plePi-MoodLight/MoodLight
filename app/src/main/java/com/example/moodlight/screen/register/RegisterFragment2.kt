@@ -40,7 +40,6 @@ class RegisterFragment2 : Fragment() {
             if (!it.equals("")) {
                 if (Expression.isValidPw(it))
                     setActive()
-
                 else
                     setFailureInActive()
             }

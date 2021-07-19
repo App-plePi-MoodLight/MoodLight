@@ -44,7 +44,6 @@ class RegisterFragment1 : Fragment() {
                     emailArray = it.get("emailArray")!! as ArrayList<String>
                     Log.e("test",emailArray[0])
                 }
-
         }
 
 
@@ -65,7 +64,6 @@ class RegisterFragment1 : Fragment() {
                 else
                     setFailureInActive()
             }
-
         })
 
 
@@ -117,5 +115,4 @@ class RegisterFragment1 : Fragment() {
         if (binding.register1Btn1.isEnabled)
             binding.register1Btn1.isEnabled = false
     }
-
 }

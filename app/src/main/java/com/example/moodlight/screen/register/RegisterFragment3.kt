@@ -128,8 +128,11 @@ class RegisterFragment3 : Fragment() {
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     val map = hashMapOf(
-                        "nickname" to nickname
-
+                        "nickname" to nickname,
+                        "email" to viewModel.email.value,
+                        "joinTime" to System.currentTimeMillis(),
+                        "commentAlarm" to false,
+                        "likeAlarm" to false
                     )
 
                     CoroutineScope(Dispatchers.IO).launch {

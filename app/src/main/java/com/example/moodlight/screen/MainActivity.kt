@@ -1,6 +1,7 @@
 package com.example.moodlight.screen
 
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -24,6 +25,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         changeFragment(mainFragment1)
+
+        Log.e("a", System.currentTimeMillis().toString())
 
         if (networkStatus == NetworkStatus.TYPE_NOT_CONNECTED) {
             Toast.makeText(baseContext, "무드등을 이용하시려면 Wifi연결이 필요합니다.", Toast.LENGTH_SHORT).show()

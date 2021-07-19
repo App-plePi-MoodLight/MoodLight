@@ -22,8 +22,8 @@ import kotlinx.coroutines.launch
 
 class MainFragment3 : Fragment() {
 
-    private lateinit var binding : FragmentMain3Binding
-    private val viewModel : Main3ViewModel by lazy {
+    private lateinit var binding: FragmentMain3Binding
+    private val viewModel: Main3ViewModel by lazy {
         ViewModelProvider(this).get(Main3ViewModel::class.java)
     }
 
@@ -45,7 +45,6 @@ class MainFragment3 : Fragment() {
 
             Main3Helper.setCommentAlarm(isChecked)
             viewModel.commentIsChecked.value = isChecked
-
         }
 
         binding.main3LikeSwitch.setOnCheckedChangeListener { buttonView, isChecked ->
@@ -56,16 +55,19 @@ class MainFragment3 : Fragment() {
 
         setUi()
 
+
+
         return binding.root
     }
 
+
     @SuppressLint("SetTextI18n")
-    private fun setUi () : Unit {
-        CoroutineScope(Dispatchers.IO).launch{
+    private fun setUi() {
+        CoroutineScope(Dispatchers.IO).launch {
             FirebaseUtil.getFireStoreInstance().collection("users")
                 .document(FirebaseUtil.getUid())
                 .get()
-                .addOnCompleteListener{
+                .addOnCompleteListener {
                     val millisTime = it.result!!.get("joinTime") as Long
                     val time = GetTime.getTime(millisTime)
                     viewModel.username.value = it.result!!.get("nickname") as String
@@ -78,7 +80,7 @@ class MainFragment3 : Fragment() {
         }
     }
 
-    public fun signOut(view : View) : Unit {
+    public fun signOut(view: View): Unit {
         CoroutineScope(Dispatchers.IO).launch {
             UserDatabase.getInstance(requireContext())!!.userDao().deleteUserLoginTable()
         }
@@ -87,5 +89,4 @@ class MainFragment3 : Fragment() {
         requireActivity().startActivity(intent)
         requireActivity().finish()
     }
-
 }

@@ -4,6 +4,8 @@ import android.annotation.SuppressLint
 import java.text.SimpleDateFormat
 
 class GetTime {
+
+
     companion object {
         fun getTime(productTime: Long): String? {
             val currentTime = System.currentTimeMillis()

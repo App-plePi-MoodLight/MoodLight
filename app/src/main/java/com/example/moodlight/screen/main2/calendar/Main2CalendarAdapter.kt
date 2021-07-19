@@ -43,12 +43,15 @@ class Main2CalendarAdapter (val viewModel : Main2CalendarViewModel) :
                 DataType.HAPPY_MOOD ->
                     itemCalendarDateTv.setBackgroundResource(R.drawable.happy_background)
 
-                DataType.SAD_MOOD ->
+                DataType.SAD_MOOD -> {
                     itemCalendarDateTv.setBackgroundResource(R.drawable.sad_background)
+                    itemCalendarDateTv.setTextColor(Color.parseColor("#ffffff"))
 
-                DataType.MAD_MOOD ->
+                }
+                DataType.MAD_MOOD -> {
                     itemCalendarDateTv.setBackgroundResource(R.drawable.mad_background)
-
+                    itemCalendarDateTv.setTextColor(Color.parseColor("#ffffff"))
+                }
                 else -> {}
             }
 

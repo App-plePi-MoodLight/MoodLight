@@ -7,9 +7,6 @@
         <variable
             name="activity"
             type="com.example.moodlight.screen.main1.AnswerActivity" />
-        <variable
-            name="ViewModel"
-            type="com.example.moodlight.screen.main1.ContentsModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -113,7 +110,7 @@
             android:textColor="@color/white"
             android:textSize="15sp"
             app:cornerRadius="24dp"
-            android:onClick="@{()->activity.addContentView(ViewModel)}"
+            android:onClick="@{activity::addContents}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.55"

@@ -15,6 +15,7 @@ import com.example.moodlight.databinding.ActivityAnswerBinding;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
@@ -27,13 +28,13 @@ public class AnswerActivity extends AppCompatActivity {
 
     private ActivityAnswerBinding binding;
     private FirebaseFirestore db;
+    private int postNumber;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         db = FirebaseFirestore.getInstance();
         binding = DataBindingUtil.setContentView(this,R.layout.activity_answer);
         binding.setActivity(this);
-        binding.setViewModel(new ContentsModel(binding.answerEditText.getText().toString(),false,false));
         setColor();
 
     }
@@ -49,31 +50,49 @@ public class AnswerActivity extends AppCompatActivity {
                 break;
         }
     }
-    private void addContents(ContentsModel contentsModel){
+    public void addContents(View view){
+        getPostNumber();
+    }
+    public void getPostNumber(){
+        db.collection("post")
+                .document("information")
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()){
+                        Log.d(TAG, "getPostNumber: 성공");
+                        DocumentSnapshot documentSnapshot = task.getResult();
+                        ++postNumber;
+                        updatePostNumber();
+                        setContents();
+                    }
+                });
+    }
+    public void updatePostNumber(){
+        Map<String,Object> map = new HashMap<>();
+        map.put("postNumber", postNumber+1);
+        db.collection("post")
+                .document("information")
+                .update(map)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "onSuccess: 성공");
+                    }
+                });
+    }
+    public void setContents(){
         Map<String,Object> content = new HashMap<>();
-
-        binding.commentCheck.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                contentsModel.setCommentAlram(isChecked);
-            }
-        });
-        binding.onlyCheck.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                contentsModel.setLikeAlram(isChecked);
-            }
-        });
-        content.put("answer",contentsModel.getAnswer());
-        content.put("commentAlram",contentsModel.isCommentAlram());
-        content.put("likeAlram",contentsModel.isCommentAlram());
+        content.put("answer",binding.answerEditText.getText().toString());
+        content.put("commentAlram",binding.commentCheck.isChecked());
+        content.put("likeAlram",binding.onlyCheck.isChecked());
 
         db.collection("post").
-                add(content).
-                addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                    @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        Log.d(TAG, "onSuccess: 성공"+documentReference.getFirestore());
+                document(String.valueOf(postNumber+1))
+                .set(content).
+                addOnCompleteListener(task ->  {
+                    if (task.isSuccessful()){
+                        Log.d(TAG, "addContents: 성공");
+                        finish();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -82,5 +101,6 @@ public class AnswerActivity extends AppCompatActivity {
                         Log.d(TAG, "onFailure: 실패"+e.getMessage());
                     }
                 });
+
     }
 }

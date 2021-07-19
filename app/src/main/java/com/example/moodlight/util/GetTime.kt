@@ -21,7 +21,7 @@ class GetTime {
 
         @SuppressLint("SimpleDateFormat")
         fun modifyJoinTime(productTime: Long) : String? {
-            val simpleDateFormat : SimpleDateFormat = SimpleDateFormat("YYYY.MM.DD")
+            val simpleDateFormat : SimpleDateFormat = SimpleDateFormat("yyyy.MM.dd")
 
             return simpleDateFormat.format(productTime)
         }

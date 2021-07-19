@@ -134,10 +134,9 @@ class RegisterFragment3 : Fragment() {
                 if (task.isSuccessful) {
                     val map = hashMapOf(
                         "nickname" to nickname,
-                        "email" to viewModel.email.value,
                         "joinTime" to System.currentTimeMillis(),
                         "commentAlarm" to false,
-                        "likeAlarm" to false
+                        "likeAlarm" to false,
                         "password" to sha.encryptSHA(viewModel.password.value)
                     )
 
@@ -156,6 +155,8 @@ class RegisterFragment3 : Fragment() {
                             .addOnSuccessListener {
                                 nicknameArray = it.get("nicknameArray") as ArrayList<String>
                                 emailArray = it.get("emailArray") as ArrayList<String>
+                                nicknameArray.add(viewModel.nickname.value!!)
+                                emailArray.add(viewModel.email.value!!)
                                 val map2 = hashMapOf(
                                     "nicknameArray" to nicknameArray,
                                     "emailArray" to emailArray

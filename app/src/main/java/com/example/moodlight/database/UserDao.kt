@@ -17,6 +17,9 @@ interface UserDao {
     @Update
     fun updateLoginTable(userData: UserData)
 
+    @Query("DELETE from userLoginTable")
+    fun deleteUserLoginTable()
+
     @Query("SELECT id FROM userLoginTable ")
     fun getIdFromUserLoginTable() : String?
 

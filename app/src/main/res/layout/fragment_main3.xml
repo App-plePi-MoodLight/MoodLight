@@ -7,20 +7,13 @@
     <data>
 
         <variable
-            name="username"
-            type="String" />
-
-        <variable
-            name="email"
-            type="String" />
-
-        <variable
-            name="subscription"
-            type="String" />
+            name="fragment"
+            type="com.example.moodlight.screen.main3.MainFragment3" />
 
         <variable
             name="viewModel"
             type="com.example.moodlight.screen.main3.Main3ViewModel" />
+
     </data>
 
     <ScrollView
@@ -31,13 +24,14 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:padding="25sp">
+            android:paddingBottom="80sp">
 
 
             <ImageView
                 android:id="@+id/main3ProfileIv"
                 android:layout_width="100sp"
                 android:layout_height="100sp"
+                android:src="@drawable/basic_profile"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -153,6 +147,7 @@
                 android:checked="@{viewModel.commentIsChecked}"
                 android:layout_marginTop="25sp"
                 android:layout_marginEnd="50sp"
+                android:theme="@style/switchStyle"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/main3Tv2"
                 tools:ignore="UseSwitchCompatOrMaterialXml" />
@@ -164,6 +159,7 @@
                 android:checked="@{viewModel.likeIsChecked}"
                 android:layout_marginTop="17sp"
                 android:layout_marginEnd="50sp"
+                android:theme="@style/switchStyle"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/main3Tv3"
                 tools:ignore="UseSwitchCompatOrMaterialXml" />
@@ -191,6 +187,7 @@
                 android:layout_marginEnd="10sp"
                 android:background="@drawable/main3btn_background"
                 android:fontFamily="@font/roboto_bold"
+                android:onClick="@{fragment::signOut}"
                 android:text="로그아웃"
                 android:textColor="#ffffff"
                 android:textSize="15sp"

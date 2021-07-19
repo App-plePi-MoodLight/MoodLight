@@ -10,6 +10,7 @@ import com.example.moodlight.screen.main2.MainFragment2
 import com.example.moodlight.screen.main3.MainFragment3
 import com.example.moodlight.util.NetworkStatus
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 @Suppress("DEPRECATION")
 class MainActivity : AppCompatActivity() {
@@ -23,7 +24,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        changeFragment(mainFragment1)
+        changeFragment(mainFragment2)
 
         if (networkStatus == NetworkStatus.TYPE_NOT_CONNECTED) {
             Toast.makeText(baseContext, "무드등을 이용하시려면 Wifi연결이 필요합니다.", Toast.LENGTH_SHORT).show()
@@ -31,10 +32,6 @@ class MainActivity : AppCompatActivity() {
 
         findViewById<BottomNavigationView>(R.id.bottomNavigation).setOnItemSelectedListener { item ->
             when (item.itemId) {
-                R.id.main1 -> {
-                    changeFragment(mainFragment1)
-                    true
-                }
                 R.id.main2 -> {
                     changeFragment(mainFragment2)
                     true
@@ -45,6 +42,9 @@ class MainActivity : AppCompatActivity() {
                 }
                 else -> false
             }
+        }
+        findViewById<FloatingActionButton>(R.id.faBtn).setOnClickListener {
+            //병주 클래스
         }
 
     }

@@ -134,6 +134,10 @@ class RegisterFragment3 : Fragment() {
                 if (task.isSuccessful) {
                     val map = hashMapOf(
                         "nickname" to nickname,
+                        "email" to viewModel.email.value,
+                        "joinTime" to System.currentTimeMillis(),
+                        "commentAlarm" to false,
+                        "likeAlarm" to false
                         "password" to sha.encryptSHA(viewModel.password.value)
                     )
 

@@ -41,13 +41,13 @@ class Main2CalendarAdapter (val viewModel : Main2CalendarViewModel) :
             when (viewModel.dateList[position].moodType) {
 
                 DataType.HAPPY_MOOD ->
-                    itemCalendarDateTv.setBackgroundResource(R.drawable.text_happy_background)
+                    itemCalendarDateTv.setBackgroundResource(R.drawable.happy_background)
 
                 DataType.SAD_MOOD ->
-                    itemCalendarDateTv.setBackgroundResource(R.drawable.text_sad_background)
+                    itemCalendarDateTv.setBackgroundResource(R.drawable.sad_background)
 
                 DataType.MAD_MOOD ->
-                    itemCalendarDateTv.setBackgroundResource(R.drawable.text_mad_background)
+                    itemCalendarDateTv.setBackgroundResource(R.drawable.mad_background)
 
                 else -> {}
             }

@@ -137,7 +137,7 @@ class RegisterFragment3 : Fragment() {
                         "email" to viewModel.email.value,
                         "joinTime" to System.currentTimeMillis(),
                         "commentAlarm" to false,
-                        "likeAlarm" to false
+                        "likeAlarm" to false,
                         "password" to sha.encryptSHA(viewModel.password.value)
                     )
 

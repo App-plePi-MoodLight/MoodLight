@@ -9,7 +9,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MoodLight">
-        <activity android:name=".screen.initial.InitialActivity"></activity>
+        <activity android:name=".screen.main3.setting.SettingActivity"></activity>
+        <activity android:name=".screen.initial.InitialActivity" />
         <activity android:name=".screen.register.RegisterActivity" />
         <activity android:name=".screen.splash.SplashActivity">
             <intent-filter>

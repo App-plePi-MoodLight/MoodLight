@@ -11,6 +11,7 @@ import com.example.moodlight.database.UserDatabase
 import com.example.moodlight.screen.MainActivity
 import com.example.moodlight.screen.initial.InitialActivity
 import com.example.moodlight.screen.login.LoginActivity
+import com.example.moodlight.util.FirebaseUtil
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.*
@@ -24,24 +25,29 @@ class SplashActivity : AppCompatActivity() {
         var userDataList : List<UserData>?
         val db = UserDatabase.getInstance(applicationContext)
 
+
         GlobalScope.launch {
 
-            if (db!!.userDao().getuserLoginTable()!!.isNotEmpty()) {
-                userDataList = db!!.userDao().getuserLoginTable()
-                val email : String = userDataList!![0].id
-                val password : String = userDataList!![0].password
-
-                Firebase.auth.signInWithEmailAndPassword(email, password)
-                    .addOnCompleteListener(this@SplashActivity) { task ->
-                        if (task.isSuccessful) {
-
-                            Log.d("Login", "signInWithEmail:success")
-                            intent = Intent(applicationContext, MainActivity::class.java)
-                            startActivity(intent)
-                            finish()
-                        }
-                    }
-            } else {
+//            if (db!!.userDao().getuserLoginTable()!!.isNotEmpty()) {
+//                userDataList = db!!.userDao().getuserLoginTable()
+//                val email : String = userDataList!![0].id
+//                vail password : String = userDataList!![0].password
+//
+//                Fiirebase.auth.signInWithEmailAndPassword(email, password)
+//                i    .addOnCompleteListener(this@SplashActivity) { task ->
+//                        if (task.isSuccessful) {
+//
+//                            Log.d("Login", "signInWithEmail:success")
+//                            intent = Intent(applicationContext, MainActivity::class.java)
+//               i             startActivity(intent)
+//              i              finish()
+//             i           }
+//                    }
+//            }
+            if(FirebaseUtil.getAuth().currentUser != null){
+                startActivity(Intent(applicationContext, MainActivity::class.java))
+            }
+            else {
                 intent = Intent(applicationContext, InitialActivity::class.java)
                 startActivity(intent)
                 finish()

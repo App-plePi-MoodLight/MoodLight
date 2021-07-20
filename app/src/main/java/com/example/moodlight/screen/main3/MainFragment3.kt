@@ -1,6 +1,9 @@
 package com.example.moodlight.screen.main3
 
 import android.annotation.SuppressLint
+import android.content.Context
+import android.content.DialogInterface
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -10,14 +13,19 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import com.example.moodlight.R
 import com.example.moodlight.databinding.FragmentMain3Binding
+import com.example.moodlight.dialog.CommonDialog
+import com.example.moodlight.screen.MainActivity
+import com.example.moodlight.screen.main3.setting.SettingActivity
 import com.example.moodlight.util.FirebaseUtil
 import com.example.moodlight.util.GetTime
+import com.google.android.gms.common.internal.service.Common
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class MainFragment3 : Fragment() {
+    private var activity : MainActivity? = MainActivity()
 
     private lateinit var binding : FragmentMain3Binding
     private val viewModel : Main3ViewModel by lazy {
@@ -51,6 +59,15 @@ class MainFragment3 : Fragment() {
                 Main3Helper.setLikeAlarm(isChecked)
         }
 
+        binding.main3Btn1.setOnClickListener {
+            startActivity(Intent(requireContext(), SettingActivity::class.java))
+        }
+
+        binding.main3WithdrawalTv.setOnClickListener {
+            activity?.onClickBtnInFragment(1)
+
+        }
+
         setUi()
 
         return binding.root
@@ -75,6 +92,17 @@ class MainFragment3 : Fragment() {
 
                 }
         }
+    }
+
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        activity = getActivity() as MainActivity
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        activity = null
     }
 
 }

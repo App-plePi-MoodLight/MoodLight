@@ -67,6 +67,9 @@ class MainFragment3 : Fragment() {
             activity?.onClickBtnInFragment(1)
 
         }
+        binding.main3LogoutBtn.setOnClickListener {
+            activity?.onClickBtnInFragment(2)
+        }
 
         setUi()
 

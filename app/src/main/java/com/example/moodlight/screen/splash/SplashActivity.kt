@@ -11,6 +11,7 @@ import com.example.moodlight.database.UserDatabase
 import com.example.moodlight.screen.MainActivity
 import com.example.moodlight.screen.initial.InitialActivity
 import com.example.moodlight.screen.login.LoginActivity
+import com.example.moodlight.screen.onboarding.OnboardingActivity
 import com.example.moodlight.util.FirebaseUtil
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
@@ -33,7 +34,7 @@ class SplashActivity : AppCompatActivity() {
                 finish()
             }
             else {
-                intent = Intent(applicationContext, InitialActivity::class.java)
+                intent = Intent(applicationContext, OnboardingActivity::class.java)
                 startActivity(intent)
                 finish()
             }

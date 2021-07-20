@@ -1,15 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/taools">
 
     <data>
         <variable
-            name="fragment"
-            type="com.example.moodlight.screen.main1.CommunitiyFragment" />
-        <variable
-            name="color"
-            type="com.example.moodlight.screen.main1.ColorModel" />
+            name="activity"
+            type="com.example.moodlight.screen.main1.CommunityMainActivity" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -65,7 +62,7 @@
             android:textSize="15sp"
             android:textColor="#ffffff"
             android:fontFamily="@font/roboto_bold"
-            android:onClick="@{fragment::intentAnswer}"
+            android:onClick="@{activity::intentAnswer}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/today_question"/>

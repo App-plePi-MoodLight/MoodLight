@@ -5,14 +5,14 @@
 
     <data>
         <variable
-            name="fragment"
-            type="com.example.moodlight.screen.main1.MainFragment1" />
+            name="activity"
+            type="com.example.moodlight.screen.main1.CommunityActiviy" />
 
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".screen.main1.MainFragment1">
+        tools:context=".screen.main1.CommunityActiviy">
 
         <TextView
             android:id="@+id/todaymood"
@@ -47,7 +47,7 @@
                     android:id="@+id/happy"
                     android:layout_width="82dp"
                     android:layout_height="82dp"
-                    android:onClick="@{fragment::setMood}"
+                    android:onClick="@{activity::setMood}"
                     />
                 <TextView
                     android:layout_width="wrap_content"
@@ -70,7 +70,7 @@
                     android:id="@+id/mad"
                     android:layout_width="82dp"
                     android:layout_height="82dp"
-                    android:onClick="@{fragment::setMood}"
+                    android:onClick="@{activity::setMood}"
                     />
 
                 <TextView
@@ -93,7 +93,7 @@
                     android:id="@+id/sad"
                     android:layout_width="82dp"
                     android:layout_height="82dp"
-                    android:onClick="@{fragment::setMood}"
+                    android:onClick="@{activity::setMood}"
                     />
                 <TextView
                     android:layout_width="wrap_content"
@@ -118,7 +118,7 @@
             android:layout_marginBottom="30dp"
             android:backgroundTint="#212121"
             android:fontFamily="@font/roboto_bold"
-            android:onClick="@{fragment::changeFragment}"
+            android:onClick="@{activity::next}"
             android:paddingTop="16dp"
             android:paddingBottom="16dp"
             android:text="입장하기"

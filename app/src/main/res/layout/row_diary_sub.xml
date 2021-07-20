@@ -12,11 +12,15 @@
         app:layout_constraintHeight_percent="0.2"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintWidth_percent="0.2" />
+        app:layout_constraintWidth_percent="0.1" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/QnALayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:layout_marginBottom="30dp"
+        android:background="@drawable/round"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/constraintLayout2"
@@ -26,11 +30,11 @@
             android:id="@+id/Qcontents"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingTop="10dp"
-            android:paddingLeft="10dp"
             android:text="질문내용"
             android:textColor="#000"
-            android:textSize="25sp"
+            android:textSize="20sp"
+            android:paddingTop="10dp"
+            android:paddingLeft="10dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -39,11 +43,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif-medium"
-            android:padding="10dp"
+            android:textStyle="normal"
             android:text="답변내용"
+            android:paddingBottom="10dp"
+            android:paddingLeft="10dp"
             android:textColor="#8b8b8b"
-            android:textSize="25sp"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:textSize="20sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/Qcontents" />
 
@@ -52,14 +57,28 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif-medium"
-            android:padding="10dp"
             android:text=".............."
+            android:paddingBottom="10dp"
             android:textColor="#8b8b8b"
-            android:textSize="25sp"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:textSize="20sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/Acontents"
             app:layout_constraintTop_toBottomOf="@+id/Qcontents" />
+
+<!--        <androidx.viewpager.widget.ViewPager-->
+<!--            android:id="@+id/view"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="30dp" />-->
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:background="@drawable/list_item_color_round"
+            app:layout_constraintTop_toBottomOf="@id/AcontentsTv"/>
+
+
+
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

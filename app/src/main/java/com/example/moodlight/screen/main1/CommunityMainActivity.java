@@ -1,55 +1,46 @@
 package com.example.moodlight.screen.main1;
 
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.moodlight.R;
-import com.example.moodlight.databinding.FragmentCommunitiyBinding;
+import com.example.moodlight.databinding.ActivityCommunityMainBinding;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
-import java.util.Map;
-import java.util.Objects;
 
 import static android.content.ContentValues.TAG;
-import static com.example.moodlight.screen.main1.MainFragment1.todayMood;
+import static com.example.moodlight.screen.main1.CommunityActiviy.todayMood;
 
-public class CommunitiyFragment extends Fragment {
+public class CommunityMainActivity extends AppCompatActivity {
 
-    private FragmentCommunitiyBinding binding;
+    private ActivityCommunityMainBinding binding;
     private FirebaseFirestore db;
     private int postNumber;
     private ArrayList<CommunityItem> list;
     private CommunityAdapter adapter;
+
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_community_main);
 
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
         db = FirebaseFirestore.getInstance();
 
-        binding = DataBindingUtil.inflate(inflater,R.layout.fragment_communitiy,container,false);
-        View view = binding.getRoot();
-        binding.setFragment(this);
-        setColor(view);
+        binding = DataBindingUtil.setContentView(this,R.layout.activity_community_main);
+        binding.setActivity(this);
+        setColor();
 
-        LinearLayoutManager manager = new LinearLayoutManager(view.getContext(),LinearLayoutManager.VERTICAL,false);
+        LinearLayoutManager manager = new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false);
         binding.answerList.setLayoutManager(manager);
 
         list = new ArrayList<>();
@@ -57,23 +48,21 @@ public class CommunitiyFragment extends Fragment {
         binding.answerList.setAdapter(adapter);
         getPostNumber();
 
-        return view;
     }
-
-    private void setColor(View view){
+    private void setColor(){
         switch (todayMood){
-            case 0: binding.answerBtn.setBackground(ContextCompat.getDrawable(view.getContext(),R.drawable.btn_happy_background));
+            case 0: binding.answerBtn.setBackground(ContextCompat.getDrawable(this,R.drawable.btn_happy_background));
                 break;
-                case 1:
-                    binding.answerBtn.setBackground(ContextCompat.getDrawable(view.getContext(),R.drawable.btn_mad_background));
+            case 1:
+                binding.answerBtn.setBackground(ContextCompat.getDrawable(this,R.drawable.btn_mad_background));
                 break;
-                case 2:
-                    binding.answerBtn.setBackground(ContextCompat.getDrawable(view.getContext(),R.drawable.btn_sad_background));
-                    break;
+            case 2:
+                binding.answerBtn.setBackground(ContextCompat.getDrawable(this,R.drawable.btn_sad_background));
+                break;
         }
     }
     public void intentAnswer(View view){
-        Intent intent = new Intent(getContext(),AnswerActivity.class);
+        Intent intent = new Intent(this,AnswerActivity.class);
         startActivity(intent);
     }
     public void setItem(String question, String answer, int heart, int comment, int mood){
@@ -119,11 +108,12 @@ public class CommunitiyFragment extends Fragment {
                 .document("information")
                 .get()
                 .addOnCompleteListener(task -> {
-                   if(task.isSuccessful()){
-                       DocumentSnapshot documentSnapshot = task.getResult();
-                       postNumber =  Integer.parseInt(String.valueOf(documentSnapshot.get("postNumber")));
-                       setlist(postNumber);
-                   }
+                    if(task.isSuccessful()){
+                        DocumentSnapshot documentSnapshot = task.getResult();
+                        postNumber =  Integer.parseInt(String.valueOf(documentSnapshot.get("postNumber")));
+                        setlist(postNumber);
+                    }
                 });
     }
 }
+

@@ -4,6 +4,7 @@ import androidx.room.*
 
 @Dao
 interface UserDao {
+
     @Insert
     fun insert (userData: UserData)
 
@@ -15,6 +16,9 @@ interface UserDao {
 
     @Update
     fun updateLoginTable(userData: UserData)
+
+    @Query("DELETE from userLoginTable")
+    fun deleteUserLoginTable()
 
     @Query("SELECT id FROM userLoginTable ")
     fun getIdFromUserLoginTable() : String?

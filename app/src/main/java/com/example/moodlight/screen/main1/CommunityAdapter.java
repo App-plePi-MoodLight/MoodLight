@@ -14,8 +14,6 @@ import com.example.moodlight.R;
 
 import java.util.ArrayList;
 
-import static com.example.moodlight.screen.main1.MainFragment1.todayMood;
-
 public class CommunityAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private final int VIEW_TYPE_ITEM = 0;
     private final int VIEW_TYPE_LOADING = 1;

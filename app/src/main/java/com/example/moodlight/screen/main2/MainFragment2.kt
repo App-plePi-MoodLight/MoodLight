@@ -1,5 +1,7 @@
 package com.example.moodlight.screen.main2
 
+import android.content.ContentValues.TAG
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -23,22 +25,21 @@ import com.example.moodlight.screen.main2.diaryRecyclerview.data.QnAData
 
 class MainFragment2 : Fragment() {
 
-    private lateinit var calendar : Calendar
+    private lateinit var calendar: Calendar
     private val calendarHelper by lazy { CalendarHelper() }
 
-    private val viewModel : Main2ViewModel by lazy {
+    private val viewModel: Main2ViewModel by lazy {
         ViewModelProvider(this).get(Main2ViewModel::class.java)
     }
 
-    private val calendarViewModel : Main2CalendarViewModel by lazy{
+    private val calendarViewModel: Main2CalendarViewModel by lazy {
         ViewModelProvider(this).get(Main2CalendarViewModel::class.java)
     }
 
-    private lateinit var binding : FragmentMain2Binding
-    var list : ArrayList<DateClass> = ArrayList()
+    private lateinit var binding: FragmentMain2Binding
+    var list: ArrayList<DateClass> = ArrayList()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
     }
 
     override fun onCreateView(
@@ -49,25 +50,41 @@ class MainFragment2 : Fragment() {
         binding.viewModel = viewModel
         binding.lifecycleOwner = this
         binding.fragment = this
-        Log.e("version","3")
+        Log.e("version", "3")
         setUi()
+        dataLoding()
+
+
 
         return binding.root
     }
 
-    private fun setUi () {
+    private fun dataLoding() {
+        val data : ArrayList<QnAData> = ArrayList()
+        if(list.isEmpty()){
+            data.add(QnAData("오늘 점심은 뭐 먹죠?", "점심을 먹죠 ㅎㅎ"))
+            data.add(QnAData("오늘 저녁은 뭐 먹죠?", "저녁을 먹죠 ㅎㅎ"))
+            list.add(DateClass("3월 16일", data))
+            list.add(DateClass("4월 16일", data))
+            Log.d(TAG, "onActivityCreated: 내 리스트 data$data $list")
+        }
+        binding.recycler.adapter = DateAdapter(requireContext(), list)
+        binding.recycler.setHasFixedSize(true)
+    }
 
-        val adapter : Main2CalendarAdapter = Main2CalendarAdapter(calendarViewModel)
+    private fun setUi() {
+
+        val adapter: Main2CalendarAdapter = Main2CalendarAdapter(calendarViewModel)
         binding.main2CalendarRecyclerView.adapter = adapter
         calendarViewModel.today = calendarHelper.getDate()
 
         setCalendar()
     }
 
-    private fun setCalendar () {
+    private fun setCalendar() {
         calendarViewModel.dateList = ArrayList()
-        var lastEndDay : Int
-        when (calendarHelper.getMonth()+1) {
+        var lastEndDay: Int
+        when (calendarHelper.getMonth() + 1) {
             1 -> {
                 viewModel.month.value = "January"
                 lastEndDay = 31
@@ -79,7 +96,8 @@ class MainFragment2 : Fragment() {
             3 -> {
                 viewModel.month.value = "March"
                 if (calendarHelper.getYear() % 4 == 0 && calendarHelper.getYear() % 100 != 0
-                    || calendarHelper.getYear() % 400 == 0) {
+                    || calendarHelper.getYear() % 400 == 0
+                ) {
                     lastEndDay = 29
                 } else
                     lastEndDay = 28
@@ -121,24 +139,29 @@ class MainFragment2 : Fragment() {
                 lastEndDay = 30
             }
             else -> {
-                viewModel.month.value ="error"
+                viewModel.month.value = "error"
                 lastEndDay = 30
             }
         }
 
-        for (i in calendarHelper.getStartDayOfWeek()-2 downTo 0) {
+        for (i in calendarHelper.getStartDayOfWeek() - 2 downTo 0) {
             calendarViewModel.dateList.add(
-                Main2CalendarData((lastEndDay-i).toString(), DataType.NONE_MOOD, DataType.LAST_DAY)
+
+                Main2CalendarData(
+                    (lastEndDay - i).toString(),
+                    DataType.NONE_MOOD,
+                    DataType.LAST_DAY
+                )
             )
         }
 
         for (j in 0 until calendarHelper.getEndDay()) {
             calendarViewModel.dateList.add(
-                Main2CalendarData((j+1).toString(), DataType.NONE_MOOD, DataType.CURRENT_DAY)
+                Main2CalendarData((j + 1).toString(), DataType.NONE_MOOD, DataType.CURRENT_DAY)
             )
         }
 
-        for (k in 1 .. 7-calendarHelper.getEndDayOfWeek()) {
+        for (k in 1..7 - calendarHelper.getEndDayOfWeek()) {
             calendarViewModel.dateList.add(
                 Main2CalendarData(k.toString(), DataType.NONE_MOOD, DataType.LAST_DAY)
             )
@@ -147,28 +170,25 @@ class MainFragment2 : Fragment() {
         binding.main2CalendarRecyclerView.adapter!!.notifyDataSetChanged()
     }
 
-    public fun plusMonth (view : View) {
+    public fun plusMonth(view: View) {
         calendarHelper.plusMonth()
-        Log.e("year,month",calendarHelper.getYear().toString()+":  "+ calendarHelper.getMonth().toString())
+        Log.e(
+            "year,month",
+            calendarHelper.getYear().toString() + ":  " + calendarHelper.getMonth().toString()
+        )
 
         setCalendar()
     }
 
-    public fun minusMonth (view : View ) {
+    public fun minusMonth(view: View) {
         calendarHelper.minusMonth()
-        Log.e("year,month",calendarHelper.getYear().toString()+":  "+ calendarHelper.getMonth().toString())
+        Log.e(
+            "year,month",
+            calendarHelper.getYear().toString() + ":  " + calendarHelper.getMonth().toString()
+        )
 
         setCalendar()
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        val data : ArrayList<QnAData> = ArrayList()
-        data.add(QnAData("오늘 점심은 뭐 먹죠?", "점심을 먹죠 ㅎㅎ"))
-        data.add(QnAData("오늘 저녁은 뭐 먹죠?", "저녁을 먹죠 ㅎㅎ"))
-        list.add(DateClass("3월 16일", data))
-        list.add(DateClass("4월 16일", data))
-        binding.recycler.adapter = DateAdapter(requireContext(), list)
-        binding.recycler.setHasFixedSize(true)
-    }
+
 }

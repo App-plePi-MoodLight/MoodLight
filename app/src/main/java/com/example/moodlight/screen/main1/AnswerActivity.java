@@ -26,7 +26,7 @@ import java.util.List;
 import java.util.Map;
 
 import static android.content.ContentValues.TAG;
-import static com.example.moodlight.screen.main1.MainFragment1.todayMood;
+import static com.example.moodlight.screen.main1.CommunityActiviy.todayMood;
 
 public class AnswerActivity extends AppCompatActivity {
 

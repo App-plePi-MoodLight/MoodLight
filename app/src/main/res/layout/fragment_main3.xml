@@ -1,12 +1,242 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".screen.main3.MainFragment3">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <data>
+
+        <variable
+            name="fragment"
+            type="com.example.moodlight.screen.main3.MainFragment3" />
+
+        <variable
+            name="viewModel"
+            type="com.example.moodlight.screen.main3.Main3ViewModel" />
+
+    </data>
+
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/wholeLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:animateLayoutChanges="true"
+            android:paddingBottom="80sp">
+            android:paddingBottom="100sp">
+
+
+            <ImageView
+                android:id="@+id/main3ProfileIv"
+                android:layout_width="100sp"
+                android:layout_height="100sp"
+                android:src="@drawable/basic_profile"
+                android:visibility="invisible"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.1" />
+
+            <TextView
+                android:id="@+id/main3UserNameTv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20sp"
+                android:fontFamily="@font/roboto_bold"
+                android:gravity="center"
+                android:text="@{viewModel.username}"
+                android:textColor="#000000"
+                android:textSize="20sp"
+                android:visibility="invisible"
+                app:layout_constraintTop_toBottomOf="@id/main3ProfileIv"
+                tools:text="USERNAME" />
+
+            <TextView
+                android:id="@+id/main3EmailTv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3sp"
+                android:fontFamily="@font/roboto_medium"
+                android:gravity="center"
+                android:text="@{viewModel.email}"
+                android:textColor="#b5b5b5"
+                android:textSize="15sp"
+                android:visibility="invisible"
+                app:layout_constraintTop_toBottomOf="@id/main3UserNameTv"
+                tools:text="asdf@asdf.com" />
+
+            <TextView
+                android:id="@+id/main3Tv1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20sp"
+                android:fontFamily="@font/roboto_medium"
+                android:gravity="center"
+                android:text="@{viewModel.main3Tv1Text}"
+                android:textColor="#000000"
+                android:textSize="15sp"
+                android:visibility="invisible"
+                app:layout_constraintTop_toBottomOf="@id/main3EmailTv"
+                tools:text="무드등을 시작한지 365일이 지났어요!" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/main3Btn1"
+                android:layout_width="110sp"
+                android:layout_height="40sp"
+                android:layout_marginTop="15sp"
+                android:background="@drawable/main3btn_background"
+                android:fontFamily="@font/roboto_bold"
+                android:text="프로필 수정"
+                android:textColor="#ffffff"
+                android:textSize="15sp"
+                android:visibility="invisible"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/main3Tv1" />
+
+            <TextView
+                android:id="@+id/main3Tv2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20sp"
+                android:layout_marginTop="50sp"
+                android:fontFamily="@font/roboto_bold"
+                android:text="설정"
+                android:textColor="#000000"
+                android:textSize="18sp"
+                android:visibility="invisible"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/main3Btn1" />
+
+            <TextView
+                android:id="@+id/main3Tv3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="25sp"
+                android:fontFamily="@font/roboto_medium"
+                android:text="게시물 댓글 알림"
+
+                android:textColor="#000000"
+                android:textSize="16sp"
+                android:visibility="invisible"
+                app:layout_constraintStart_toEndOf="@id/main3Tv2"
+                app:layout_constraintTop_toBottomOf="@id/main3Tv2" />
+
+
+            <Switch
+                android:id="@+id/main3CommentSwitch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="25sp"
+                android:layout_marginEnd="50sp"
+
+                android:checked="@{viewModel.commentIsChecked}"
+                android:theme="@style/switchStyle"
+                android:visibility="invisible"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/main3Tv2"
+                tools:ignore="UseSwitchCompatOrMaterialXml" />
+
+            <TextView
+                android:id="@+id/main3Tv4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="17sp"
+                android:fontFamily="@font/roboto_medium"
+                android:text="게시물 좋아요 알림"
+
+                android:textColor="#000000"
+                android:textSize="16sp"
+                android:visibility="invisible"
+                app:layout_constraintStart_toEndOf="@id/main3Tv2"
+                app:layout_constraintTop_toBottomOf="@id/main3Tv3" />
+
+            <Switch
+                android:id="@+id/main3LikeSwitch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="17sp"
+                android:layout_marginEnd="50sp"
+
+                android:checked="@{viewModel.likeIsChecked}"
+                android:theme="@style/switchStyle"
+                android:visibility="invisible"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/main3Tv3"
+                tools:ignore="UseSwitchCompatOrMaterialXml" />
+
+            <TextView
+                android:id="@+id/main3Tv5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="17sp"
+                android:fontFamily="@font/roboto_medium"
+                android:text="가입일"
+
+                android:textColor="#000000"
+                android:textSize="16sp"
+                android:visibility="invisible"
+                app:layout_constraintStart_toEndOf="@id/main3Tv2"
+                app:layout_constraintTop_toBottomOf="@id/main3Tv4" />
+
+
+            <TextView
+                android:id="@+id/main3SubscriptionTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="17sp"
+                android:layout_marginEnd="50sp"
+                android:fontFamily="@font/roboto_medium"
+
+                android:text="@{viewModel.subscription}"
+                android:textColor="#000000"
+                android:textSize="16sp"
+                android:visibility="invisible"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/main3Tv4"
+                tools:text="2021.07.19" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/main3LogoutBtn"
+                android:layout_width="0dp"
+                android:layout_height="50sp"
+                android:layout_marginStart="10sp"
+                android:layout_marginTop="50sp"
+                android:layout_marginEnd="10sp"
+                android:background="@drawable/main3btn_background"
+                android:fontFamily="@font/roboto_bold"
+
+                android:onClick="@{fragment::signOut}"
+                android:text="로그아웃"
+                android:textColor="#ffffff"
+                android:textSize="15sp"
+                android:visibility="invisible"
+                app:layout_constraintEnd_toEndOf="@id/main3SubscriptionTv"
+                app:layout_constraintStart_toStartOf="@id/main3Tv5"
+                app:layout_constraintTop_toBottomOf="@id/main3SubscriptionTv" />
+
+            <TextView
+                android:id="@+id/main3WithdrawalTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15sp"
+                android:fontFamily="@font/roboto_medium"
+                android:text="탈퇴하기"
+
+                android:textColor="#b5b5b5"
+                android:textSize="13sp"
+                android:visibility="invisible"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/main3LogoutBtn" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
 
 </layout>

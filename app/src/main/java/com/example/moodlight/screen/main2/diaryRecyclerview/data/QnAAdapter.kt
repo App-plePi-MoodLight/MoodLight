@@ -28,4 +28,7 @@ class  QnAAdapter(val context : Context, val DataList: ArrayList<QnAData>): Recy
     }
     override fun getItemCount() = DataList.size
 
+    override fun getItemViewType(position: Int): Int {
+        return position
+    }
 }

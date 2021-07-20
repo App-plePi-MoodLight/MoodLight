@@ -8,11 +8,15 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.moodlight.R;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class CommunityAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private final int VIEW_TYPE_ITEM = 0;
@@ -59,6 +63,9 @@ public class CommunityAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         return items == null ? 0 : items.size();
     }
     public class NormalViewHolder extends RecyclerView.ViewHolder {
+        private FirebaseFirestore db;
+        private int heartValue;
+        private boolean isSelect = false;
         private TextView todayQuestion;
         private TextView answer;
         private TextView heart;
@@ -73,14 +80,24 @@ public class CommunityAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             heartBtn = itemView.findViewById(R.id.heartBtn);
         }
         public void onBind(CommunityItem item){
-            todayQuestion.setText(item.getQuestion());
+            db = FirebaseFirestore.getInstance();
+            isSelect = item.getIsHeart() != 0 ? true : false;
+            todayQuestion.setText(item.getTodayQuestion());
             answer.setText(item.getAnswer());
             heart.setText(String.valueOf(item.getHeart()));
             comment.setText(String.valueOf(item.getComment()));
 
+            heartValue = item.getHeart();
+            if (isSelect){
+                heartBtn.setImageDrawable(ContextCompat.getDrawable(itemView.getContext(),R.drawable.heart_icon));
+            }else{
+                heartBtn.setImageDrawable(ContextCompat.getDrawable(itemView.getContext(),R.drawable.unselect_heart_icon));
+            }
+
             switch (item.getTodayMood()){
                 case 0 :
                     heartBtn.setColorFilter(Color.parseColor("#f5cf66"));
+                    break;
                 case 1:
                     heartBtn.setColorFilter(Color.parseColor("#ed5d4c"));
                     break;
@@ -88,6 +105,42 @@ public class CommunityAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                         heartBtn.setColorFilter(Color.parseColor("#10699e"));
                         break;
             }
+            Map<String, Object> map = new HashMap<>();
+            heartBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (isSelect){
+                        map.put("heart",--heartValue);
+                        map.put("isHeart",0);
+                        heart.setText(String.valueOf(heartValue));
+                        heartBtn.setImageDrawable(ContextCompat.getDrawable(itemView.getContext(),R.drawable.unselect_heart_icon));
+                        db.collection("post")
+                                .document(String.valueOf(item.getPostNumber()))
+                                .update(map)
+                                .addOnCompleteListener(task -> {
+                                    if (!task.isSuccessful()){
+                                        return;
+                                    }
+                                    isSelect = false;
+                                });
+                    }else{
+                        map.put("heart",++heartValue);
+                        map.put("isHeart",1);
+                        heart.setText(String.valueOf(heartValue));
+                        heartBtn.setImageDrawable(ContextCompat.getDrawable(itemView.getContext(),R.drawable.heart_icon));
+                        db.collection("post")
+                                .document(String.valueOf(item.getPostNumber()))
+                                .update(map)
+                                .addOnCompleteListener(task -> {
+                                    if (!task.isSuccessful()){
+                                        return;
+                                    }
+                                    isSelect = true;
+                                });
+
+                    }
+                }
+            });
         }
     }
     private class LoadingViewHolder extends RecyclerView.ViewHolder {

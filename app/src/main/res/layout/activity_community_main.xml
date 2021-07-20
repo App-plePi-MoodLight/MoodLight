@@ -23,8 +23,12 @@
             app:layout_constraintTop_toTopOf="parent"
             >
             <ImageButton
+                android:id="@+id/backBtn"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:background="#00000000"
+                android:src="@drawable/back_btn"
+                android:onClick="@{activity::finishActvity}"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -95,8 +99,9 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/answerList"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:layout_marginTop="20dp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/hint_text"

@@ -1,26 +1,33 @@
 package com.example.moodlight.screen.main1;
 
 public class CommunityItem {
-    private String question;
+    private String todayQuestion;
     private String answer;
     private int heart;
     private int comment;
     private int todayMood;
+    private int postNumber;
+    private int isHeart;
 
-    public CommunityItem(String question, String answer, int heart, int comment, int todayMood) {
-        this.question = question;
+    public CommunityItem() {
+    }
+
+    public CommunityItem(String todayQuestion, String answer, int heart, int comment, int todayMood, int postNumber, int isHeart) {
+        this.todayQuestion = todayQuestion;
         this.answer = answer;
         this.heart = heart;
         this.comment = comment;
         this.todayMood = todayMood;
+        this.postNumber = postNumber;
+        this.isHeart = isHeart;
     }
 
-    public String getQuestion() {
-        return question;
+    public String getTodayQuestion() {
+        return todayQuestion;
     }
 
-    public void setQuestion(String question) {
-        this.question = question;
+    public void setTodayQuestion(String todayQuestion) {
+        this.todayQuestion = todayQuestion;
     }
 
     public String getAnswer() {
@@ -53,5 +60,21 @@ public class CommunityItem {
 
     public void setTodayMood(int todayMood) {
         this.todayMood = todayMood;
+    }
+
+    public int getPostNumber() {
+        return postNumber;
+    }
+
+    public void setPostNumber(int postNumber) {
+        this.postNumber = postNumber;
+    }
+
+    public int getIsHeart() {
+        return isHeart;
+    }
+
+    public void setIsHeart(int isHeart) {
+        this.isHeart = isHeart;
     }
 }

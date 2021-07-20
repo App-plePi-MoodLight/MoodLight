@@ -13,13 +13,18 @@ import com.example.moodlight.databinding.ActivityCommunityBinding;
 
 public class CommunityActiviy extends AppCompatActivity {
 
-    public static int todayMood;
+    public static int todayMood = 3;
     private ActivityCommunityBinding binding;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_community);
+
+        if (todayMood != 3){
+            View view = null;
+            next(view);
+        }
 
         binding = DataBindingUtil.setContentView(this,R.layout.activity_community);
         binding.setActivity(this);

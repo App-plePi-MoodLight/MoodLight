@@ -34,5 +34,8 @@
         <item name="colorControlActivated">#212121</item>
     </style>
 
->>>>>>> upstream/master
+    <style name="switchStyleHappy" >
+        <item name="colorControlActivated">#f5cf66</item>
+    </style>
+    >>>>>>> upstream/master
 </resources>

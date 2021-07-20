@@ -17,35 +17,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <androidx.cardview.widget.CardView
-            android:id="@+id/profileCardView"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_margin="18dp"
-            android:backgroundTint="#f4f5f7"
-            app:cardCornerRadius="15dp"
-            app:cardElevation="0dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:ignore="DuplicateIds">
 
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
-        </androidx.cardview.widget.CardView>
 
-        <TextView
-            android:id="@+id/profileName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
-            android:fontFamily="@font/roboto_medium"
-            android:text="닉네임"
-            android:textColor="#000000"
-            android:textSize="15sp"
-            app:layout_constraintBottom_toBottomOf="@id/profileCardView"
-            app:layout_constraintStart_toEndOf="@id/profileCardView"
-            app:layout_constraintTop_toTopOf="@id/profileCardView" />
+
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:layout_editor_absoluteX="19dp"
+            tools:layout_editor_absoluteY="13dp" />
 
         <TextView
             android:id="@+id/todayQuestionAnswer"
@@ -58,7 +38,7 @@
             android:textColor="@color/black"
             android:textSize="15sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/profileCardView" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/answer"

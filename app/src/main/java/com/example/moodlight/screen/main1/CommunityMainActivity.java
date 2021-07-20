@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
@@ -13,8 +14,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.moodlight.R;
 import com.example.moodlight.databinding.ActivityCommunityMainBinding;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 
 import java.util.ArrayList;
 
@@ -28,11 +32,14 @@ public class CommunityMainActivity extends AppCompatActivity {
     private int postNumber;
     private ArrayList<CommunityItem> list;
     private CommunityAdapter adapter;
+    private DocumentSnapshot lastVisibleDocument;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_community_main);
+
+        lastVisibleDocument = null;
 
         db = FirebaseFirestore.getInstance();
 
@@ -46,7 +53,9 @@ public class CommunityMainActivity extends AppCompatActivity {
         list = new ArrayList<>();
         adapter = new CommunityAdapter(list);
         binding.answerList.setAdapter(adapter);
-        getPostNumber();
+        setlist();
+
+
 
     }
     private void setColor(){
@@ -65,55 +74,49 @@ public class CommunityMainActivity extends AppCompatActivity {
         Intent intent = new Intent(this,AnswerActivity.class);
         startActivity(intent);
     }
-    public void setItem(String question, String answer, int heart, int comment, int mood){
-        list.add(new CommunityItem(question,answer,heart,comment,mood));
+    private void setItem(String question, String answer, int heart, int comment, int mood){
+        list.add(new CommunityItem(question,answer,heart,comment,mood,0,0));
         adapter.notifyDataSetChanged();
     }
-    public void setAnswer(int name){
-        db.collection("post")
-                .document(String.valueOf(name))
-                .get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()){
-                        DocumentSnapshot documentSnapshot = task.getResult();
-
-                        String question = "";
-                        String answer = String.valueOf(documentSnapshot.get("answer"));
-                        int heart = 0;
-                        int comment = 0;
-                        int mood = Integer.parseInt(String.valueOf(documentSnapshot.get("todayMood")));
-
-                        setItem(question,answer,heart,comment,mood);
-                    }
-                });
+    private Query setAnswer(){
+        CollectionReference collectionReference = db.collection("post");
+        if (lastVisibleDocument == null){
+            return collectionReference.whereEqualTo("todayMood",todayMood).limit(20);
+        }
+        return collectionReference.whereEqualTo("todayMood",todayMood).startAfter(lastVisibleDocument).limit(20);
     }
-    public void setlist(int name){
+    private void setlist(){
         list.add(null);
         adapter.notifyDataSetChanged();
-        int j = name - 15;
-        if (j < 0){
-            j = 0;
-        }
-        Log.d(TAG, "setlist: "+j);
-        for(int i = name; i > j ; i--){
-            setAnswer(i);
-        }
+        Query query = setAnswer();
+        query.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()){
+                Log.d(TAG, "setlist: 성공");
+                for (DocumentSnapshot documentSnapshot : task.getResult()){
+                    CommunityItem item = documentSnapshot.toObject(CommunityItem.class);
+                    list.add(item);
+                }
+                adapter.notifyDataSetChanged();
+                try{
+                    lastVisibleDocument = task.getResult().getDocuments().get(task.getResult().size()-1);
+                }catch (Exception e){
+                    e.getMessage();
+                }
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d(TAG, "onFailure: 실패"+e.getMessage());
+            }
+        });
         list.remove(list.size()-1);
         adapter.notifyItemRemoved(list.size()-1);
-        postNumber-=15;
     }
 
-    public void getPostNumber(){
-        db.collection("post")
-                .document("information")
-                .get()
-                .addOnCompleteListener(task -> {
-                    if(task.isSuccessful()){
-                        DocumentSnapshot documentSnapshot = task.getResult();
-                        postNumber =  Integer.parseInt(String.valueOf(documentSnapshot.get("postNumber")));
-                        setlist(postNumber);
-                    }
-                });
+
+    public void finishActvity(View view){
+        todayMood = 3;
+        finish();
     }
 }
 

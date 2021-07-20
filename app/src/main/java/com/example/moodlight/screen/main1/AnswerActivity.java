@@ -12,8 +12,10 @@ import android.widget.CompoundButton;
 
 import com.example.moodlight.R;
 import com.example.moodlight.databinding.ActivityAnswerBinding;
+import com.example.moodlight.util.FirebaseUtil;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -33,6 +35,9 @@ public class AnswerActivity extends AppCompatActivity {
     private ActivityAnswerBinding binding;
     private FirebaseFirestore db;
     private int postNumber;
+    private String nickName;
+    private String todayQuestion;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,6 +45,7 @@ public class AnswerActivity extends AppCompatActivity {
         binding = DataBindingUtil.setContentView(this,R.layout.activity_answer);
         binding.setActivity(this);
         setColor();
+        getNickName();
 
     }
     private void setColor(){
@@ -57,23 +63,24 @@ public class AnswerActivity extends AppCompatActivity {
     public void addContents(View view){
         getPostNumber();
     }
-    public void getPostNumber(){
+    private void getPostNumber(){
         db.collection("post")
                 .document("information")
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()){
                         DocumentSnapshot documentSnapshot = task.getResult();
-                        postNumber = Integer.parseInt(String.valueOf(documentSnapshot.get("postNumber")))+1;
+                        postNumber = Integer.parseInt(String.valueOf(documentSnapshot.get("todayPostNumber")))+1;
+                        todayQuestion = (String)documentSnapshot.get("todayQuestion");
                         Log.d(TAG, "getPostNumber: 성공"+postNumber);
                         updatePostNumber();
                         setContents();
                     }
                 });
     }
-    public void updatePostNumber(){
+    private void updatePostNumber(){
         Map<String,Object> map = new HashMap<>();
-        map.put("postNumber", postNumber);
+        map.put("todaypPostNumber", postNumber);
         db.collection("post")
                 .document("information")
                 .update(map)
@@ -84,15 +91,21 @@ public class AnswerActivity extends AppCompatActivity {
                     }
                 });
     }
-    public void setContents(){
+    private void setContents(){
         String time = modifyJoinTime(System.currentTimeMillis());
         String[] timeArray = time.split("\\.");
         Map<String,Object> content = new HashMap<>();
+        content.put("todayQuestion",todayQuestion);
         content.put("todayMood",todayMood);
         content.put("answer",binding.answerEditText.getText().toString());
         content.put("commentAlram",binding.commentCheck.isChecked());
         content.put("likeAlram",binding.onlyCheck.isChecked());
         content.put("time", Arrays.toString(timeArray));
+        content.put("nickName",nickName);
+        content.put("postNumber",postNumber);
+        content.put("heart",0);
+        content.put("isHeart",0);
+
 
         db.collection("post").
                 document(String.valueOf(postNumber))
@@ -111,6 +124,23 @@ public class AnswerActivity extends AppCompatActivity {
                 });
 
     }
+
+    private void getNickName(){
+        db.collection("users")
+                .document(FirebaseAuth.getInstance().getUid())
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()){
+                        DocumentSnapshot documentSnapshot = task.getResult();
+                        nickName = (String) documentSnapshot.get("nickname");
+                    }
+                });
+    }
+
+    public void finishActivity(View view){
+        finish();
+    }
+
     private static String modifyJoinTime (Long time) {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy.MM.dd");
         return simpleDateFormat.format(time);

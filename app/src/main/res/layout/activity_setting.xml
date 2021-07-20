@@ -25,7 +25,7 @@
                 android:textSize="18sp" />
         </androidx.appcompat.widget.Toolbar>
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/dangerLayout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -37,20 +37,27 @@
             app:layout_constraintWidth_percent="0.85">
 
             <ImageView
+                android:id="@+id/imageView2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/img_danger" />
+                android:src="@drawable/img_danger"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/dangerTv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
                 android:text="이미 존재하는 닉네임입니다."
-                android:textColor="#FD3939" />
-        </LinearLayout>
+                android:textColor="#FD3939"
+                android:layout_marginLeft="10dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/imageView2"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/successLayout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -62,9 +69,13 @@
             app:layout_constraintWidth_percent="0.85">
 
             <ImageView
+                android:id="@+id/imageView3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/img_success" />
+                android:src="@drawable/img_success"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/successTv"
@@ -72,8 +83,11 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:text="사용할 수 있는 닉네임입니다."
-                android:textColor="#090" />
-        </LinearLayout>
+                android:textColor="#090"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/imageView3"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
 
         <ImageView
@@ -220,7 +234,7 @@
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent" />
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/successPwLayout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -232,20 +246,25 @@
             app:layout_constraintWidth_percent="0.85">
 
             <ImageView
+                android:id="@+id/imageView5"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/img_success" />
+                android:src="@drawable/img_success"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/successPwTv"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_marginLeft="10dp"
                 android:text="다 되었습니다."
-                android:textColor="#090" />
-        </LinearLayout>
+                android:layout_marginLeft="10dp"
+                android:textColor="#090"
+                app:layout_constraintStart_toEndOf="@+id/imageView5" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/dangerPwLayout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -257,18 +276,23 @@
             app:layout_constraintWidth_percent="0.85">
 
             <ImageView
+                android:id="@+id/imageView4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/img_danger" />
+                android:src="@drawable/img_danger"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/dangerPwTv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
                 android:text="이미 존재하는 닉네임입니다."
-                android:textColor="#FD3939" />
-        </LinearLayout>
+                android:layout_marginLeft="10dp"
+                android:textColor="#FD3939"
+                app:layout_constraintStart_toEndOf="@+id/imageView4" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -60,11 +60,6 @@ class MainFragment2 : Fragment() {
     }
 
     private fun dataLoding() {
-        val data: ArrayList<QnAData> = ArrayList()
-        data.add(QnAData("오늘 점심은 뭐 먹죠?", "점심을 먹죠 ㅎㅎ"))
-        data.add(QnAData("오늘 저녁은 뭐 먹죠?", "저녁을 먹죠 ㅎㅎ"))
-        list.add(DateClass("3월 16일", data))
-        list.add(DateClass("4월 16일", data))
         val data : ArrayList<QnAData> = ArrayList()
         if(list.isEmpty()){
             data.add(QnAData("오늘 점심은 뭐 먹죠?", "점심을 먹죠 ㅎㅎ"))

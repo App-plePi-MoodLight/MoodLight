@@ -5,6 +5,7 @@
         android:icon="@drawable/ic_group"
         />
     <item
+        android:id="@+id/nullItem"
         android:checked="false"
         android:title=""
         android:enabled="false"/>

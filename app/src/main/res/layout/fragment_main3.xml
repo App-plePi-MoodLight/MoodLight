@@ -26,7 +26,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:animateLayoutChanges="true"
-            android:paddingBottom="80sp">
             android:paddingBottom="100sp">
 
 
@@ -40,7 +39,8 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.1" />
+                app:layout_constraintVertical_bias="0.1"
+                tools:visibility="visible" />
 
             <TextView
                 android:id="@+id/main3UserNameTv"
@@ -54,7 +54,8 @@
                 android:textSize="20sp"
                 android:visibility="invisible"
                 app:layout_constraintTop_toBottomOf="@id/main3ProfileIv"
-                tools:text="USERNAME" />
+                tools:text="USERNAME"
+                tools:visibility="visible" />
 
             <TextView
                 android:id="@+id/main3EmailTv"
@@ -68,7 +69,8 @@
                 android:textSize="15sp"
                 android:visibility="invisible"
                 app:layout_constraintTop_toBottomOf="@id/main3UserNameTv"
-                tools:text="asdf@asdf.com" />
+                tools:text="asdf@asdf.com"
+                tools:visibility="visible" />
 
             <TextView
                 android:id="@+id/main3Tv1"
@@ -82,7 +84,8 @@
                 android:textSize="15sp"
                 android:visibility="invisible"
                 app:layout_constraintTop_toBottomOf="@id/main3EmailTv"
-                tools:text="무드등을 시작한지 365일이 지났어요!" />
+                tools:text="무드등을 시작한지 365일이 지났어요!"
+                tools:visibility="visible" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/main3Btn1"
@@ -97,7 +100,8 @@
                 android:visibility="invisible"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/main3Tv1" />
+                app:layout_constraintTop_toBottomOf="@id/main3Tv1"
+                tools:visibility="visible" />
 
             <TextView
                 android:id="@+id/main3Tv2"
@@ -111,7 +115,8 @@
                 android:textSize="18sp"
                 android:visibility="invisible"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/main3Btn1" />
+                app:layout_constraintTop_toBottomOf="@id/main3Btn1"
+                tools:visibility="visible" />
 
             <TextView
                 android:id="@+id/main3Tv3"
@@ -120,12 +125,12 @@
                 android:layout_marginTop="25sp"
                 android:fontFamily="@font/roboto_medium"
                 android:text="게시물 댓글 알림"
-
                 android:textColor="#000000"
                 android:textSize="16sp"
                 android:visibility="invisible"
                 app:layout_constraintStart_toEndOf="@id/main3Tv2"
-                app:layout_constraintTop_toBottomOf="@id/main3Tv2" />
+                app:layout_constraintTop_toBottomOf="@id/main3Tv2"
+                tools:visibility="visible" />
 
 
             <Switch
@@ -134,13 +139,13 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="25sp"
                 android:layout_marginEnd="50sp"
-
                 android:checked="@{viewModel.commentIsChecked}"
                 android:theme="@style/switchStyle"
                 android:visibility="invisible"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/main3Tv2"
-                tools:ignore="UseSwitchCompatOrMaterialXml" />
+                tools:ignore="UseSwitchCompatOrMaterialXml"
+                tools:visibility="visible" />
 
             <TextView
                 android:id="@+id/main3Tv4"
@@ -149,12 +154,12 @@
                 android:layout_marginTop="17sp"
                 android:fontFamily="@font/roboto_medium"
                 android:text="게시물 좋아요 알림"
-
                 android:textColor="#000000"
                 android:textSize="16sp"
                 android:visibility="invisible"
                 app:layout_constraintStart_toEndOf="@id/main3Tv2"
-                app:layout_constraintTop_toBottomOf="@id/main3Tv3" />
+                app:layout_constraintTop_toBottomOf="@id/main3Tv3"
+                tools:visibility="visible" />
 
             <Switch
                 android:id="@+id/main3LikeSwitch"
@@ -162,13 +167,13 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="17sp"
                 android:layout_marginEnd="50sp"
-
                 android:checked="@{viewModel.likeIsChecked}"
                 android:theme="@style/switchStyle"
                 android:visibility="invisible"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/main3Tv3"
-                tools:ignore="UseSwitchCompatOrMaterialXml" />
+                tools:ignore="UseSwitchCompatOrMaterialXml"
+                tools:visibility="visible" />
 
             <TextView
                 android:id="@+id/main3Tv5"
@@ -177,12 +182,12 @@
                 android:layout_marginTop="17sp"
                 android:fontFamily="@font/roboto_medium"
                 android:text="가입일"
-
                 android:textColor="#000000"
                 android:textSize="16sp"
                 android:visibility="invisible"
                 app:layout_constraintStart_toEndOf="@id/main3Tv2"
-                app:layout_constraintTop_toBottomOf="@id/main3Tv4" />
+                app:layout_constraintTop_toBottomOf="@id/main3Tv4"
+                tools:visibility="visible" />
 
 
             <TextView
@@ -192,14 +197,14 @@
                 android:layout_marginTop="17sp"
                 android:layout_marginEnd="50sp"
                 android:fontFamily="@font/roboto_medium"
-
                 android:text="@{viewModel.subscription}"
                 android:textColor="#000000"
                 android:textSize="16sp"
                 android:visibility="invisible"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/main3Tv4"
-                tools:text="2021.07.19" />
+                tools:text="2021.07.19"
+                tools:visibility="visible" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/main3LogoutBtn"
@@ -210,15 +215,14 @@
                 android:layout_marginEnd="10sp"
                 android:background="@drawable/main3btn_background"
                 android:fontFamily="@font/roboto_bold"
-
-                android:onClick="@{fragment::signOut}"
                 android:text="로그아웃"
                 android:textColor="#ffffff"
                 android:textSize="15sp"
                 android:visibility="invisible"
                 app:layout_constraintEnd_toEndOf="@id/main3SubscriptionTv"
                 app:layout_constraintStart_toStartOf="@id/main3Tv5"
-                app:layout_constraintTop_toBottomOf="@id/main3SubscriptionTv" />
+                app:layout_constraintTop_toBottomOf="@id/main3SubscriptionTv"
+                tools:visibility="visible" />
 
             <TextView
                 android:id="@+id/main3WithdrawalTv"
@@ -227,13 +231,13 @@
                 android:layout_marginTop="15sp"
                 android:fontFamily="@font/roboto_medium"
                 android:text="탈퇴하기"
-
                 android:textColor="#b5b5b5"
                 android:textSize="13sp"
                 android:visibility="invisible"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/main3LogoutBtn" />
+                app:layout_constraintTop_toBottomOf="@id/main3LogoutBtn"
+                tools:visibility="visible" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

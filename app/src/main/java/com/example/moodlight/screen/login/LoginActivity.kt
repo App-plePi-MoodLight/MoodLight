@@ -5,8 +5,11 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.EditText
+import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.widget.AppCompatButton
+import androidx.core.view.isVisible
 import com.example.moodlight.R
 import com.example.moodlight.database.UserData
 import com.example.moodlight.database.UserDatabase
@@ -29,35 +32,49 @@ class LoginActivity : AppCompatActivity() {
         setContentView(R.layout.activity_login)
 
         findViewById<AppCompatButton>(R.id.loginBtn).setOnClickListener {
+
             val email: String = findViewById<EditText>(R.id.loginIdEtv).text.toString()
             val password: String = findViewById<EditText>(R.id.loginPasswordEtv).text.toString()
 
-            FirebaseUtil.getAuth().signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this) { task ->
-                    if (task.isSuccessful) {
-                        // Sign in success, update UI with the signed-in user's information
-                        val userData = UserData(email, password)
-
-                        val db = UserDatabase.getInstance(applicationContext)
-                            CoroutineScope(Dispatchers.IO).launch {
-                            db!!.userDao().insert(userData)
-                        }
-
-                        Log.d("Login", "signInWithEmail:success")
-                        val intent: Intent = Intent(applicationContext, MainActivity::class.java)
-                        startActivity(intent)
-                        initialActivity.finish()
-                        finish()
-                    } else {
-                        // If sign in fails, display a message to the user.
-                        Log.w("Login", "signInWithEmail:failure", task.exception)
-                        Toast.makeText(
-                            baseContext, "Authentication failed.",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
+            when {
+                email.equals("") -> {
+                    errorVisible("이메일을 입력해주세요.")
                 }
+                password.equals("") -> {
+                    errorVisible("비밀번호를 입력해주세요.")
+                }
+                else -> {
+
+                    FirebaseUtil.getAuth().signInWithEmailAndPassword(email, password)
+                        .addOnCompleteListener(this) { task ->
+                            if (task.isSuccessful) {
+                                // Sign in success, update UI with the signed-in user's information
+                                val userData = UserData(email, password)
+
+                                val db = UserDatabase.getInstance(applicationContext)
+                                CoroutineScope(Dispatchers.Main).launch {
+                                    db!!.userDao().insert(userData)
+                                }
+
+                                Log.d("Login", "signInWithEmail:success")
+                                val intent: Intent =
+                                    Intent(applicationContext, MainActivity::class.java)
+                                startActivity(intent)
+                                initialActivity.finish()
+                                finish()
+                            } else {
+                                errorVisible("가입하지 않은 아이디이거나, 잘못된 비밀번호입니다.")
+                            }
+                        }
+                }
+            }
         }
 
+    }
+
+    private fun errorVisible(errorText : String) : Unit {
+        findViewById<ImageView>(R.id.loginErrorIv).isVisible = true
+        findViewById<TextView>(R.id.loginErrorTv).text = errorText
+        findViewById<TextView>(R.id.loginErrorTv).isVisible = true
     }
 }

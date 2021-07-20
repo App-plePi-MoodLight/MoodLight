@@ -1,5 +1,7 @@
 package com.example.moodlight.screen.main3
 
+import android.animation.LayoutTransition
+import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
@@ -7,6 +9,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import com.example.moodlight.R
@@ -40,6 +43,18 @@ class MainFragment3 : Fragment() {
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
         binding.fragment = this
+
+
+
+        (binding.wholeLayout as ViewGroup).layoutTransition.apply {
+            val appearingAnimator = ObjectAnimator.ofFloat(view, "translationX", -1000f, 0f)
+            val disappearingAnimator = ObjectAnimator.ofFloat(view, "translationX", 0f, 1000f)
+            this.setAnimator(LayoutTransition.APPEARING, appearingAnimator)
+            this.setAnimator(LayoutTransition.DISAPPEARING, disappearingAnimator)
+            this.setStartDelay(LayoutTransition.APPEARING, 2000L)
+            this.setDuration(LayoutTransition.APPEARING, 700L)
+        }
+        setAnimation()
 
         binding.main3CommentSwitch.setOnCheckedChangeListener { buttonView, isChecked ->
 
@@ -88,5 +103,52 @@ class MainFragment3 : Fragment() {
         val intent = Intent(requireContext(), InitialActivity::class.java)
         requireActivity().startActivity(intent)
         requireActivity().finish()
+    }
+
+    private fun setAnimation(): Unit {
+        binding.main3ProfileIv.postDelayed({
+            binding.main3ProfileIv.isVisible = true
+        }, 50L)
+
+        binding.main3Tv1.postDelayed({
+            binding.main3UserNameTv.isVisible = true
+        }, 200L)
+        binding.main3EmailTv.postDelayed({
+            binding.main3EmailTv.isVisible = true
+        }, 250L)
+        binding.main3Tv1.postDelayed({
+            binding.main3Tv1.isVisible = true
+        }, 300L)
+        binding.main3Btn1.postDelayed({
+            binding.main3Btn1.isVisible = true
+        }, 350L)
+        binding.main3Tv2.postDelayed({
+            binding.main3Tv2.isVisible = true
+        }, 400L)
+        binding.main3Tv3.postDelayed({
+            binding.main3Tv3.isVisible = true
+        }, 450L)
+        binding.main3CommentSwitch.postDelayed({
+            binding.main3CommentSwitch.isVisible = true
+        }, 500L)
+        binding.main3Tv4.postDelayed({
+            binding.main3Tv4.isVisible = true
+        }, 550L)
+        binding.main3LikeSwitch.postDelayed({
+            binding.main3LikeSwitch.isVisible = true
+        }, 600L)
+        binding.main3Tv5.postDelayed({
+            binding.main3Tv5.isVisible = true
+        }, 650L)
+        binding.main3SubscriptionTv.postDelayed({
+            binding.main3SubscriptionTv.isVisible = true
+        }, 700L)
+        binding.main3LogoutBtn.postDelayed({
+            binding.main3LogoutBtn.isVisible = true
+        }, 750L)
+        binding.main3WithdrawalTv.postDelayed({
+            binding.main3WithdrawalTv.isVisible = true
+        }, 800L)
+
     }
 }

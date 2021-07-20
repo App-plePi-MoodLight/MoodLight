@@ -22,8 +22,10 @@
 
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/wholeLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:animateLayoutChanges="true"
             android:paddingBottom="80sp">
 
 
@@ -32,6 +34,7 @@
                 android:layout_width="100sp"
                 android:layout_height="100sp"
                 android:src="@drawable/basic_profile"
+                android:visibility="invisible"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -48,6 +51,7 @@
                 android:text="@{viewModel.username}"
                 android:textColor="#000000"
                 android:textSize="20sp"
+                android:visibility="invisible"
                 app:layout_constraintTop_toBottomOf="@id/main3ProfileIv"
                 tools:text="USERNAME" />
 
@@ -61,6 +65,7 @@
                 android:text="@{viewModel.email}"
                 android:textColor="#b5b5b5"
                 android:textSize="15sp"
+                android:visibility="invisible"
                 app:layout_constraintTop_toBottomOf="@id/main3UserNameTv"
                 tools:text="asdf@asdf.com" />
 
@@ -70,10 +75,11 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20sp"
                 android:fontFamily="@font/roboto_medium"
-                android:text="@{viewModel.main3Tv1Text}"
                 android:gravity="center"
+                android:text="@{viewModel.main3Tv1Text}"
                 android:textColor="#000000"
                 android:textSize="15sp"
+                android:visibility="invisible"
                 app:layout_constraintTop_toBottomOf="@id/main3EmailTv"
                 tools:text="무드등을 시작한지 365일이 지났어요!" />
 
@@ -87,6 +93,7 @@
                 android:text="프로필 수정"
                 android:textColor="#ffffff"
                 android:textSize="15sp"
+                android:visibility="invisible"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/main3Tv1" />
@@ -101,6 +108,7 @@
                 android:text="설정"
                 android:textColor="#000000"
                 android:textSize="18sp"
+                android:visibility="invisible"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/main3Btn1" />
 
@@ -111,10 +119,27 @@
                 android:layout_marginTop="25sp"
                 android:fontFamily="@font/roboto_medium"
                 android:text="게시물 댓글 알림"
+
                 android:textColor="#000000"
                 android:textSize="16sp"
+                android:visibility="invisible"
                 app:layout_constraintStart_toEndOf="@id/main3Tv2"
                 app:layout_constraintTop_toBottomOf="@id/main3Tv2" />
+
+
+            <Switch
+                android:id="@+id/main3CommentSwitch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="25sp"
+                android:layout_marginEnd="50sp"
+
+                android:checked="@{viewModel.commentIsChecked}"
+                android:theme="@style/switchStyle"
+                android:visibility="invisible"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/main3Tv2"
+                tools:ignore="UseSwitchCompatOrMaterialXml" />
 
             <TextView
                 android:id="@+id/main3Tv4"
@@ -123,10 +148,26 @@
                 android:layout_marginTop="17sp"
                 android:fontFamily="@font/roboto_medium"
                 android:text="게시물 좋아요 알림"
+
                 android:textColor="#000000"
                 android:textSize="16sp"
+                android:visibility="invisible"
                 app:layout_constraintStart_toEndOf="@id/main3Tv2"
                 app:layout_constraintTop_toBottomOf="@id/main3Tv3" />
+
+            <Switch
+                android:id="@+id/main3LikeSwitch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="17sp"
+                android:layout_marginEnd="50sp"
+
+                android:checked="@{viewModel.likeIsChecked}"
+                android:theme="@style/switchStyle"
+                android:visibility="invisible"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/main3Tv3"
+                tools:ignore="UseSwitchCompatOrMaterialXml" />
 
             <TextView
                 android:id="@+id/main3Tv5"
@@ -135,34 +176,13 @@
                 android:layout_marginTop="17sp"
                 android:fontFamily="@font/roboto_medium"
                 android:text="가입일"
+
                 android:textColor="#000000"
                 android:textSize="16sp"
+                android:visibility="invisible"
                 app:layout_constraintStart_toEndOf="@id/main3Tv2"
                 app:layout_constraintTop_toBottomOf="@id/main3Tv4" />
 
-            <Switch
-                android:id="@+id/main3CommentSwitch"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:checked="@{viewModel.commentIsChecked}"
-                android:layout_marginTop="25sp"
-                android:layout_marginEnd="50sp"
-                android:theme="@style/switchStyle"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/main3Tv2"
-                tools:ignore="UseSwitchCompatOrMaterialXml" />
-
-            <Switch
-                android:id="@+id/main3LikeSwitch"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:checked="@{viewModel.likeIsChecked}"
-                android:layout_marginTop="17sp"
-                android:layout_marginEnd="50sp"
-                android:theme="@style/switchStyle"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/main3Tv3"
-                tools:ignore="UseSwitchCompatOrMaterialXml" />
 
             <TextView
                 android:id="@+id/main3SubscriptionTv"
@@ -171,9 +191,11 @@
                 android:layout_marginTop="17sp"
                 android:layout_marginEnd="50sp"
                 android:fontFamily="@font/roboto_medium"
+
                 android:text="@{viewModel.subscription}"
                 android:textColor="#000000"
                 android:textSize="16sp"
+                android:visibility="invisible"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/main3Tv4"
                 tools:text="2021.07.19" />
@@ -187,10 +209,12 @@
                 android:layout_marginEnd="10sp"
                 android:background="@drawable/main3btn_background"
                 android:fontFamily="@font/roboto_bold"
+
                 android:onClick="@{fragment::signOut}"
                 android:text="로그아웃"
                 android:textColor="#ffffff"
                 android:textSize="15sp"
+                android:visibility="invisible"
                 app:layout_constraintEnd_toEndOf="@id/main3SubscriptionTv"
                 app:layout_constraintStart_toStartOf="@id/main3Tv5"
                 app:layout_constraintTop_toBottomOf="@id/main3SubscriptionTv" />
@@ -202,8 +226,10 @@
                 android:layout_marginTop="15sp"
                 android:fontFamily="@font/roboto_medium"
                 android:text="탈퇴하기"
+
                 android:textColor="#b5b5b5"
                 android:textSize="13sp"
+                android:visibility="invisible"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/main3LogoutBtn" />

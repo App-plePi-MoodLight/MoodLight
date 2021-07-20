@@ -1,5 +1,7 @@
 package com.example.moodlight.screen.register
 
+import android.animation.LayoutTransition
+import android.animation.ObjectAnimator
 import android.content.ContentValues.TAG
 import android.content.Intent
 import android.graphics.Color
@@ -11,6 +13,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -24,6 +27,7 @@ import com.example.moodlight.screen.initial.InitialActivity
 import com.example.moodlight.screen.login.LoginActivity
 import com.example.moodlight.util.Expression
 import com.example.moodlight.util.FirebaseUtil
+import com.google.firebase.messaging.FirebaseMessaging
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -47,6 +51,7 @@ class RegisterFragment3 : Fragment() {
         )
         binding.viewModel = viewModel
         lateinit var nicknameArray: ArrayList<String>
+
 
 
         Log.d(TAG, "onCreateView: 비밀번호 ${sha.encryptSHA(viewModel.password.value)}")
@@ -132,15 +137,17 @@ class RegisterFragment3 : Fragment() {
         FirebaseUtil.getAuth().createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    val map = hashMapOf(
-                        "nickname" to nickname,
-                        "joinTime" to System.currentTimeMillis(),
-                        "commentAlarm" to false,
-                        "likeAlarm" to false,
-                        "password" to sha.encryptSHA(viewModel.password.value)
-                    )
 
                     CoroutineScope(Dispatchers.IO).launch {
+                        val map = hashMapOf(
+                            "nickname" to nickname,
+                            "joinTime" to System.currentTimeMillis(),
+                            "commentAlarm" to false,
+                            "likeAlarm" to false,
+                            "password" to sha.encryptSHA(viewModel.password.value),
+                            "token" to FirebaseUtil.getFirebaseMessagingInstance().token
+                        )
+
                         FirebaseUtil.getFireStoreInstance().collection("users")
                             .document(FirebaseUtil.getUid())
                             .set(map)

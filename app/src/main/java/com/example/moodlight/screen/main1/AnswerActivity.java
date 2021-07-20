@@ -18,7 +18,11 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static android.content.ContentValues.TAG;
@@ -59,9 +63,9 @@ public class AnswerActivity extends AppCompatActivity {
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()){
-                        Log.d(TAG, "getPostNumber: 성공");
                         DocumentSnapshot documentSnapshot = task.getResult();
-                        ++postNumber;
+                        postNumber = Integer.parseInt(String.valueOf(documentSnapshot.get("postNumber")))+1;
+                        Log.d(TAG, "getPostNumber: 성공"+postNumber);
                         updatePostNumber();
                         setContents();
                     }
@@ -69,7 +73,7 @@ public class AnswerActivity extends AppCompatActivity {
     }
     public void updatePostNumber(){
         Map<String,Object> map = new HashMap<>();
-        map.put("postNumber", postNumber+1);
+        map.put("postNumber", postNumber);
         db.collection("post")
                 .document("information")
                 .update(map)
@@ -81,17 +85,21 @@ public class AnswerActivity extends AppCompatActivity {
                 });
     }
     public void setContents(){
+        String time = modifyJoinTime(System.currentTimeMillis());
+        String[] timeArray = time.split("\\.");
         Map<String,Object> content = new HashMap<>();
+        content.put("todayMood",todayMood);
         content.put("answer",binding.answerEditText.getText().toString());
         content.put("commentAlram",binding.commentCheck.isChecked());
         content.put("likeAlram",binding.onlyCheck.isChecked());
+        content.put("time", Arrays.toString(timeArray));
 
         db.collection("post").
-                document(String.valueOf(postNumber+1))
+                document(String.valueOf(postNumber))
                 .set(content).
                 addOnCompleteListener(task ->  {
                     if (task.isSuccessful()){
-                        Log.d(TAG, "addContents: 성공");
+                        Log.d(TAG, "addContents: 성공"+time);
                         finish();
                     }
                 })
@@ -103,4 +111,9 @@ public class AnswerActivity extends AppCompatActivity {
                 });
 
     }
+    private static String modifyJoinTime (Long time) {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy.MM.dd");
+        return simpleDateFormat.format(time);
+    }
+
 }

@@ -96,13 +96,14 @@
             app:layout_constraintHorizontal_bias="0.0"/>
 
         <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/answerList"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="18dp"
-            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="20dp"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/hint_text"
-            tools:listitem="@layout/row_answer"/>
+            tools:listitem="@layout/row_answer" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

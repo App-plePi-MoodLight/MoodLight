@@ -3,6 +3,8 @@ package com.example.moodlight.screen.main3
 import android.animation.LayoutTransition
 import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
+import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -16,14 +18,19 @@ import com.example.moodlight.R
 import com.example.moodlight.database.UserDatabase
 import com.example.moodlight.databinding.FragmentMain3Binding
 import com.example.moodlight.screen.initial.InitialActivity
+import com.example.moodlight.dialog.CommonDialog
+import com.example.moodlight.screen.MainActivity
+import com.example.moodlight.screen.main3.setting.SettingActivity
 import com.example.moodlight.util.FirebaseUtil
 import com.example.moodlight.util.GetTime
+import com.google.android.gms.common.internal.service.Common
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class MainFragment3 : Fragment() {
+    private var activity : MainActivity? = MainActivity()
 
     private lateinit var binding: FragmentMain3Binding
     private val viewModel: Main3ViewModel by lazy {
@@ -68,6 +75,18 @@ class MainFragment3 : Fragment() {
             viewModel.likeIsChecked.value = isChecked
         }
 
+        binding.main3Btn1.setOnClickListener {
+            startActivity(Intent(requireContext(), SettingActivity::class.java))
+        }
+
+        binding.main3WithdrawalTv.setOnClickListener {
+            activity?.onClickBtnInFragment(1)
+
+        }
+        binding.main3LogoutBtn.setOnClickListener {
+            activity?.onClickBtnInFragment(2)
+        }
+
         setUi()
 
 
@@ -94,7 +113,6 @@ class MainFragment3 : Fragment() {
                 }
         }
     }
-
     public fun signOut(view: View): Unit {
         CoroutineScope(Dispatchers.IO).launch {
             UserDatabase.getInstance(requireContext())!!.userDao().deleteUserLoginTable()
@@ -150,5 +168,15 @@ class MainFragment3 : Fragment() {
             binding.main3WithdrawalTv.isVisible = true
         }, 800L)
 
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        activity = getActivity() as MainActivity
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        activity = null
     }
 }

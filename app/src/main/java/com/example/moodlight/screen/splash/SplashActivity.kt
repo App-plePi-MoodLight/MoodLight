@@ -3,6 +3,8 @@ package com.example.moodlight.screen.splash
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.widget.Toast
 import com.example.moodlight.R
@@ -27,8 +29,39 @@ class SplashActivity : AppCompatActivity() {
         val db = UserDatabase.getInstance(applicationContext)
 
 
-        GlobalScope.launch {
+//        GlobalScope.launch {
+//
+//            if (db!!.userDao().getuserLoginTable()!!.isNotEmpty()) {
+//                userDataList = db!!.userDao().getuserLoginTable()
+//                val email : String = userDataList!![0].id
+//                val password : String = userDataList!![0].password
+//
+//                Firebase.auth.signInWithEmailAndPassword(email, password)
+//                    .addOnCompleteListener(this@SplashActivity) { task ->
+//                        if (task.isSuccessful) {
+//
+//                            Log.d("Login", "signInWithEmail:success")
+//                            intent = Intent(applicationContext, MainActivity::class.java)
+//                            startActivity(intent)
+//                            finish()
+//                       }
+//                    }
+//            }
+//            if(FirebaseUtil.getAuth().currentUser != null){
+//                startActivity(Intent(applicationContext, MainActivity::class.java))
+//            }
+//            else {
+//                intent = Intent(applicationContext, OnboardingActivity::class.java)
+//                startActivity(intent)
+//                finish()
+//            }
+//
+//            delay(3000)
+//
+//
+//        }
 
+        Handler(Looper.getMainLooper()).postDelayed({
             if(FirebaseUtil.getAuth().currentUser != null){
                 startActivity(Intent(applicationContext, MainActivity::class.java))
                 finish()
@@ -38,11 +71,7 @@ class SplashActivity : AppCompatActivity() {
                 startActivity(intent)
                 finish()
             }
-
-            delay(3000)
-
-
-        }
+        }, 3000)
 
     }
 }

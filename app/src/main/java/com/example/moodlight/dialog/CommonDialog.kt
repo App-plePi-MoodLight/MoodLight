@@ -36,10 +36,10 @@ class CommonDialog(
 
         findViewById<TextView>(R.id.mainTv).text = mainMessage
         findViewById<TextView>(R.id.subTv).text = message
-        findViewById<TextView>(R.id.checkBtn).text = checkBtn
+        findViewById<TextView>(R.id.checkBtn2).text = checkBtn
 
         window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        findViewById<TextView>(R.id.checkBtn).setOnClickListener {
+        findViewById<TextView>(R.id.checkBtn2).setOnClickListener {
             this.commDialoginterface?.onCheckBtnClick()
         }
         findViewById<TextView>(R.id.cancelBtn).setOnClickListener {

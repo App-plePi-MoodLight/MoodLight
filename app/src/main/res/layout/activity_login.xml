@@ -6,16 +6,15 @@
     android:layout_height="match_parent"
     tools:context=".screen.login.LoginActivity">
 
+
     <ImageView
-        android:layout_width="70sp"
-        android:layout_height="70sp"
-        android:src="@drawable/logo"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintVertical_bias="0.2"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_width="70dp"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_main_icon"
+        android:layout_marginBottom="20dp"
+        app:layout_constraintBottom_toTopOf="@+id/loginIdEtv"
         app:layout_constraintEnd_toEndOf="parent"
-        />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <EditText
         android:id="@+id/loginIdEtv"
@@ -25,6 +24,7 @@
         android:background="@drawable/edittext_design_1"
         android:fontFamily="@font/roboto_medium"
         android:hint="이메일 입력"
+        android:textColorHint="#000"
         android:padding="17sp"
         android:theme="@style/editText"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -43,6 +43,7 @@
         android:background="@drawable/edittext_design_1"
         android:fontFamily="@font/roboto_medium"
         android:hint="비밀번호 입력"
+        android:textColorHint="#000"
         android:inputType="textPassword"
         android:padding="17sp"
         android:theme="@style/editText"

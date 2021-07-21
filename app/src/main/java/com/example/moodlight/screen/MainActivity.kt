@@ -127,13 +127,14 @@ class MainActivity : AppCompatActivity(), CommonDialogInterface, LogoutDialogInt
     override fun onClickLogout() {
 
         FirebaseUtil.getAuth().signOut()
+        logoutDialog.dismiss()
         startActivity(Intent(this, InitialActivity::class.java))
         logoutDialog.dismiss()
         finish()
     }
 
     override fun onCancelLogout() {
-        logoutDialog.cancel()
+        logoutDialog.dismiss()
     }
 
 

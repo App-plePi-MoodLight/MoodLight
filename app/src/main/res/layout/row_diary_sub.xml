@@ -32,9 +32,9 @@
             android:layout_height="wrap_content"
             android:text="질문내용"
             android:textColor="#000"
-            android:textSize="20sp"
-            android:paddingTop="10dp"
-            android:paddingLeft="10dp"
+            android:textSize="16sp"
+            android:paddingTop="20dp"
+            android:paddingLeft="20dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -46,9 +46,9 @@
             android:textStyle="normal"
             android:text="답변내용"
             android:paddingBottom="10dp"
-            android:paddingLeft="10dp"
+            android:paddingLeft="20dp"
             android:textColor="#8b8b8b"
-            android:textSize="20sp"
+            android:textSize="16sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/Qcontents" />
 
@@ -60,7 +60,7 @@
             android:text=".............."
             android:paddingBottom="10dp"
             android:textColor="#8b8b8b"
-            android:textSize="20sp"
+            android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/Acontents"
             app:layout_constraintTop_toBottomOf="@+id/Qcontents" />

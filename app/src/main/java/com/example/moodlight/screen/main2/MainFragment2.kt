@@ -81,7 +81,7 @@ class MainFragment2 : Fragment() {
 
     private fun dataLoding() {
         val data: ArrayList<QnAData> = ArrayList()
-        if (list.isEmpty()) {
+        if(list.isEmpty()){
             data.add(QnAData("오늘 점심은 뭐 먹죠?", "점심을 먹죠 ㅎㅎ"))
             data.add(QnAData("오늘 저녁은 뭐 먹죠?", "저녁을 먹죠 ㅎㅎ"))
             list.add(DateClass("3월 16일", data))
@@ -172,6 +172,7 @@ class MainFragment2 : Fragment() {
         for (i in calendarHelper.getStartDayOfWeek() - 2 downTo 0) {
 
             calendarViewModel.dateList.add(
+
                 Main2CalendarData(
                     (lastEndDay - i).toString(),
                     DataType.NONE_MOOD,
@@ -244,6 +245,11 @@ class MainFragment2 : Fragment() {
 
     public fun minusMonth(view: View) {
         calendarHelper.minusMonth()
+        Log.e(
+            "year,month",
+            calendarHelper.getYear().toString() + ":  " + calendarHelper.getMonth().toString()
+        )
+
         setCalendar()
     }
 

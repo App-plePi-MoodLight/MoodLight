@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.moodlight.R;
 import com.example.moodlight.databinding.ActivityCommunityMainBinding;
@@ -20,6 +21,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 import static android.content.ContentValues.TAG;
@@ -56,16 +58,15 @@ public class CommunityMainActivity extends AppCompatActivity {
         setlist();
 
 
-
     }
     private void setColor(){
         switch (todayMood){
-            case 0: binding.answerBtn.setBackground(ContextCompat.getDrawable(this,R.drawable.btn_happy_background));
+            case 101: binding.answerBtn.setBackground(ContextCompat.getDrawable(this,R.drawable.btn_happy_background));
                 break;
-            case 1:
+            case 102:
                 binding.answerBtn.setBackground(ContextCompat.getDrawable(this,R.drawable.btn_mad_background));
                 break;
-            case 2:
+            case 103:
                 binding.answerBtn.setBackground(ContextCompat.getDrawable(this,R.drawable.btn_sad_background));
                 break;
         }
@@ -74,16 +75,13 @@ public class CommunityMainActivity extends AppCompatActivity {
         Intent intent = new Intent(this,AnswerActivity.class);
         startActivity(intent);
     }
-    private void setItem(String question, String answer, int heart, int comment, int mood){
-        list.add(new CommunityItem(question,answer,heart,comment,mood,0,0));
-        adapter.notifyDataSetChanged();
-    }
+
     private Query setAnswer(){
         CollectionReference collectionReference = db.collection("post");
         if (lastVisibleDocument == null){
-            return collectionReference.whereEqualTo("todayMood",todayMood).limit(20);
+            return collectionReference.whereEqualTo("mood",todayMood).limit(20);
         }
-        return collectionReference.whereEqualTo("todayMood",todayMood).startAfter(lastVisibleDocument).limit(20);
+        return collectionReference.whereEqualTo("mood",todayMood).startAfter(lastVisibleDocument).limit(20);
     }
     private void setlist(){
         list.add(null);
@@ -91,7 +89,7 @@ public class CommunityMainActivity extends AppCompatActivity {
         Query query = setAnswer();
         query.get().addOnCompleteListener(task -> {
             if (task.isSuccessful()){
-                Log.d(TAG, "setlist: 성공");
+                Log.d(TAG, "setlist: 성공"+modifyJoinTime());
                 for (DocumentSnapshot documentSnapshot : task.getResult()){
                     CommunityItem item = documentSnapshot.toObject(CommunityItem.class);
                     list.add(item);
@@ -106,7 +104,6 @@ public class CommunityMainActivity extends AppCompatActivity {
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Log.d(TAG, "onFailure: 실패"+e.getMessage());
             }
         });
         list.remove(list.size()-1);
@@ -117,6 +114,13 @@ public class CommunityMainActivity extends AppCompatActivity {
     public void finishActvity(View view){
         todayMood = 3;
         finish();
+    }
+
+    private static String modifyJoinTime () {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy.MM.dd");
+        String time = simpleDateFormat.format(System.currentTimeMillis());
+        String[] timeArray = time.split("\\.");
+        return timeArray[1]+"."+(Integer.parseInt(timeArray[2])+1);
     }
 }
 

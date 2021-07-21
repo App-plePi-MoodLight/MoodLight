@@ -1,9 +1,11 @@
 package com.example.moodlight.screen.main1;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -62,15 +64,19 @@ public class CommunityAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     public int getItemCount() {
         return items == null ? 0 : items.size();
     }
+
     public class NormalViewHolder extends RecyclerView.ViewHolder {
         private FirebaseFirestore db;
         private int heartValue;
         private boolean isSelect = false;
+
         private TextView todayQuestion;
         private TextView answer;
         private TextView heart;
         private TextView comment;
         private ImageButton heartBtn;
+        private Button commentBtn;
+
         public NormalViewHolder(@NonNull View itemView) {
             super(itemView);
             todayQuestion = itemView.findViewById(R.id.todayQuestionAnswer);
@@ -78,10 +84,12 @@ public class CommunityAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             heart = itemView.findViewById(R.id.heart);
             comment = itemView.findViewById(R.id.comment);
             heartBtn = itemView.findViewById(R.id.heartBtn);
+            commentBtn = itemView.findViewById(R.id.commentBtn);
         }
         public void onBind(CommunityItem item){
             db = FirebaseFirestore.getInstance();
             isSelect = item.getIsHeart() != 0 ? true : false;
+
             todayQuestion.setText(item.getTodayQuestion());
             answer.setText(item.getAnswer());
             heart.setText(String.valueOf(item.getHeart()));
@@ -95,16 +103,27 @@ public class CommunityAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             }
 
             switch (item.getTodayMood()){
-                case 0 :
+                case 101:
                     heartBtn.setColorFilter(Color.parseColor("#f5cf66"));
                     break;
-                case 1:
+                case 102:
                     heartBtn.setColorFilter(Color.parseColor("#ed5d4c"));
                     break;
-                case 2:
+                case 103:
                         heartBtn.setColorFilter(Color.parseColor("#10699e"));
                         break;
             }
+
+            commentBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(itemView.getContext(),CommentActivity.class);
+                    intent.putExtra("commentArray",item);
+                    intent.putExtra("postNumber",item.getPostNumber());
+                    itemView.getContext().startActivity(intent);
+                }
+            });
+
             Map<String, Object> map = new HashMap<>();
             heartBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -137,7 +156,6 @@ public class CommunityAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                                     }
                                     isSelect = true;
                                 });
-
                     }
                 }
             });

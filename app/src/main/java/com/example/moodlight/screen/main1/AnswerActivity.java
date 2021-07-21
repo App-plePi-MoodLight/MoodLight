@@ -50,12 +50,12 @@ public class AnswerActivity extends AppCompatActivity {
     }
     private void setColor(){
         switch (todayMood){
-            case 0: binding.answerBtn.setBackground(ContextCompat.getDrawable(this,R.drawable.btn_happy_background));
+            case 101: binding.answerBtn.setBackground(ContextCompat.getDrawable(this,R.drawable.btn_happy_background));
                 break;
-            case 1:
+            case 102:
                 binding.answerBtn.setBackground(ContextCompat.getDrawable(this,R.drawable.btn_mad_background));
                 break;
-            case 2:
+            case 103:
                 binding.answerBtn.setBackground(ContextCompat.getDrawable(this,R.drawable.btn_sad_background));
                 break;
         }
@@ -73,14 +73,13 @@ public class AnswerActivity extends AppCompatActivity {
                         postNumber = Integer.parseInt(String.valueOf(documentSnapshot.get("todayPostNumber")))+1;
                         todayQuestion = (String)documentSnapshot.get("todayQuestion");
                         Log.d(TAG, "getPostNumber: 성공"+postNumber);
-                        updatePostNumber();
                         setContents();
                     }
                 });
     }
     private void updatePostNumber(){
         Map<String,Object> map = new HashMap<>();
-        map.put("todaypPostNumber", postNumber);
+        map.put("todayPostNumber", postNumber);
         db.collection("post")
                 .document("information")
                 .update(map)
@@ -96,15 +95,17 @@ public class AnswerActivity extends AppCompatActivity {
         String[] timeArray = time.split("\\.");
         Map<String,Object> content = new HashMap<>();
         content.put("todayQuestion",todayQuestion);
-        content.put("todayMood",todayMood);
         content.put("answer",binding.answerEditText.getText().toString());
         content.put("commentAlram",binding.commentCheck.isChecked());
         content.put("likeAlram",binding.onlyCheck.isChecked());
-        content.put("time", Arrays.toString(timeArray));
         content.put("nickName",nickName);
         content.put("postNumber",postNumber);
         content.put("heart",0);
+        content.put("comment",0);
+        content.put("commentArray",Arrays.asList());
         content.put("isHeart",0);
+        content.put("mood",todayMood);
+        content.put(timeArray[1]+"."+(Integer.parseInt(timeArray[2])+1),todayMood);
 
 
         db.collection("post").
@@ -113,6 +114,18 @@ public class AnswerActivity extends AppCompatActivity {
                 addOnCompleteListener(task ->  {
                     if (task.isSuccessful()){
                         Log.d(TAG, "addContents: 성공"+time);
+                        updatePostNumber();
+                        switch (todayMood){
+                            case 101:
+                                getCount("Happy");
+                                break;
+                            case 102:
+                                getCount("Mad");
+                                break;
+                            case 103:
+                                getCount("Sad");
+                                break;
+                        }
                         finish();
                     }
                 })
@@ -139,6 +152,25 @@ public class AnswerActivity extends AppCompatActivity {
 
     public void finishActivity(View view){
         finish();
+    }
+
+    private void getCount(String mood){
+        db.collection("post")
+                .document("information")
+                .get().addOnCompleteListener(task -> {
+                    DocumentSnapshot documentSnapshot = task.getResult();
+                    updateCount(mood, Integer.parseInt(String.valueOf(documentSnapshot.get("today"+mood+"Count"))));
+        });
+    }
+
+    private void updateCount(String mood,int value){
+        Map<String,Object> map = new HashMap<>();
+        map.put("today"+mood+"Count",value+1);
+        db.collection("post").document("information")
+                .update(map)
+                .addOnCompleteListener(task -> {
+
+                });
     }
 
     private static String modifyJoinTime (Long time) {

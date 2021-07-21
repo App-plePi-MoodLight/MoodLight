@@ -28,24 +28,9 @@ class SplashActivity : AppCompatActivity() {
 
         GlobalScope.launch {
 
-//            if (db!!.userDao().getuserLoginTable()!!.isNotEmpty()) {
-//                userDataList = db!!.userDao().getuserLoginTable()
-//                val email : String = userDataList!![0].id
-//                vail password : String = userDataList!![0].password
-//
-//                Fiirebase.auth.signInWithEmailAndPassword(email, password)
-//                i    .addOnCompleteListener(this@SplashActivity) { task ->
-//                        if (task.isSuccessful) {
-//
-//                            Log.d("Login", "signInWithEmail:success")
-//                            intent = Intent(applicationContext, MainActivity::class.java)
-//               i             startActivity(intent)
-//              i              finish()
-//             i           }
-//                    }
-//            }
             if(FirebaseUtil.getAuth().currentUser != null){
                 startActivity(Intent(applicationContext, MainActivity::class.java))
+                finish()
             }
             else {
                 intent = Intent(applicationContext, InitialActivity::class.java)

@@ -1,6 +1,9 @@
 package com.example.moodlight.screen.main1;
 
-public class CommunityItem {
+import java.io.Serializable;
+import java.util.List;
+
+public class CommunityItem implements Serializable {
     private String todayQuestion;
     private String answer;
     private int heart;
@@ -8,18 +11,9 @@ public class CommunityItem {
     private int todayMood;
     private int postNumber;
     private int isHeart;
+    private List<String> commentArray;
 
     public CommunityItem() {
-    }
-
-    public CommunityItem(String todayQuestion, String answer, int heart, int comment, int todayMood, int postNumber, int isHeart) {
-        this.todayQuestion = todayQuestion;
-        this.answer = answer;
-        this.heart = heart;
-        this.comment = comment;
-        this.todayMood = todayMood;
-        this.postNumber = postNumber;
-        this.isHeart = isHeart;
     }
 
     public String getTodayQuestion() {
@@ -76,5 +70,26 @@ public class CommunityItem {
 
     public void setIsHeart(int isHeart) {
         this.isHeart = isHeart;
+    }
+
+    public List<String> getCommentArray() {
+        return commentArray;
+    }
+
+    public void setCommentArray(List<String> commentArray) {
+        this.commentArray = commentArray;
+    }
+
+    public CommunityItem(String todayQuestion, String answer, int heart, int comment, int todayMood, int postNumber, int isHeart, List<String> commentArray) {
+        this.todayQuestion = todayQuestion;
+        this.answer = answer;
+        this.heart = heart;
+        this.comment = comment;
+        this.todayMood = todayMood;
+        this.postNumber = postNumber;
+        this.isHeart = isHeart;
+        this.commentArray = commentArray;
+
+
     }
 }

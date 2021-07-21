@@ -1,0 +1,358 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+
+    tools:context=".mainstatics.MainStatisticsFragment">
+
+    <data>
+
+        <variable
+            name="todayQuestion"
+            type="String" />
+
+        <variable
+            name="lastQuestion"
+            type="String" />
+
+        <variable
+            name="happySum"
+            type="String" />
+
+        <variable
+            name="madSum"
+            type="String" />
+
+        <variable
+            name="sadSum"
+            type="String" />
+
+        <variable
+            name="lastHappySum"
+            type="String" />
+
+        <variable
+            name="lastMadSum"
+            type="String" />
+
+        <variable
+            name="lastSadSum"
+            type="String" />
+
+        <variable
+            name="lastStatsText1"
+            type="String" />
+
+        <variable
+            name="lastStatsText2"
+            type="String" />
+    </data>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/wholeLayout"
+            android:animateLayoutChanges="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="70dp">
+
+            <TextView
+                android:id="@+id/mainStatsTv1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20sp"
+                android:visibility="invisible"
+                tools:visibility="visible"
+                android:fontFamily="@font/roboto_bold"
+                android:text="오늘의 질문"
+                android:textColor="#000000"
+                android:textSize="15sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.07" />
+
+            <TextView
+                android:id="@+id/mainStatsTodayQuestionTv"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="50sp"
+                android:layout_marginTop="20sp"
+                android:layout_marginEnd="50sp"
+                android:fontFamily="@font/roboto_bold"
+                android:gravity="center"
+                android:visibility="invisible"
+                tools:visibility="visible"
+                android:text="@{todayQuestion}"
+                android:textColor="#000000"
+                android:textSize="17sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/mainStatsTv1"
+                tools:text="오늘 기분은 어떤가요?" />
+
+            <LinearLayout
+                android:id="@+id/mainStatsTodayLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40sp"
+                android:background="@drawable/main_stats_layout_background"
+                android:orientation="horizontal"
+                android:paddingStart="50sp"
+                android:paddingTop="20sp"
+                android:paddingRight="50sp"
+                android:paddingBottom="20sp"
+                android:visibility="invisible"
+                tools:visibility="visible"
+                android:weightSum="3"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/mainStatsTodayQuestionTv">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    >
+
+                    <ImageView
+                        android:layout_width="65sp"
+                        android:layout_height="65sp"
+                        android:src="@drawable/icon_happy" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10sp"
+                        android:fontFamily="@font/roboto_bold"
+                        android:gravity="center"
+                        android:text="@{happySum}"
+                        android:textColor="#000000"
+                        android:textSize="16sp"
+                        tools:text="340" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="20sp"
+                    android:layout_marginEnd="20sp"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="65sp"
+                        android:layout_height="65sp"
+                        android:src="@drawable/icon_mad" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10sp"
+                        android:fontFamily="@font/roboto_bold"
+                        android:gravity="center"
+                        android:text="@{madSum}"
+                        android:textColor="#000000"
+                        android:textSize="16sp"
+                        tools:text="350" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="65sp"
+                        android:layout_height="65sp"
+                        android:src="@drawable/icon_sad" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10sp"
+                        android:fontFamily="@font/roboto_bold"
+                        android:gravity="center"
+                        android:text="@{sadSum}"
+                        android:textColor="#000000"
+                        android:textSize="16sp"
+                        tools:text="360" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/mainStatsTv2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20sp"
+                android:layout_marginTop="40sp"
+                android:fontFamily="@font/roboto_bold"
+                android:text="어제의 질문"
+                android:visibility="invisible"
+                tools:visibility="visible"
+                android:textColor="#000000"
+                android:textSize="15sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/mainStatsTodayLayout" />
+
+            <TextView
+                android:id="@+id/mainStatsLastQuestionTv"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="50sp"
+                android:layout_marginTop="20sp"
+                android:layout_marginEnd="50sp"
+                android:fontFamily="@font/roboto_bold"
+                android:gravity="center"
+                android:visibility="invisible"
+                tools:visibility="visible"
+                android:text="@{lastQuestion}"
+                android:textColor="#000000"
+                android:textSize="17sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/mainStatsTv2"
+                tools:text="오늘 하루 있었던 일 중 가장 인상깊었던 일은 무엇인가요?" />
+
+            <LinearLayout
+                android:id="@+id/mainStatsLastLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30sp"
+                android:background="@drawable/main_stats_layout_background"
+                android:orientation="horizontal"
+                android:paddingStart="50sp"
+                android:paddingTop="20sp"
+                android:paddingRight="50sp"
+                android:visibility="invisible"
+                tools:visibility="visible"
+                android:paddingBottom="20sp"
+                android:weightSum="3"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/mainStatsLastQuestionTv">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:id="@+id/mainStatsLastHappyIv"
+                        android:layout_width="65sp"
+                        android:layout_height="65sp"
+                        android:src="@drawable/icon_happy" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10sp"
+                        android:fontFamily="@font/roboto_bold"
+                        android:gravity="center"
+                        android:text="@{lastHappySum}"
+                        android:textColor="#000000"
+                        android:textSize="16sp"
+                        tools:text="340" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="20sp"
+                    android:layout_marginEnd="20sp"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:id="@+id/mainStatsLastMadIv"
+                        android:layout_width="65sp"
+                        android:layout_height="65sp"
+                        android:src="@drawable/icon_mad" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10sp"
+                        android:fontFamily="@font/roboto_bold"
+                        android:gravity="center"
+                        android:text="@{lastMadSum}"
+                        android:textColor="#000000"
+                        android:textSize="16sp"
+                        tools:text="350" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:id="@+id/mainStatsLastSadIv"
+                        android:layout_width="65sp"
+                        android:layout_height="65sp"
+                        android:src="@drawable/icon_sad" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10sp"
+                        android:fontFamily="@font/roboto_bold"
+                        android:gravity="center"
+                        android:text="@{lastSadSum}"
+                        android:textColor="#000000"
+                        android:textSize="16sp"
+                        tools:text="360" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/mainStatsLastStatsTv1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="50sp"
+                android:layout_marginTop="20sp"
+                android:layout_marginEnd="50sp"
+                android:fontFamily="@font/roboto_bold"
+                android:gravity="center"
+                android:visibility="invisible"
+                tools:visibility="visible"
+                android:text="@{lastStatsText1}"
+                android:textColor="#000000"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/mainStatsLastLayout"
+                tools:text="어제는 분노의 감정을 가지고 있는 사람들이 많았네요" />
+
+            <TextView
+                android:id="@+id/mainStatsLastStatsTv2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="50sp"
+                android:layout_marginTop="5sp"
+                android:layout_marginEnd="50sp"
+                android:fontFamily="@font/roboto_medium"
+                android:gravity="center"
+                android:visibility="invisible"
+                tools:visibility="visible"
+                android:text="@{lastStatsText2}"
+                android:textColor="#000000"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/mainStatsLastStatsTv1"
+                tools:text="분노 날려버리고 행복한 일만 가득하길 바랄게요" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
+
+
+</layout>

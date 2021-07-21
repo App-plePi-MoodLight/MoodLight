@@ -14,6 +14,53 @@
         android:layout_height="match_parent"
         tools:context=".screen.main1.CommunityActiviy">
 
+        <ImageView
+            android:id="@+id/night1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_night1"
+            android:scaleType="centerCrop"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_star"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_starline"
+            android:scaleType="centerCrop"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:paddingBottom="10dp"
+            android:elevation="3dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_night2"
+            app:layout_constraintBottom_toBottomOf="@id/night1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="45dp"
+            android:src="@drawable/ic_moon"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
         <TextView
             android:id="@+id/todaymood"
             android:layout_width="wrap_content"
@@ -47,6 +94,8 @@
                     android:id="@+id/happy"
                     android:layout_width="82dp"
                     android:layout_height="82dp"
+                    android:background="#00000000"
+                    android:src="@drawable/icon_happy"
                     android:onClick="@{activity::setMood}"
                     />
                 <TextView
@@ -70,6 +119,8 @@
                     android:id="@+id/mad"
                     android:layout_width="82dp"
                     android:layout_height="82dp"
+                    android:background="#00000000"
+                    android:src="@drawable/icon_mad"
                     android:onClick="@{activity::setMood}"
                     />
 
@@ -93,6 +144,8 @@
                     android:id="@+id/sad"
                     android:layout_width="82dp"
                     android:layout_height="82dp"
+                    android:background="#00000000"
+                    android:src="@drawable/icon_sad"
                     android:onClick="@{activity::setMood}"
                     />
                 <TextView
@@ -109,20 +162,21 @@
 
         </LinearLayout>
 
-        <com.google.android.material.button.MaterialButton
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/enterbtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
             android:layout_marginBottom="30dp"
-            android:backgroundTint="#212121"
+            android:background="@drawable/btn_none_backgroun2"
             android:fontFamily="@font/roboto_bold"
             android:onClick="@{activity::next}"
             android:paddingTop="16dp"
             android:paddingBottom="16dp"
             android:text="입장하기"
             android:textSize="15sp"
+            android:textColor="#ffffff"
             app:cornerRadius="7dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

@@ -6,6 +6,9 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
+import android.widget.TextView
 import android.widget.Toast
 import com.example.moodlight.R
 import com.example.moodlight.database.UserData
@@ -20,58 +23,30 @@ import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.*
 
 class SplashActivity : AppCompatActivity() {
+
+    val fadeinAnim : Animation by lazy { AnimationUtils.loadAnimation(this, R.anim.fade_in) }
+    val fadeinAnim2 : Animation by lazy { AnimationUtils.loadAnimation(this, R.anim.fade_in_2000) }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
         lateinit var intent : Intent
 
-        var userDataList : List<UserData>?
-        val db = UserDatabase.getInstance(applicationContext)
-
-
-//        GlobalScope.launch {
-//
-//            if (db!!.userDao().getuserLoginTable()!!.isNotEmpty()) {
-//                userDataList = db!!.userDao().getuserLoginTable()
-//                val email : String = userDataList!![0].id
-//                val password : String = userDataList!![0].password
-//
-//                Firebase.auth.signInWithEmailAndPassword(email, password)
-//                    .addOnCompleteListener(this@SplashActivity) { task ->
-//                        if (task.isSuccessful) {
-//
-//                            Log.d("Login", "signInWithEmail:success")
-//                            intent = Intent(applicationContext, MainActivity::class.java)
-//                            startActivity(intent)
-//                            finish()
-//                       }
-//                    }
-//            }
-//            if(FirebaseUtil.getAuth().currentUser != null){
-//                startActivity(Intent(applicationContext, MainActivity::class.java))
-//            }
-//            else {
-//                intent = Intent(applicationContext, OnboardingActivity::class.java)
-//                startActivity(intent)
-//                finish()
-//            }
-//
-//            delay(3000)
-//
-//
-//        }
+        findViewById<TextView>(R.id.textView3).startAnimation(fadeinAnim)
+        findViewById<TextView>(R.id.textView4).startAnimation(fadeinAnim2)
 
         Handler(Looper.getMainLooper()).postDelayed({
             if(FirebaseUtil.getAuth().currentUser != null){
                 startActivity(Intent(applicationContext, MainActivity::class.java))
                 finish()
             }
+
             else {
                 intent = Intent(applicationContext, OnboardingActivity::class.java)
                 startActivity(intent)
                 finish()
             }
-        }, 3000)
+        }, 2500)
 
     }
 }

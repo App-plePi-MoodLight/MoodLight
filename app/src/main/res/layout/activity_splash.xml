@@ -31,6 +31,7 @@
         app:layout_constraintTop_toBottomOf="@+id/imageView6" />
 
     <TextView
+        android:id="@+id/textView4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/tmon_monsori_black"

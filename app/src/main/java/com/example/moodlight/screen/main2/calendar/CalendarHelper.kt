@@ -10,13 +10,10 @@ class CalendarHelper {
     // month 0부터 시작.
 
     fun plusMonth () {
-        Log.e("plusMonth", (getMonth()+1).toString())
         calendar.add(Calendar.MONTH, 1)
     }
 
     fun minusMonth () {
-        Log.e("minusMonth", "run")
-
         calendar.add(Calendar.MONTH, -1)
     }
 

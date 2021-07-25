@@ -6,14 +6,29 @@
     android:layout_height="match_parent"
     tools:context=".screen.initial.InitialActivity">
 
-    <TextView
+    <ImageView
+        android:id="@+id/imageView7"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="Logo"
+        android:layout_marginBottom="20dp"
+        android:src="@drawable/ic_main_icon"
         android:textSize="50sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/tmon_monsori_black"
+        android:text="무드등"
+        android:layout_marginTop="10dp"
+        android:textColor="#000"
+        android:textSize="30sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView7" />
+
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/callLoginBtn"
@@ -22,7 +37,7 @@
         android:layout_marginLeft="20sp"
         android:layout_marginRight="20sp"
         android:layout_marginBottom="10sp"
-        android:background="@drawable/btn_design_1"
+        android:background="@drawable/btn_design_3"
         android:fontFamily="@font/roboto_bold"
         android:text="로그인"
         android:textSize="18sp"

@@ -13,6 +13,10 @@
         <variable
             name="viewModel"
             type="com.example.moodlight.screen.main2.Main2ViewModel" />
+
+        <variable
+            name="year"
+            type="String" />
     </data>
 
     <androidx.core.widget.NestedScrollView
@@ -50,6 +54,8 @@
             android:background="#ffffff"
             android:onClick="@{fragment::minusMonth}"
             android:src="@drawable/left_btn"
+            android:paddingEnd="5sp"
+            android:paddingStart="5sp"
             app:layout_constraintBottom_toBottomOf="@id/main2DateTv"
             app:layout_constraintEnd_toStartOf="@id/main2DateTv"
             app:layout_constraintTop_toTopOf="@id/main2DateTv" />
@@ -79,6 +85,8 @@
             android:background="#ffffff"
             android:onClick="@{fragment::plusMonth}"
             android:src="@drawable/right_btn"
+            android:paddingEnd="5sp"
+            android:paddingStart="5sp"
             app:layout_constraintBottom_toBottomOf="@id/main2DateTv"
             app:layout_constraintStart_toEndOf="@id/main2DateTv"
             app:layout_constraintTop_toTopOf="@id/main2DateTv" />

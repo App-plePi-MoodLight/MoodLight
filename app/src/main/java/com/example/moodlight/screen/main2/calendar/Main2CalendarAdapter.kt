@@ -1,9 +1,11 @@
 package com.example.moodlight.screen.main2.calendar
 
 import android.graphics.Color
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.moodlight.R
@@ -34,37 +36,42 @@ class Main2CalendarAdapter (val viewModel : Main2CalendarViewModel) :
     inner class CalendarViewHolder(itemView : View?) : RecyclerView.ViewHolder(itemView!!) {
 
         private var itemCalendarDateTv : TextView = itemView!!.findViewById(R.id.item_calendar_date_tv)
+        private var itemCalendarDateIv : ImageView = itemView!!.findViewById(R.id.item_calendar_date_iv)
 
         fun bind(position: Int) {
 
             itemCalendarDateTv.text = viewModel.dateList[position].day
-            when (viewModel.dateList[position].moodType) {
-
-                DataType.HAPPY_MOOD ->
-                    itemCalendarDateTv.setBackgroundResource(R.drawable.happy_background)
-
-                DataType.SAD_MOOD -> {
-                    itemCalendarDateTv.setBackgroundResource(R.drawable.sad_background)
-                    itemCalendarDateTv.setTextColor(Color.parseColor("#ffffff"))
-
-                }
-                DataType.MAD_MOOD -> {
-                    itemCalendarDateTv.setBackgroundResource(R.drawable.mad_background)
-                    itemCalendarDateTv.setTextColor(Color.parseColor("#ffffff"))
-                }
-                else -> {}
-            }
 
             when (viewModel.dateList[position].dayType) {
 
-                DataType.CURRENT_DAY ->
-                    itemCalendarDateTv.setTextColor(Color.parseColor("#212121"))
+                DataType.CURRENT_DAY -> {
+                    when (viewModel.dateList[position].moodType) {
 
+                        DataType.HAPPY_MOOD -> {
+                            itemCalendarDateIv.setImageResource(R.drawable.happy_background)
+                            itemCalendarDateTv.setTextColor(Color.parseColor("#212121"))
+                        }
+                        DataType.SAD_MOOD -> {
+                            itemCalendarDateIv.setBackgroundResource(R.drawable.sad_background)
+                            itemCalendarDateTv.setTextColor(Color.parseColor("#ffffff"))
+                        }
+                        DataType.MAD_MOOD -> {
+                            itemCalendarDateIv.setBackgroundResource(R.drawable.mad_background)
+                            itemCalendarDateTv.setTextColor(Color.parseColor("#ffffff"))
+                        }
+                        else -> {
+                            itemCalendarDateTv.setTextColor(Color.parseColor("#212121"))
+                        }
+                    }
+                }
                 DataType.LAST_DAY ->
                     itemCalendarDateTv.setTextColor(Color.parseColor("#bbbbbb"))
 
                 else -> {}
             }
+
+
+
 
 /*            if ( viewModel.dateList[position].day.equals(viewModel.today.toString()))
                 itemCalendarDateTv.setTextColor(Color.parseColor("#0078ff"))*/

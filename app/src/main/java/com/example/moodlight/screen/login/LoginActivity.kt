@@ -52,8 +52,12 @@ class LoginActivity : AppCompatActivity() {
                                 val userData = UserData(email, password)
 
                                 val db = UserDatabase.getInstance(applicationContext)
-                                CoroutineScope(Dispatchers.Main).launch {
-                                    db!!.userDao().insert(userData)
+                                CoroutineScope(Dispatchers.IO).launch {
+                                    if ( db!!.userDao().getuserLoginTable() != null)
+                                        db.userDao().update(userData)
+
+                                    else
+                                        db.userDao().insert(userData)
                                 }
 
                                 Log.d("Login", "signInWithEmail:success")

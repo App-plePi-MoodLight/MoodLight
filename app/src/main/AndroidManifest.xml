@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.example.moodlight">
 
     <application
@@ -19,6 +20,12 @@
 
         <activity android:name=".mainstatics.MainStatisticsFragment"></activity>
         <activity android:name=".screen.main3.setting.SettingActivity" />
+
+
+        <activity android:name=".screen.onboarding.OnboardingActivity"></activity>
+        <activity android:name="com.example.moodlight.screen.mainstatics.MainStatisticsFragment"
+            tools:ignore="Instantiatable" />
+        <activity android:name=".screen.main3.setting.SettingActivity"></activity>
 
         <activity android:name=".screen.initial.InitialActivity" />
         <activity android:name=".screen.register.RegisterActivity" />

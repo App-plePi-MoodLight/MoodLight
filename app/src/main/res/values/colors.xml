@@ -8,6 +8,6 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="happy_color">#f5cf66</color>
-    <color name="sad_color">#1b4d6b</color>
+    <color name="sad_color">#10699e</color>
     <color name="mad_color">#ed5d4c</color>
 </resources>

@@ -6,6 +6,16 @@
     android:layout_height="match_parent"
     tools:context=".screen.login.LoginActivity">
 
+
+    <ImageView
+        android:layout_width="70dp"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_main_icon"
+        android:layout_marginBottom="20dp"
+        app:layout_constraintBottom_toTopOf="@+id/loginIdEtv"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
     <EditText
         android:id="@+id/loginIdEtv"
         android:layout_width="0dp"
@@ -14,13 +24,14 @@
         android:background="@drawable/edittext_design_1"
         android:fontFamily="@font/roboto_medium"
         android:hint="이메일 입력"
+        android:textColorHint="#000"
         android:padding="17sp"
         android:theme="@style/editText"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.40" />
+        app:layout_constraintVertical_bias="0.35" />
 
     <EditText
         android:id="@+id/loginPasswordEtv"
@@ -32,6 +43,7 @@
         android:background="@drawable/edittext_design_1"
         android:fontFamily="@font/roboto_medium"
         android:hint="비밀번호 입력"
+        android:textColorHint="#000"
         android:inputType="textPassword"
         android:padding="17sp"
         android:theme="@style/editText"
@@ -51,7 +63,7 @@
         android:textSize="18sp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/loginPasswordEtv" />
+        app:layout_constraintTop_toBottomOf="@id/loginErrorTv" />
 
     <ImageView
         android:id="@+id/loginErrorIv"
@@ -76,7 +88,7 @@
         android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="@id/loginBtn"
         app:layout_constraintStart_toEndOf="@id/loginErrorIv"
-        app:layout_constraintTop_toBottomOf="@id/loginBtn" />
+        app:layout_constraintTop_toBottomOf="@id/loginPasswordEtv" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -2,7 +2,6 @@ package com.example.moodlight.screen
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -11,7 +10,7 @@ import com.example.moodlight.dialog.CommonDialog
 import com.example.moodlight.dialog.CommonDialogInterface
 import com.example.moodlight.dialog.LogoutDialog
 import com.example.moodlight.dialog.LogoutDialogInterface
-import com.example.moodlight.mainstatics.MainStatisticsFragment
+import com.example.moodlight.screen.mainstatics.MainStatisticsFragment
 import com.example.moodlight.screen.initial.InitialActivity
 import com.example.moodlight.screen.main1.CommunityActiviy
 import com.example.moodlight.screen.main2.MainFragment2
@@ -28,12 +27,19 @@ import kotlinx.coroutines.launch
 class MainActivity : AppCompatActivity(), CommonDialogInterface, LogoutDialogInterface {
 
 
+
     private val mainFragment2 by lazy {MainFragment2()}
     private val mainFragment3 by lazy {MainFragment3()}
     private val mainStatisticsFragment by lazy {MainStatisticsFragment()}
     private val networkStatus : Int by lazy {NetworkStatus.getConnectivityStatus(applicationContext)}
 
-    private lateinit var dialog : CommonDialog
+    private val mainFragment1 by lazy { MainFragment1() }
+    private val mainFragment2 by lazy { MainFragment2() }
+    private val mainFragment3 by lazy { MainFragment3() }
+    private val mainStatisticsFragment by lazy { MainStatisticsFragment() }
+    private val networkStatus: Int by lazy { NetworkStatus.getConnectivityStatus(applicationContext) }
+
+    private lateinit var dialog: CommonDialog
     private lateinit var logoutDialog: LogoutDialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,11 +53,9 @@ class MainActivity : AppCompatActivity(), CommonDialogInterface, LogoutDialogInt
             Toast.makeText(baseContext, "무드등을 이용하시려면 Wifi 연결이 필요합니다.", Toast.LENGTH_SHORT).show()
         }
 
-        dialog = CommonDialog(this, this
-            , "회원탈퇴"
-            , "정말로 탈퇴를 하시겠습니까?\n탈퇴 이후의 정보는 되돌릴 수 없습니다."
-            , "탈퇴하기"
-            , "취소")
+        dialog = CommonDialog(
+            this, this, "회원탈퇴", "정말로 탈퇴를 하시겠습니까?\n탈퇴 이후의 정보는 되돌릴 수 없습니다.", "탈퇴하기", "취소"
+        )
         logoutDialog = LogoutDialog(this, this, "로그아웃", "로그아웃을 하시겠습니까?", "로그아웃", "취소")
 
 
@@ -77,17 +81,23 @@ class MainActivity : AppCompatActivity(), CommonDialogInterface, LogoutDialogInt
 
     }
 
+
     fun changeFragment(fragment: Fragment) {
         supportFragmentManager .beginTransaction()
             .replace(R.id.mainFrame, fragment) .commit()
+
+    private fun changeFragment(fragment: Fragment) {
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.mainFrame, fragment).commit()
+
     }
 
-    fun onClickBtnInFragment(i : Int){
-        when(i){
-            1->{
+    fun onClickBtnInFragment(i: Int) {
+        when (i) {
+            1 -> {
                 dialogShow()
             }
-            2->{
+            2 -> {
                 logoutDialogShow()
             }
         }
@@ -105,7 +115,7 @@ class MainActivity : AppCompatActivity(), CommonDialogInterface, LogoutDialogInt
         FirebaseUtil.getAuth().currentUser!!.delete()
             .addOnCompleteListener {
 
-                if(it.isSuccessful){
+                if (it.isSuccessful) {
                     CoroutineScope(Dispatchers.IO).launch {
                         FirebaseUtil.getFireStoreInstance().collection("users")
                             .document(FirebaseUtil.getUid())
@@ -115,8 +125,7 @@ class MainActivity : AppCompatActivity(), CommonDialogInterface, LogoutDialogInt
                     startActivity(Intent(this, InitialActivity::class.java))
                     dialog.dismiss()
                     finish()
-                }
-                else{
+                } else {
                     Toast.makeText(this, "오류가 발생하였습니다. 다시 시도해주세요.", Toast.LENGTH_SHORT).show()
                 }
             }
@@ -132,13 +141,14 @@ class MainActivity : AppCompatActivity(), CommonDialogInterface, LogoutDialogInt
     override fun onClickLogout() {
 
         FirebaseUtil.getAuth().signOut()
+        logoutDialog.dismiss()
         startActivity(Intent(this, InitialActivity::class.java))
         logoutDialog.dismiss()
         finish()
     }
 
     override fun onCancelLogout() {
-        logoutDialog.cancel()
+        logoutDialog.dismiss()
     }
 
 

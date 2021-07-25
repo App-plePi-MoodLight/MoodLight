@@ -26,4 +26,16 @@
         <item name="colorControlActivated">#212121</item>
     </style>
 
+    <style name="switchStyleHappy" >
+        <item name="colorControlActivated">#f5cf66</item>
+    </style>
+
+    <style name="switchStyleMad" >
+        <item name="colorControlActivated">#ed5d4c</item>
+    </style>
+
+    <style name="switchStyleSad" >
+        <item name="colorControlActivated">#10699e</item>
+    </style>
+
 </resources>

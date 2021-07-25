@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="activity"
+            type="com.example.moodlight.screen.main1.AnswerActivity" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".screen.main1.AnswerActivity">
+
+        <Toolbar
+            android:id="@+id/communityToolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            >
+            <ImageButton
+                android:id="@+id/backBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="#00000000"
+                android:src="@drawable/back_btn"
+                android:onClick="@{activity::finishActivity}"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:fontFamily="@font/roboto_bold"
+                android:text="답변하기"
+                android:textColor="#212121"
+                android:textSize="18sp" />
+        </Toolbar>
+
+        <TextView
+            android:id="@+id/todayQuestion"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="33dp"
+            android:text="Q.오늘의 질문"
+            android:textSize="16sp"
+            android:textColor="#000000"
+            android:fontFamily="@font/roboto_bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/communityToolbar"/>
+
+        <EditText
+            android:id="@+id/answerEditText"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginRight="30dp"
+            android:background="@drawable/text_background"
+            android:fontFamily="@font/roboto_bold"
+            android:gravity="top"
+            android:hint="답변을 입력해주세요"
+            android:padding="25dp"
+            android:textColor="#000000"
+            android:textColorHint="#949494"
+            android:textSize="15sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHeight_percent="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/todayQuestion" />
+
+        <Switch
+            android:id="@+id/commentSwitch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            app:switchPadding="40dp"
+            android:text="댓글 작성"
+            android:theme="@style/switchStyleHappy"
+            app:layout_constraintStart_toStartOf="@+id/answerEditText"
+            app:layout_constraintTop_toBottomOf="@id/answerEditText" />
+
+        <Switch
+            android:id="@+id/onlySwitch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:switchPadding="40dp"
+            android:layout_marginTop="20dp"
+            android:text="나만보기"
+            android:theme="@style/switchStyleHappy"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/answerEditText"
+            app:layout_constraintHorizontal_bias="0.75"/>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/answerBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="30dp"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/btn_happy_background"
+            android:fontFamily="@font/roboto_bold"
+            android:padding="15dp"
+            android:text="답변하기"
+            android:textColor="@color/white"
+            android:textSize="15sp"
+            app:cornerRadius="24dp"
+            android:onClick="@{activity::addContents}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.55"
+            app:layout_constraintStart_toStartOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

@@ -12,7 +12,7 @@ import com.example.moodlight.dialog.LogoutDialog
 import com.example.moodlight.dialog.LogoutDialogInterface
 import com.example.moodlight.screen.mainstatics.MainStatisticsFragment
 import com.example.moodlight.screen.initial.InitialActivity
-import com.example.moodlight.screen.main1.MainFragment1
+import com.example.moodlight.screen.main1.CommunityActiviy
 import com.example.moodlight.screen.main2.MainFragment2
 import com.example.moodlight.screen.main3.MainFragment3
 import com.example.moodlight.util.FirebaseUtil
@@ -25,6 +25,13 @@ import kotlinx.coroutines.launch
 
 @Suppress("DEPRECATION")
 class MainActivity : AppCompatActivity(), CommonDialogInterface, LogoutDialogInterface {
+
+
+
+    private val mainFragment2 by lazy {MainFragment2()}
+    private val mainFragment3 by lazy {MainFragment3()}
+    private val mainStatisticsFragment by lazy {MainStatisticsFragment()}
+    private val networkStatus : Int by lazy {NetworkStatus.getConnectivityStatus(applicationContext)}
 
     private val mainFragment1 by lazy { MainFragment1() }
     private val mainFragment2 by lazy { MainFragment2() }
@@ -68,14 +75,21 @@ class MainActivity : AppCompatActivity(), CommonDialogInterface, LogoutDialogInt
             }
         }
         findViewById<FloatingActionButton>(R.id.faBtn).setOnClickListener {
+            startActivity(Intent(this, CommunityActiviy::class.java))
             //병주 클래스
         }
 
     }
 
+
+    fun changeFragment(fragment: Fragment) {
+        supportFragmentManager .beginTransaction()
+            .replace(R.id.mainFrame, fragment) .commit()
+
     private fun changeFragment(fragment: Fragment) {
         supportFragmentManager.beginTransaction()
             .replace(R.id.mainFrame, fragment).commit()
+
     }
 
     fun onClickBtnInFragment(i: Int) {

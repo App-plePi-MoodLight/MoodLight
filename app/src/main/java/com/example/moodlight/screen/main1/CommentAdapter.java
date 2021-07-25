@@ -3,6 +3,7 @@ package com.example.moodlight.screen.main1;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -67,8 +68,10 @@ public class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         }
     }
     private class LoadingViewHolder extends RecyclerView.ViewHolder {
+        private ProgressBar progressBar;
         public LoadingViewHolder(@NonNull View itemView) {
             super(itemView);
+            progressBar = itemView.findViewById(R.id.progressBar);
         }
     }
 }

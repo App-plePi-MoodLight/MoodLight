@@ -15,19 +15,21 @@ import androidx.databinding.DataBindingUtil;
 import com.example.moodlight.R;
 import com.example.moodlight.databinding.ActivityCommunityBinding;
 
+import static com.example.moodlight.util.DataTypeJava.HAPPY_MOOD;
+import static com.example.moodlight.util.DataTypeJava.MAD_MOOD;
+import static com.example.moodlight.util.DataTypeJava.SAD_MOOD;
+
 public class CommunityActiviy extends AppCompatActivity {
 
-    private static final int HAPPY_MOOD = 101;
-    private static final int MAD_MOOD = 102;
-    private static final int SAD_MOOD = 103;
-
-    public static int todayMood = 100;
+    public static int todayMood;
     private ActivityCommunityBinding binding;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_community);
+
+        todayMood = 100;
 
         binding = DataBindingUtil.setContentView(this,R.layout.activity_community);
         binding.setActivity(this);

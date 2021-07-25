@@ -10,25 +10,18 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.moodlight.R;
 import com.example.moodlight.databinding.ActivityCommentBinding;
-import com.example.moodlight.databinding.ActivityCommentBindingImpl;
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
 
-import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-import static androidx.constraintlayout.widget.StateSet.TAG;
-import static com.example.moodlight.screen.main1.CommunityActiviy.todayMood;
+import static android.content.ContentValues.TAG;
 
 public class CommentActivity extends AppCompatActivity {
 
@@ -44,7 +37,7 @@ public class CommentActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        getComment(item);
+        setComment(item);
     }
 
     @Override
@@ -54,19 +47,28 @@ public class CommentActivity extends AppCompatActivity {
 
         lastVisibleDocument = null;
         Intent intent = getIntent();
-        item = (CommunityItem) intent.getSerializableExtra("commentArray");
+        item = (CommunityItem) intent.getSerializableExtra("comment");
         postNumber = intent.getIntExtra("postNumber",0);
 
         db = FirebaseFirestore.getInstance();
         binding = DataBindingUtil.setContentView(this,R.layout.activity_comment);
         binding.setActivity(this);
 
-        LinearLayoutManager manager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL,true);
+        LinearLayoutManager manager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL,false);
         binding.commentList.setLayoutManager(manager);
 
         list = new ArrayList<>();
         adapter = new CommentAdapter(list);
         binding.commentList.setAdapter(adapter);
+
+        binding.swipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                list.clear();
+                setComment(item);
+                binding.swipeLayout.setRefreshing(false);
+            }
+        });
 
     }
     public void submitComment(View view){
@@ -84,7 +86,7 @@ public class CommentActivity extends AppCompatActivity {
                     setCommentCount();
                 });
     }
-    private void getComment(CommunityItem item){
+    private void setComment(CommunityItem item){
         for(int i = 0; i < item.getCommentArray().size();i++){
             list.add(item.getCommentArray().get(i));
         }

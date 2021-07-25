@@ -40,7 +40,7 @@
         </Toolbar>
 
         <TextView
-            android:id="@+id/today_question"
+            android:id="@+id/todayQuestion"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
@@ -69,7 +69,7 @@
             android:onClick="@{activity::intentAnswer}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/today_question"/>
+            app:layout_constraintTop_toBottomOf="@id/todayQuestion"/>
 
         <ImageView
             android:id="@+id/comment_icon"
@@ -96,16 +96,24 @@
             app:layout_constraintTop_toBottomOf="@id/answerBtn"
             app:layout_constraintHorizontal_bias="0.0"/>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/answerList"
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/swipeLayout"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginTop="20dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/hint_text"
-            tools:listitem="@layout/row_answer" />
+            >
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/answerList"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="20dp"
+                tools:listitem="@layout/row_answer" />
+
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

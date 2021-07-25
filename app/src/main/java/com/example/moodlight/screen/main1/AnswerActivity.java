@@ -5,10 +5,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.CompoundButton;
+import android.widget.Toast;
 
 import com.example.moodlight.R;
 import com.example.moodlight.databinding.ActivityAnswerBinding;
@@ -29,6 +31,9 @@ import java.util.Map;
 
 import static android.content.ContentValues.TAG;
 import static com.example.moodlight.screen.main1.CommunityActiviy.todayMood;
+import static com.example.moodlight.util.DataTypeJava.HAPPY_MOOD;
+import static com.example.moodlight.util.DataTypeJava.MAD_MOOD;
+import static com.example.moodlight.util.DataTypeJava.SAD_MOOD;
 
 public class AnswerActivity extends AppCompatActivity {
 
@@ -46,11 +51,11 @@ public class AnswerActivity extends AppCompatActivity {
         binding.setActivity(this);
         setColor();
         getNickName();
-
     }
     private void setColor(){
         switch (todayMood){
-            case 101: binding.answerBtn.setBackground(ContextCompat.getDrawable(this,R.drawable.btn_happy_background));
+            case 101:
+                binding.answerBtn.setBackground(ContextCompat.getDrawable(this,R.drawable.btn_happy_background));
                 break;
             case 102:
                 binding.answerBtn.setBackground(ContextCompat.getDrawable(this,R.drawable.btn_mad_background));
@@ -61,9 +66,10 @@ public class AnswerActivity extends AppCompatActivity {
         }
     }
     public void addContents(View view){
-        getPostNumber();
-    }
-    private void getPostNumber(){
+        if (binding.answerEditText.getText().toString().isEmpty()){
+            Toast.makeText(this, "답변을 입력해주세요", Toast.LENGTH_SHORT).show();
+            return;
+        }
         db.collection("post")
                 .document("information")
                 .get()
@@ -91,41 +97,36 @@ public class AnswerActivity extends AppCompatActivity {
                 });
     }
     private void setContents(){
-        String time = modifyJoinTime(System.currentTimeMillis());
-        String[] timeArray = time.split("\\.");
         Map<String,Object> content = new HashMap<>();
         content.put("todayQuestion",todayQuestion);
         content.put("answer",binding.answerEditText.getText().toString());
-        content.put("commentAlram",binding.commentCheck.isChecked());
-        content.put("likeAlram",binding.onlyCheck.isChecked());
+        content.put("commentAlram",binding.commentSwitch.isChecked());
+        content.put("likeAlram",binding.onlySwitch.isChecked());
         content.put("nickName",nickName);
         content.put("postNumber",postNumber);
         content.put("heart",0);
         content.put("comment",0);
         content.put("commentArray",Arrays.asList());
-        content.put("isHeart",0);
         content.put("mood",todayMood);
-        content.put(timeArray[1]+"."+(Integer.parseInt(timeArray[2])+1),todayMood);
-
 
         db.collection("post").
                 document(String.valueOf(postNumber))
                 .set(content).
                 addOnCompleteListener(task ->  {
                     if (task.isSuccessful()){
-                        Log.d(TAG, "addContents: 성공"+time);
                         updatePostNumber();
                         switch (todayMood){
-                            case 101:
+                            case HAPPY_MOOD:
                                 getCount("Happy");
                                 break;
-                            case 102:
+                            case MAD_MOOD:
                                 getCount("Mad");
                                 break;
-                            case 103:
+                            case SAD_MOOD:
                                 getCount("Sad");
                                 break;
                         }
+                        getWritePostMap();
                         finish();
                     }
                 })
@@ -136,6 +137,32 @@ public class AnswerActivity extends AppCompatActivity {
                     }
                 });
 
+    }
+
+    private void getWritePostMap(){
+        db.collection("users")
+                .document(FirebaseAuth.getInstance().getUid())
+                .get()
+                .addOnCompleteListener(task -> {
+                   if (!task.isSuccessful()){
+                       return;
+                   }
+                   DocumentSnapshot documentSnapshot = task.getResult();
+                   Map<String, Object> map =  documentSnapshot.getData();
+                   updateWritePostMap(map);
+                });
+    }
+
+    private void updateWritePostMap(Map<String, Object> map){
+        Map<String,String> writePostMap = (Map<String, String>) map.get("writePostMap");
+
+        if (map.get("writePostMap")==null){
+            writePostMap = new HashMap<>();
+        }
+        writePostMap.put(modifyJoinTime(System.currentTimeMillis()), String.valueOf(todayMood));
+        db.collection("users")
+                .document(FirebaseAuth.getInstance().getUid())
+                .update("writePostMap",writePostMap);
     }
 
     private void getNickName(){

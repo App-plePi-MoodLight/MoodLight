@@ -62,7 +62,7 @@
             android:background="@drawable/text_background"
             android:fontFamily="@font/roboto_bold"
             android:gravity="top"
-            android:hint="A.답변"
+            android:hint="답변을 입력해주세요"
             android:padding="25dp"
             android:textColor="#000000"
             android:textColorHint="#949494"
@@ -72,27 +72,25 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/todayQuestion" />
 
-        <androidx.appcompat.widget.SwitchCompat
-            android:id="@+id/comment_check"
+        <Switch
+            android:id="@+id/commentSwitch"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="20dp"
             app:switchPadding="40dp"
             android:text="댓글 작성"
-            android:thumb="@drawable/switch_thumb_happy"
-            android:track="@drawable/switch_happy"
+            android:theme="@style/switchStyleHappy"
             app:layout_constraintStart_toStartOf="@+id/answerEditText"
             app:layout_constraintTop_toBottomOf="@id/answerEditText" />
 
-        <androidx.appcompat.widget.SwitchCompat
-            android:id="@+id/onlyCheck"
+        <Switch
+            android:id="@+id/onlySwitch"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:switchPadding="40dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="20dp"
             android:text="나만보기"
-            android:track="@drawable/switch_happy"
-            android:thumb="@drawable/switch_thumb_happy"
+            android:theme="@style/switchStyleHappy"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/answerEditText"

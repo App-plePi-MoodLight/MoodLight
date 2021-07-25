@@ -8,7 +8,7 @@ public class CommunityItem implements Serializable {
     private String answer;
     private int heart;
     private int comment;
-    private int todayMood;
+    private int mood;
     private int postNumber;
     private int isHeart;
     private List<String> commentArray;
@@ -48,12 +48,12 @@ public class CommunityItem implements Serializable {
         this.comment = comment;
     }
 
-    public int getTodayMood() {
-        return todayMood;
+    public int getMood() {
+        return mood;
     }
 
-    public void setTodayMood(int todayMood) {
-        this.todayMood = todayMood;
+    public void setMood(int mood) {
+        this.mood = mood;
     }
 
     public int getPostNumber() {
@@ -80,12 +80,12 @@ public class CommunityItem implements Serializable {
         this.commentArray = commentArray;
     }
 
-    public CommunityItem(String todayQuestion, String answer, int heart, int comment, int todayMood, int postNumber, int isHeart, List<String> commentArray) {
+    public CommunityItem(String todayQuestion, String answer, int heart, int comment, int mood, int postNumber, int isHeart, List<String> commentArray) {
         this.todayQuestion = todayQuestion;
         this.answer = answer;
         this.heart = heart;
         this.comment = comment;
-        this.todayMood = todayMood;
+        this.mood = mood;
         this.postNumber = postNumber;
         this.isHeart = isHeart;
         this.commentArray = commentArray;

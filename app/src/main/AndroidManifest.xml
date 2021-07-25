@@ -16,16 +16,11 @@
         <activity android:name=".screen.main1.CommunityMainActivity"/>
         <activity android:name=".screen.main1.CommentActivity"/>
 
-        <activity android:name=".screen.main3.setting.SettingActivity"></activity>
-
-        <activity android:name=".mainstatics.MainStatisticsFragment"></activity>
         <activity android:name=".screen.main3.setting.SettingActivity" />
 
-
-        <activity android:name=".screen.onboarding.OnboardingActivity"></activity>
+        <activity android:name=".screen.onboarding.OnboardingActivity" />
         <activity android:name="com.example.moodlight.screen.mainstatics.MainStatisticsFragment"
             tools:ignore="Instantiatable" />
-        <activity android:name=".screen.main3.setting.SettingActivity"></activity>
 
         <activity android:name=".screen.initial.InitialActivity" />
         <activity android:name=".screen.register.RegisterActivity" />

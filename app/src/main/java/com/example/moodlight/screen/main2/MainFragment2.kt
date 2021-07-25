@@ -31,7 +31,6 @@ import kotlin.collections.HashMap
 
 class MainFragment2 : Fragment() {
 
-    private lateinit var calendar: Calendar
     private val calendarHelper by lazy { CalendarHelper() }
     private var writePostMap: Map<String, *>? = null
 
@@ -105,9 +104,9 @@ class MainFragment2 : Fragment() {
         calendarViewModel.dateList = ArrayList()
         val lastEndDay: Int
         var postArray : List<String>? = null
-        if (writePostMap != null) {
+        if (writePostMap != null)
             postArray = writePostMap!!.keys.toList()
-        }
+
         when (calendarHelper.getMonth() + 1) {
             1 -> {
                 viewModel.month.value = "January"
@@ -168,7 +167,6 @@ class MainFragment2 : Fragment() {
             }
         }
 
-        var j: Int = 0;
         for (i in calendarHelper.getStartDayOfWeek() - 2 downTo 0) {
 
             calendarViewModel.dateList.add(

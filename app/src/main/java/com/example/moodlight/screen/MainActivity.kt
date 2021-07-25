@@ -25,15 +25,6 @@ import kotlinx.coroutines.launch
 
 @Suppress("DEPRECATION")
 class MainActivity : AppCompatActivity(), CommonDialogInterface, LogoutDialogInterface {
-
-
-
-    private val mainFragment2 by lazy {MainFragment2()}
-    private val mainFragment3 by lazy {MainFragment3()}
-    private val mainStatisticsFragment by lazy {MainStatisticsFragment()}
-    private val networkStatus : Int by lazy {NetworkStatus.getConnectivityStatus(applicationContext)}
-
-    private val mainFragment1 by lazy { MainFragment1() }
     private val mainFragment2 by lazy { MainFragment2() }
     private val mainFragment3 by lazy { MainFragment3() }
     private val mainStatisticsFragment by lazy { MainStatisticsFragment() }
@@ -78,61 +69,55 @@ class MainActivity : AppCompatActivity(), CommonDialogInterface, LogoutDialogInt
             startActivity(Intent(this, CommunityActiviy::class.java))
             //병주 클래스
         }
-
     }
 
+        private fun changeFragment(fragment: Fragment) {
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.mainFrame, fragment).commit()
 
-    fun changeFragment(fragment: Fragment) {
-        supportFragmentManager .beginTransaction()
-            .replace(R.id.mainFrame, fragment) .commit()
-
-    private fun changeFragment(fragment: Fragment) {
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.mainFrame, fragment).commit()
-
-    }
-
-    fun onClickBtnInFragment(i: Int) {
-        when (i) {
-            1 -> {
-                dialogShow()
-            }
-            2 -> {
-                logoutDialogShow()
-            }
         }
-    }
 
-    private fun logoutDialogShow() {
-        logoutDialog.show()
-    }
-
-    private fun dialogShow() {
-        dialog.show()
-    }
-
-    override fun onCheckBtnClick() {
-        FirebaseUtil.getAuth().currentUser!!.delete()
-            .addOnCompleteListener {
-
-                if (it.isSuccessful) {
-                    CoroutineScope(Dispatchers.IO).launch {
-                        FirebaseUtil.getFireStoreInstance().collection("users")
-                            .document(FirebaseUtil.getUid())
-                            .delete()
-                    }
-                    Toast.makeText(this, "회원탈퇴가 완료되었습니다.", Toast.LENGTH_SHORT).show()
-                    startActivity(Intent(this, InitialActivity::class.java))
-                    dialog.dismiss()
-                    finish()
-                } else {
-                    Toast.makeText(this, "오류가 발생하였습니다. 다시 시도해주세요.", Toast.LENGTH_SHORT).show()
+        fun onClickBtnInFragment(i: Int) {
+            when (i) {
+                1 -> {
+                    dialogShow()
+                }
+                2 -> {
+                    logoutDialogShow()
                 }
             }
-            .addOnFailureListener {
-                Toast.makeText(this, "오류가 발생하였습니다. 다시 시도해주세요.", Toast.LENGTH_SHORT).show()
-            }
-    }
+        }
+
+        private fun logoutDialogShow() {
+            logoutDialog.show()
+        }
+
+        private fun dialogShow() {
+            dialog.show()
+        }
+
+        override fun onCheckBtnClick() {
+            FirebaseUtil.getAuth().currentUser!!.delete()
+                .addOnCompleteListener {
+
+                    if (it.isSuccessful) {
+                        CoroutineScope(Dispatchers.IO).launch {
+                            FirebaseUtil.getFireStoreInstance().collection("users")
+                                .document(FirebaseUtil.getUid())
+                                .delete()
+                        }
+                        Toast.makeText(this, "회원탈퇴가 완료되었습니다.", Toast.LENGTH_SHORT).show()
+                        startActivity(Intent(this, InitialActivity::class.java))
+                        dialog.dismiss()
+                        finish()
+                    } else {
+                        Toast.makeText(this, "오류가 발생하였습니다. 다시 시도해주세요.", Toast.LENGTH_SHORT).show()
+                    }
+                }
+                .addOnFailureListener {
+                    Toast.makeText(this, "오류가 발생하였습니다. 다시 시도해주세요.", Toast.LENGTH_SHORT).show()
+                }
+        }
 
     override fun onCancleBtnClick() {
         dialog.cancel()
@@ -150,6 +135,4 @@ class MainActivity : AppCompatActivity(), CommonDialogInterface, LogoutDialogInt
     override fun onCancelLogout() {
         logoutDialog.dismiss()
     }
-
-
 }

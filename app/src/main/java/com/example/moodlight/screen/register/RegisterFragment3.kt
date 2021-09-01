@@ -1,7 +1,5 @@
 package com.example.moodlight.screen.register
 
-import android.animation.LayoutTransition
-import android.animation.ObjectAnimator
 import android.content.ContentValues.TAG
 import android.content.Intent
 import android.graphics.Color
@@ -13,21 +11,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.example.moodlight.Hash.sha
+import com.example.moodlight.hash.sha
 import com.example.moodlight.R
-import com.example.moodlight.database.UserData
-import com.example.moodlight.database.UserDatabase
 import com.example.moodlight.databinding.FragmentRegister3Binding
-import com.example.moodlight.screen.MainActivity
 import com.example.moodlight.screen.initial.InitialActivity
 import com.example.moodlight.screen.login.LoginActivity
-import com.example.moodlight.util.Expression
 import com.example.moodlight.util.FirebaseUtil
-import com.google.firebase.messaging.FirebaseMessaging
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

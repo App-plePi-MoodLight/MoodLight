@@ -1,4 +1,4 @@
-package com.example.moodlight.Hash
+package com.example.moodlight.hash
 
 import java.math.BigInteger
 import java.security.MessageDigest

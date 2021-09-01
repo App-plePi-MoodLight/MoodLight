@@ -1,7 +1,5 @@
 package com.example.moodlight.screen.main3.setting
 
-import android.app.Activity
-import android.content.ContentValues.TAG
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -11,19 +9,16 @@ import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
-import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
-import com.example.moodlight.Hash.sha
+import com.example.moodlight.hash.sha
 import com.example.moodlight.R
-import com.example.moodlight.database.UserDao
 import com.example.moodlight.database.UserDatabase
 import com.example.moodlight.databinding.ActivitySettingBinding
 import com.example.moodlight.util.FirebaseUtil
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import java.io.File
 

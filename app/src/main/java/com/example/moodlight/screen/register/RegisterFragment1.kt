@@ -7,17 +7,23 @@ import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.moodlight.R
+import com.example.moodlight.api.ServerClient
+import com.example.moodlight.data.IsExistData
 import com.example.moodlight.databinding.FragmentRegister1Binding
 import com.example.moodlight.util.Expression
 import com.example.moodlight.util.FirebaseUtil
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class RegisterFragment1 : Fragment() {
 
@@ -48,8 +54,40 @@ class RegisterFragment1 : Fragment() {
 
 
         viewModel.email.observe( requireActivity(), Observer {
+            // it is email.
+            if(!it.equals("")) {
+                if (Expression.isValidEmail(it)) {
+                    ServerClient.getApiService().isExistEmail(it)
+                        .enqueue(object : Callback<IsExistData> {
 
-            if (!it.equals("")) {
+                            override fun onResponse(
+                                call: Call<IsExistData>,
+                                response: Response<IsExistData>
+                            ) {
+                                if (response.isSuccessful) {
+                                    val isExistEmail : Boolean = response.body()!!.exist
+
+                                    if (isExistEmail)
+                                        setOverlapInActive()
+                                    else
+                                        setActive()
+
+                                }
+                                else
+                                    Toast.makeText(requireContext(), response.message()+"\n"+"ERRORCODE: "+response.code().toString(), Toast.LENGTH_SHORT).show()
+                            }
+
+                            override fun onFailure(call: Call<IsExistData>, t: Throwable) {
+                                t.printStackTrace()
+                            }
+
+                        })
+                }
+            }
+            else
+                setFailureInActive()
+
+/*            if (!it.equals("")) {
 
                 if (Expression.isValidEmail(it)) {
                     for (i in 0 until emailArray.size) {
@@ -63,7 +101,7 @@ class RegisterFragment1 : Fragment() {
                 }
                 else
                     setFailureInActive()
-            }
+            }*/
         })
 
 

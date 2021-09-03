@@ -5,7 +5,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 object ServerClient {
 
-    // use : ServerClient.getApiService().FunctionToUse
+    // use : ServerClient.getApiService().(FunctionToUse)
 
     private const val baseUrl = "https://md.khjcode.com/"
     private var instance : Retrofit? = null

@@ -6,23 +6,31 @@ import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.KeyEvent
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.example.moodlight.hash.sha
 import com.example.moodlight.R
+import com.example.moodlight.api.ServerClient
+import com.example.moodlight.data.IsExistData
+import com.example.moodlight.data.JoinBodyData
+import com.example.moodlight.data.LoginData
+import com.example.moodlight.database.UserData
 import com.example.moodlight.databinding.FragmentRegister3Binding
+import com.example.moodlight.hash.sha
+import com.example.moodlight.screen.MainActivity
 import com.example.moodlight.screen.initial.InitialActivity
-import com.example.moodlight.screen.login.LoginActivity
 import com.example.moodlight.util.FirebaseUtil
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class RegisterFragment3 : Fragment() {
 
@@ -61,7 +69,38 @@ class RegisterFragment3 : Fragment() {
 
         viewModel.nickname.observe(requireActivity(), Observer {
 
-            if (!it.equals("")) {
+
+            if(!it.equals("")) {
+                    ServerClient.getApiService().isExistNickname(it)
+                        .enqueue(object : Callback<IsExistData> {
+
+                            override fun onResponse(
+                                call: Call<IsExistData>,
+                                response: Response<IsExistData>
+                            ) {
+                                if (response.isSuccessful) {
+                                    val isExistNickname = response.body()!!.exist
+                                    if (isExistNickname)
+                                        setOverlapInActive()
+                                    else
+                                        setActive()
+                                }
+                                else
+                                    Toast.makeText(requireContext(), response.message()+"\n"+"ERRORCODE: "+response.code().toString(), Toast.LENGTH_SHORT).show()
+                            }
+
+                            override fun onFailure(call: Call<IsExistData>, t: Throwable) {
+                                t.printStackTrace()
+                            }
+
+                        })
+                }
+                else
+                    setFailureInActive()
+
+
+
+/*            if (!it.equals("")) {
                 for (i in 0 until nicknameArray.size) {
                     if (it.equals(nicknameArray[i])) {
                         setOverlapInActive()
@@ -71,7 +110,7 @@ class RegisterFragment3 : Fragment() {
                     }
                 }
             } else
-                setFailureInActive()
+                setFailureInActive()*/
 
         })
 
@@ -126,79 +165,61 @@ class RegisterFragment3 : Fragment() {
     }
 
     private fun registerAndLogin(email: String, password: String, nickname: String) {
-        FirebaseUtil.getAuth().createUserWithEmailAndPassword(email, password)
-            .addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    val map = hashMapOf(
-                        "nickname" to nickname,
-                        "email" to viewModel.email.value,
-                        "joinTime" to System.currentTimeMillis(),
-                        "commentAlarm" to false,
-                        "likeAlarm" to false,
-                        "password" to sha.encryptSHA(viewModel.password.value)
-                    )
+        val joinBodyData : JoinBodyData = JoinBodyData(nickname, email, password, "user")
+        val call : Call<JoinBodyData> = ServerClient.getApiService().joinRequest(joinBodyData)
 
-                    CoroutineScope(Dispatchers.IO).launch {
-                        val map = hashMapOf(
-                            "nickname" to nickname,
-                            "joinTime" to System.currentTimeMillis(),
-                            "commentAlarm" to false,
-                            "likeAlarm" to false,
-                            "password" to sha.encryptSHA(viewModel.password.value),
-                            "token" to FirebaseUtil.getFirebaseMessagingInstance().token
-                        )
+        call.enqueue(object : Callback<JoinBodyData> {
 
-                        FirebaseUtil.getFireStoreInstance().collection("users")
-                            .document(FirebaseUtil.getUid())
-                            .set(map)
-                    }
+            override fun onResponse(call: Call<JoinBodyData>, response: Response<JoinBodyData>) {
+                if (response.isSuccessful) {
+                    Log.w("register", "register success!")
+                    val joinBodyData: JoinBodyData = response.body()!!
+                    saveLoginData(joinBodyData)
 
-                    CoroutineScope(Dispatchers.IO).launch {
-                        lateinit var nicknameArray : ArrayList<String>
-                        lateinit var emailArray : ArrayList<String>
-                        FirebaseUtil.getFireStoreInstance().collection("users")
-                            .document("Storage")
-                            .get()
-                            .addOnSuccessListener {
-                                nicknameArray = it.get("nicknameArray") as ArrayList<String>
-                                emailArray = it.get("emailArray") as ArrayList<String>
-                                nicknameArray.add(viewModel.nickname.value!!)
-                                emailArray.add(viewModel.email.value!!)
-                                val map2 = hashMapOf(
-                                    "nicknameArray" to nicknameArray,
-                                    "emailArray" to emailArray
-                                )
-                                FirebaseUtil.getFireStoreInstance().collection("users")
-                                    .document("Storage")
-                                    .update(map2 as Map<String, Any>)
-                            }
-                    }
+                    val loginData : LoginData = LoginData(joinBodyData.email, joinBodyData.password)
+                    ServerClient.getApiService().login(loginData)
+                        .enqueue(object : Callback<LoginData>{
+                            // login start
 
-                    if (task.isSuccessful) {
-                        FirebaseUtil.getAuth().signInWithEmailAndPassword(email, password)
-                            .addOnCompleteListener { task ->
-                                if (task.isSuccessful) {
-                                    val intent: Intent =
-                                        Intent(requireContext(), LoginActivity::class.java)
+                            override fun onResponse(
+                                call: Call<LoginData>,
+                                response: Response<LoginData>
+                            ) {
+                                if(response.isSuccessful) {
+                                    Log.w("register", "login success!")
+                                    val intent : Intent = Intent(requireContext(), MainActivity::class.java)
                                     startActivity(intent)
                                     initialActivity.finish()
                                     requireActivity().finish()
-                                } else {
-                                    // If sign in fails, display a message to the user.
-                                    Log.w(
-                                        "Login",
-                                        "signInWithEmail:failure",
-                                        task.exception
-                                    )
-
-                                    Toast.makeText(
-                                        requireContext(), "Authentication failed.",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
                                 }
+                                else
+                                    Toast.makeText(requireContext(), response.message()+"\n"+"ERRORCODE: "+response.code().toString(), Toast.LENGTH_SHORT).show()
                             }
-                    }
+
+                            override fun onFailure(call: Call<LoginData>, t: Throwable) {
+                                t.printStackTrace()
+                            }
+
+                            // login end
+                        })
+
+
                 }
+                else
+                    Toast.makeText(requireContext(), response.message()+"\n"+"ERRORCODE: "+response.code().toString(), Toast.LENGTH_SHORT).show()
             }
+
+            override fun onFailure(call: Call<JoinBodyData>, t: Throwable) {
+                TODO("Not yet implemented")
+            }
+
+        })
+    }
+
+    private fun saveLoginData(joinBodyData: JoinBodyData) : Unit {
+        CoroutineScope(Dispatchers.IO).launch {
+            val userData: UserData = UserData(joinBodyData.email, joinBodyData.password)
+            viewModel.insertLoginData(userData)
+        }
     }
 }

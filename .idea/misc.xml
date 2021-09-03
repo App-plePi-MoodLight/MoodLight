@@ -3,7 +3,12 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/OIS/AndroidStudioProjects/MoodLightApplication/app/src/main/res/layout/activity_answer.xml" value="0.35" />
         <entry key="..\:/Users/OIS/AndroidStudioProjects/MoodLightApplication/app/src/main/res/layout/activity_community.xml" value="0.35" />
+        <entry key="..\:/Users/OIS/AndroidStudioProjects/MoodLightApplication/app/src/main/res/layout/activity_register.xml" value="0.35" />
+        <entry key="..\:/Users/OIS/AndroidStudioProjects/MoodLightApplication/app/src/main/res/layout/fragment_register3.xml" value="0.1890625" />
+        <entry key="..\:/Users/OIS/AndroidStudioProjects/MoodLightApplication/app/src/main/res/layout/row_answer.xml" value="0.35" />
+        <entry key="..\:/Users/OIS/AndroidStudioProjects/MoodLightApplication/app/src/main/res/layout/row_comment.xml" value="0.35" />
       </map>
     </option>
   </component>

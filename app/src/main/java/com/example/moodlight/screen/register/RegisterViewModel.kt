@@ -10,6 +10,8 @@ class RegisterViewModel(application: Application) : AndroidViewModel(application
     var email = MutableLiveData("")
     var password = MutableLiveData("")
     var nickname = MutableLiveData("")
+    public var adminKey : String = "user"
+    var confirmCode = MutableLiveData("")
     private val repository : UserDatabaseRepository = UserDatabaseRepository(application)
 
     fun insertLoginData (userData: UserData) {

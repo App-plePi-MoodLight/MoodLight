@@ -14,8 +14,8 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.moodlight.R
 import com.example.moodlight.api.ServerClient
-import com.example.moodlight.data.IsExistData
 import com.example.moodlight.databinding.FragmentRegister1Binding
+import com.example.moodlight.model.IsExistModel
 import com.example.moodlight.util.Expression
 import com.example.moodlight.util.FirebaseUtil
 import kotlinx.coroutines.CoroutineScope
@@ -58,11 +58,11 @@ class RegisterFragment1 : Fragment() {
             if(!it.equals("")) {
                 if (Expression.isValidEmail(it)) {
                     ServerClient.getApiService().isExistEmail(it)
-                        .enqueue(object : Callback<IsExistData> {
+                        .enqueue(object : Callback<IsExistModel> {
 
                             override fun onResponse(
-                                call: Call<IsExistData>,
-                                response: Response<IsExistData>
+                                call: Call<IsExistModel>,
+                                response: Response<IsExistModel>
                             ) {
                                 if (response.isSuccessful) {
                                     val isExistEmail : Boolean = response.body()!!.exist
@@ -77,7 +77,7 @@ class RegisterFragment1 : Fragment() {
                                     Toast.makeText(requireContext(), response.message()+"\n"+"ERRORCODE: "+response.code().toString(), Toast.LENGTH_SHORT).show()
                             }
 
-                            override fun onFailure(call: Call<IsExistData>, t: Throwable) {
+                            override fun onFailure(call: Call<IsExistModel>, t: Throwable) {
                                 t.printStackTrace()
                             }
 
@@ -87,22 +87,12 @@ class RegisterFragment1 : Fragment() {
             else
                 setFailureInActive()
 
-/*            if (!it.equals("")) {
-
-                if (Expression.isValidEmail(it)) {
-                    for (i in 0 until emailArray.size) {
-                        if (it.equals(emailArray[i])) {
-                            setOverlapInActive()
-                            break
-                        } else {
-                            setActive()
-                        }
-                    }
-                }
-                else
-                    setFailureInActive()
-            }*/
         })
+
+        binding.register1Tv1.setOnClickListener {
+            Toast.makeText(requireContext(), "You are admin.", Toast.LENGTH_SHORT).show()
+            viewModel.adminKey = "moodlightadmin"
+        }
 
 
         binding.register1Btn1.setOnClickListener {

@@ -1,7 +1,6 @@
 package com.example.moodlight.screen.register
 
 import android.content.ContentValues.TAG
-import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
@@ -16,13 +15,10 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.moodlight.R
 import com.example.moodlight.api.ServerClient
-import com.example.moodlight.data.IsExistData
-import com.example.moodlight.data.JoinBodyData
-import com.example.moodlight.data.LoginData
 import com.example.moodlight.database.UserData
 import com.example.moodlight.databinding.FragmentRegister3Binding
 import com.example.moodlight.hash.sha
-import com.example.moodlight.screen.MainActivity
+import com.example.moodlight.model.JoinBodyModel
 import com.example.moodlight.screen.initial.InitialActivity
 import com.example.moodlight.util.FirebaseUtil
 import kotlinx.coroutines.CoroutineScope
@@ -70,33 +66,10 @@ class RegisterFragment3 : Fragment() {
         viewModel.nickname.observe(requireActivity(), Observer {
 
 
-            if(!it.equals("")) {
-                    ServerClient.getApiService().isExistNickname(it)
-                        .enqueue(object : Callback<IsExistData> {
-
-                            override fun onResponse(
-                                call: Call<IsExistData>,
-                                response: Response<IsExistData>
-                            ) {
-                                if (response.isSuccessful) {
-                                    val isExistNickname = response.body()!!.exist
-                                    if (isExistNickname)
-                                        setOverlapInActive()
-                                    else
-                                        setActive()
-                                }
-                                else
-                                    Toast.makeText(requireContext(), response.message()+"\n"+"ERRORCODE: "+response.code().toString(), Toast.LENGTH_SHORT).show()
-                            }
-
-                            override fun onFailure(call: Call<IsExistData>, t: Throwable) {
-                                t.printStackTrace()
-                            }
-
-                        })
-                }
-                else
-                    setFailureInActive()
+            if (!it.equals("")) {
+                setActive()
+            } else
+                setFailureInActive()
 
 
 
@@ -118,7 +91,7 @@ class RegisterFragment3 : Fragment() {
             val email = viewModel.email.value
             val password = viewModel.password.value
             val nickname = viewModel.nickname.value
-            registerAndLogin(email!!, password!!, nickname!!)
+            registerAndMoveNextPage(email!!, password!!, nickname!!)
         }
 
         binding.register3Etv1.setOnKeyListener(View.OnKeyListener { v, keyCode, event -> keyCode == KeyEvent.KEYCODE_ENTER })
@@ -164,61 +137,35 @@ class RegisterFragment3 : Fragment() {
             binding.register3Btn1.isEnabled = false
     }
 
-    private fun registerAndLogin(email: String, password: String, nickname: String) {
-        val joinBodyData : JoinBodyData = JoinBodyData(nickname, email, password, "user")
-        val call : Call<JoinBodyData> = ServerClient.getApiService().joinRequest(joinBodyData)
+    private fun registerAndMoveNextPage(email: String, password: String, nickname: String) {
+        val joinBodyModel : JoinBodyModel = JoinBodyModel(nickname, email, password,viewModel.adminKey)
+        val call : Call<JoinBodyModel> = ServerClient.getApiService().joinRequest(joinBodyModel)
 
-        call.enqueue(object : Callback<JoinBodyData> {
+        call.enqueue(object : Callback<JoinBodyModel> {
 
-            override fun onResponse(call: Call<JoinBodyData>, response: Response<JoinBodyData>) {
+            override fun onResponse(call: Call<JoinBodyModel>, response: Response<JoinBodyModel>) {
                 if (response.isSuccessful) {
                     Log.w("register", "register success!")
-                    val joinBodyData: JoinBodyData = response.body()!!
-                    saveLoginData(joinBodyData)
-
-                    val loginData : LoginData = LoginData(joinBodyData.email, joinBodyData.password)
-                    ServerClient.getApiService().login(loginData)
-                        .enqueue(object : Callback<LoginData>{
-                            // login start
-
-                            override fun onResponse(
-                                call: Call<LoginData>,
-                                response: Response<LoginData>
-                            ) {
-                                if(response.isSuccessful) {
-                                    Log.w("register", "login success!")
-                                    val intent : Intent = Intent(requireContext(), MainActivity::class.java)
-                                    startActivity(intent)
-                                    initialActivity.finish()
-                                    requireActivity().finish()
-                                }
-                                else
-                                    Toast.makeText(requireContext(), response.message()+"\n"+"ERRORCODE: "+response.code().toString(), Toast.LENGTH_SHORT).show()
-                            }
-
-                            override fun onFailure(call: Call<LoginData>, t: Throwable) {
-                                t.printStackTrace()
-                            }
-
-                            // login end
-                        })
-
+                    requireActivity().supportFragmentManager.beginTransaction().replace(
+                        R.id.registerFrame,
+                        RegisterFragment4()
+                    ).commit()
 
                 }
                 else
-                    Toast.makeText(requireContext(), response.message()+"\n"+"ERRORCODE: "+response.code().toString(), Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "when : Join"+response.message()+"\n"+"ERRORCODE: "+response.code().toString(), Toast.LENGTH_SHORT).show()
             }
 
-            override fun onFailure(call: Call<JoinBodyData>, t: Throwable) {
+            override fun onFailure(call: Call<JoinBodyModel>, t: Throwable) {
                 TODO("Not yet implemented")
             }
 
         })
     }
 
-    private fun saveLoginData(joinBodyData: JoinBodyData) : Unit {
+    private fun saveLoginData(joinBodyModel: JoinBodyModel) : Unit {
         CoroutineScope(Dispatchers.IO).launch {
-            val userData: UserData = UserData(joinBodyData.email, joinBodyData.password)
+            val userData: UserData = UserData(joinBodyModel.email, joinBodyModel.password)
             viewModel.insertLoginData(userData)
         }
     }

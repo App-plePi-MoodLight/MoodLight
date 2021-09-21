@@ -84,7 +84,7 @@
                 android:textSize="15sp"
                 android:visibility="invisible"
                 app:layout_constraintTop_toBottomOf="@id/main3EmailTv"
-                tools:text="무드등을 시작한지 365일이 지났어요!"
+                tools:text="무드등을 시작한지 365일이 지났어요."
                 tools:visibility="visible" />
 
             <androidx.appcompat.widget.AppCompatButton

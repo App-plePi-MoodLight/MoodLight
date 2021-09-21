@@ -1,7 +1,7 @@
-package com.example.moodlight.data
+package com.example.moodlight.model
 
 // registerBody
-data class JoinBodyData(
+data class JoinBodyModel(
     val nickname : String,
     val email : String,
     val password : String,

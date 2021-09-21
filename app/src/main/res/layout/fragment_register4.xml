@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".screen.register.RegisterFragment4">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.example.moodlight.screen.register.RegisterViewModel" />
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <EditText
+            android:id="@+id/register4Etv1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="인증번호"
+            android:text="@={viewModel.confirmCode}"
+            android:theme="@style/editText"
+            android:inputType="number"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_margin="20sp"
+            />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/register4Btn1"
+            android:layout_width="0dp"
+            android:layout_height="55sp"
+            android:layout_marginStart="20sp"
+            android:layout_marginEnd="20sp"
+            android:layout_marginBottom="32sp"
+            android:background="@drawable/btn_design_3"
+            android:enabled="false"
+            android:fontFamily="@font/roboto_bold"
+            android:text="가입하기"
+            android:textColor="#ffffff"
+            android:textSize="15sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <ImageView
+            android:id="@+id/register4Iv1"
+            android:layout_width="15sp"
+            android:layout_height="15sp"
+            android:layout_marginStart="20sp"
+            android:src="@drawable/img_carbon_information"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="@id/register4Tv2"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/register4Tv2" />
+
+        <TextView
+            android:id="@+id/register4Tv2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5sp"
+
+            android:layout_marginTop="10sp"
+            android:fontFamily="@font/roboto_medium"
+            android:visibility="invisible"
+            app:layout_constraintStart_toEndOf="@id/register4Iv1"
+            app:layout_constraintTop_toBottomOf="@id/register4Etv1" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

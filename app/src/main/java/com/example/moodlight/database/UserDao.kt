@@ -24,6 +24,6 @@ interface UserDao {
     fun getIdFromUserLoginTable() : String?
 
     @Query("SELECT * FROM userLoginTable")
-    fun getuserLoginTable() : List<UserData>?
+    fun getUserFromUserLoginTable() : List<UserData>?
 
 }

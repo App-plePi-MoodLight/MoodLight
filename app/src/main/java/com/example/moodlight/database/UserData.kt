@@ -3,7 +3,7 @@ package com.example.moodlight.database
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "userLoginTable")
+@Entity
 data class UserData(
     @PrimaryKey
     var id : String,

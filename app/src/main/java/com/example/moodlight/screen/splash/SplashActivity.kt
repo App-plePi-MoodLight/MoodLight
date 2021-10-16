@@ -34,17 +34,20 @@ class SplashActivity : AppCompatActivity() {
         findViewById<TextView>(R.id.textView3).startAnimation(fadeinAnim)
         findViewById<TextView>(R.id.textView4).startAnimation(fadeinAnim2)
 
-        val db : UserDatabase = Room.databaseBuilder(applicationContext, UserDatabase::class.java,
-        "moodlight-db")
-            .allowMainThreadQueries()
-            .build()
+
 
         Handler(Looper.getMainLooper()).postDelayed({
+            val db : UserDatabase = Room.databaseBuilder(applicationContext, UserDatabase::class.java,
+                "moodlight-db")
+                .fallbackToDestructiveMigration()
+                .allowMainThreadQueries()
+                .build()
 
-            val isAutoLogin: Boolean = db.userDao().getIdFromUserLoginTable() != null
-            if (isAutoLogin) {
+            Log.e("asd", db.userDao().getUserFromUserLoginTable().toString())
+
+            if (db.userDao().getIdFromUserLoginTable() != null) {
                 val id: String = db.userDao().getUserFromUserLoginTable()!![0]!!.id
-                val password: String = db.userDao().getUserFromUserLoginTable()!![0].password
+                val password: String = db.userDao().getUserFromUserLoginTable()!![0]!!.password
 
                 val loginModel: LoginModel = LoginModel(id, password)
                 ServerClient.getApiService().login(loginModel)

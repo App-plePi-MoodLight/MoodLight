@@ -14,6 +14,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.moodlight.R
 import com.example.moodlight.api.ServerClient
 import com.example.moodlight.database.UserData
+import com.example.moodlight.database.UserDatabase
 import com.example.moodlight.databinding.FragmentRegister4Binding
 import com.example.moodlight.model.RegisterConfirmModel
 import com.example.moodlight.screen.MainActivity
@@ -69,6 +70,7 @@ class RegisterFragment4 : Fragment() {
                                 val intent : Intent = Intent(requireContext(), MainActivity::class.java)
                                 startActivity(intent)
                                 initialActivity.finish()
+                                requireActivity().finish()
                             } else {
                                 Toast.makeText(requireContext(), response.code().toString(), Toast.LENGTH_SHORT).show()
                             }
@@ -111,9 +113,10 @@ class RegisterFragment4 : Fragment() {
     }
 
     private fun saveLoginData() : Unit {
+        val userDataBase : UserDatabase = UserDatabase.getInstance(requireContext())!!
         CoroutineScope(Dispatchers.IO).launch {
             val userData: UserData = UserData(viewModel.email.value!!, viewModel.password.value!!)
-            viewModel.insertLoginData(userData)
+            userDataBase.userDao().insert(userData)
         }
     }
 

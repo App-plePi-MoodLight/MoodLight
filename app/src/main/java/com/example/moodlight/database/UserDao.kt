@@ -17,13 +17,13 @@ interface UserDao {
     @Update
     fun updateLoginTable(userData: UserData)
 
-    @Query("DELETE from userLoginTable")
+    @Query("DELETE from UserData")
     fun deleteUserLoginTable()
 
-    @Query("SELECT id FROM userLoginTable ")
+    @Query("SELECT id FROM UserData ")
     fun getIdFromUserLoginTable() : String?
 
-    @Query("SELECT * FROM userLoginTable")
+    @Query("SELECT * FROM UserData")
     fun getUserFromUserLoginTable() : List<UserData>?
 
 }

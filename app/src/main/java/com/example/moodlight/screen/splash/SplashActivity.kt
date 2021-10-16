@@ -31,17 +31,19 @@ class SplashActivity : AppCompatActivity() {
         setContentView(R.layout.activity_splash)
         lateinit var intent : Intent
 
+        val db : UserDatabase = Room.databaseBuilder(applicationContext, UserDatabase::class.java,
+            "moodlight-db")
+            .fallbackToDestructiveMigration()
+            .allowMainThreadQueries()
+            .build()
+
         findViewById<TextView>(R.id.textView3).startAnimation(fadeinAnim)
         findViewById<TextView>(R.id.textView4).startAnimation(fadeinAnim2)
 
 
 
         Handler(Looper.getMainLooper()).postDelayed({
-            val db : UserDatabase = Room.databaseBuilder(applicationContext, UserDatabase::class.java,
-                "moodlight-db")
-                .fallbackToDestructiveMigration()
-                .allowMainThreadQueries()
-                .build()
+
 
             Log.e("asd", db.userDao().getUserFromUserLoginTable().toString())
 

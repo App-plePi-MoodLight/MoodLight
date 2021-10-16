@@ -5,7 +5,7 @@ import androidx.room.*
 @Dao
 interface UserDao {
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert (userData: UserData)
 
     @Update
@@ -21,9 +21,9 @@ interface UserDao {
     fun deleteUserLoginTable()
 
     @Query("SELECT id FROM UserData ")
-    fun getIdFromUserLoginTable() : String?
+    fun getIdFromUserLoginTable() : String
 
     @Query("SELECT * FROM UserData")
-    fun getUserFromUserLoginTable() : List<UserData>?
+    fun getUserFromUserLoginTable() : List<UserData>
 
 }

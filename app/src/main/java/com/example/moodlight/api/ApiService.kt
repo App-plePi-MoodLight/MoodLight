@@ -1,14 +1,8 @@
 package com.example.moodlight.api
 
-import com.example.moodlight.model.IsExistModel
-import com.example.moodlight.model.JoinBodyModel
-import com.example.moodlight.model.LoginModel
-import com.example.moodlight.model.RegisterConfirmModel
+import com.example.moodlight.model.*
 import retrofit2.Call
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.POST
-import retrofit2.http.Query
+import retrofit2.http.*
 
 interface ApiService {
 
@@ -28,4 +22,9 @@ interface ApiService {
     @POST("auth/confirm")
     fun confirmRequest(@Body registerConfirmModel: RegisterConfirmModel)
     : Call<RegisterConfirmModel>
+
+    @GET("answer/count/{activate_date}")
+    fun getMoodCount(@Path("activate_date") date: String) : Call<MoodCountModel>
+
+
 }

@@ -6,22 +6,28 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.example.moodlight.R
+import com.example.moodlight.api.ServerClient
+import com.example.moodlight.database.UserDatabase
 import com.example.moodlight.dialog.CommonDialog
 import com.example.moodlight.dialog.CommonDialogInterface
 import com.example.moodlight.dialog.LogoutDialog
 import com.example.moodlight.dialog.LogoutDialogInterface
-import com.example.moodlight.screen.mainstatics.MainStatisticsFragment
+import com.example.moodlight.model.setting.DeleteUserModel
 import com.example.moodlight.screen.initial.InitialActivity
+import com.example.moodlight.screen.mainstatics.MainStatisticsFragment
+import com.example.moodlight.screen.login.LoginActivity
 import com.example.moodlight.screen.main1.CommunityActiviy
 import com.example.moodlight.screen.main2.MainFragment2
 import com.example.moodlight.screen.main3.MainFragment3
-import com.example.moodlight.util.FirebaseUtil
 import com.example.moodlight.util.NetworkStatus
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 @Suppress("DEPRECATION")
 class MainActivity : AppCompatActivity(), CommonDialogInterface, LogoutDialogInterface {
@@ -97,26 +103,34 @@ class MainActivity : AppCompatActivity(), CommonDialogInterface, LogoutDialogInt
         }
 
         override fun onCheckBtnClick() {
-            FirebaseUtil.getAuth().currentUser!!.delete()
-                .addOnCompleteListener {
-
-                    if (it.isSuccessful) {
-                        CoroutineScope(Dispatchers.IO).launch {
-                            FirebaseUtil.getFireStoreInstance().collection("users")
-                                .document(FirebaseUtil.getUid())
-                                .delete()
+            CoroutineScope(Dispatchers.IO).launch {
+                ServerClient.getApiService().deleteUser().enqueue(object : Callback<DeleteUserModel> {
+                    override fun onResponse(
+                        call: Call<DeleteUserModel>,
+                        response: Response<DeleteUserModel>
+                    ) {
+                        val result = response.body()
+                        if(response.code() == 200){
+                            if(!result!!.success){
+                                Toast.makeText(this@MainActivity, "회원탈퇴에 실패하였습니다.", Toast.LENGTH_SHORT).show()
+                            }
+                            else{
+                                CoroutineScope(Dispatchers.IO).launch{
+                                    UserDatabase.getInstance(this@MainActivity)!!.userDao().deleteUserLoginTable()
+                                }
+                                Toast.makeText(this@MainActivity, result.message, Toast.LENGTH_SHORT).show()
+                                startActivity(Intent(this@MainActivity, InitialActivity::class.java))
+                                dialog.dismiss()
+                                finish()
+                            }
                         }
-                        Toast.makeText(this, "회원탈퇴가 완료되었습니다.", Toast.LENGTH_SHORT).show()
-                        startActivity(Intent(this, InitialActivity::class.java))
-                        dialog.dismiss()
-                        finish()
-                    } else {
-                        Toast.makeText(this, "오류가 발생하였습니다. 다시 시도해주세요.", Toast.LENGTH_SHORT).show()
                     }
-                }
-                .addOnFailureListener {
-                    Toast.makeText(this, "오류가 발생하였습니다. 다시 시도해주세요.", Toast.LENGTH_SHORT).show()
-                }
+
+                    override fun onFailure(call: Call<DeleteUserModel>, t: Throwable) {
+                    }
+
+                })
+            }
         }
 
     override fun onCancleBtnClick() {
@@ -124,11 +138,11 @@ class MainActivity : AppCompatActivity(), CommonDialogInterface, LogoutDialogInt
     }
 
     override fun onClickLogout() {
-
-        FirebaseUtil.getAuth().signOut()
+        CoroutineScope(Dispatchers.IO).launch{
+            UserDatabase.getInstance(this@MainActivity)!!.userDao().deleteUserLoginTable()
+        }
         logoutDialog.dismiss()
-        startActivity(Intent(this, InitialActivity::class.java))
-        logoutDialog.dismiss()
+        startActivity(Intent(this, LoginActivity::class.java))
         finish()
     }
 

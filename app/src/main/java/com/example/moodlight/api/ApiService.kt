@@ -4,11 +4,12 @@ import com.example.moodlight.model.IsExistModel
 import com.example.moodlight.model.JoinBodyModel
 import com.example.moodlight.model.LoginModel
 import com.example.moodlight.model.RegisterConfirmModel
+import com.example.moodlight.model.setting.ChangePasswordModel
+import com.example.moodlight.model.setting.UserModel
+import com.example.moodlight.model.setting.DeleteUserModel
+import com.example.moodlight.model.setting.SuccussChangePasswordModel
 import retrofit2.Call
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.POST
-import retrofit2.http.Query
+import retrofit2.http.*
 
 interface ApiService {
 
@@ -28,4 +29,13 @@ interface ApiService {
     @POST("auth/confirm")
     fun confirmRequest(@Body registerConfirmModel: RegisterConfirmModel)
     : Call<RegisterConfirmModel>
+
+    @GET("auth/")
+    fun getUserInfo() : Call<UserModel>
+
+    @POST("auth/change-password")
+    fun changePassword(@Body changePasswordModel: ChangePasswordModel) : Call<SuccussChangePasswordModel>
+
+    @DELETE("user/")
+    fun deleteUser() : Call<DeleteUserModel>
 }

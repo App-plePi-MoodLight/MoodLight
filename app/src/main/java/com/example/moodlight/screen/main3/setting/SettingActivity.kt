@@ -15,6 +15,7 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import com.example.moodlight.hash.sha
 import com.example.moodlight.R
+import com.example.moodlight.api.ServerClient
 import com.example.moodlight.database.UserDatabase
 import com.example.moodlight.databinding.ActivitySettingBinding
 import com.example.moodlight.util.FirebaseUtil
@@ -24,12 +25,10 @@ import java.io.File
 
 class SettingActivity : AppCompatActivity() {
     private lateinit var binding : ActivitySettingBinding
-    private lateinit var db : FirebaseFirestore
     private lateinit var userList : ArrayList<String>
     private lateinit var rdb : UserDatabase
     private lateinit var filepath : Uri
     private lateinit var bitmap : Bitmap
-    var curPw = ""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_setting)
@@ -40,9 +39,13 @@ class SettingActivity : AppCompatActivity() {
         binding.IVBtn.setOnClickListener {
             fileChooser()
         }
+        binding.passwordChangeBtn.setOnClickListener {
+            startActivity(Intent(this, ChangePasswordActivity::class.java))
+        }
 
-
-
+        binding.distinctCheckBtn.setOnClickListener {
+            isDistinctNickName()
+        }
 
         loadProFileImage()
         setSupportActionBar(binding.main2Toolbar)
@@ -51,6 +54,9 @@ class SettingActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setHomeAsUpIndicator(R.drawable.left_btn)
     }
+
+    private fun isDistinctNickName() {
+}
 
     private fun fileChooser() {
         var i = Intent()
@@ -72,16 +78,16 @@ class SettingActivity : AppCompatActivity() {
     }
 
     private fun loadProFileImage() {
-        val storageRef = FirebaseStorage.getInstance().getReference().child("image/${FirebaseUtil.getAuth().currentUser!!.uid}.jpg")
-        val localfile = File.createTempFile("tempImage", "jpg")
-        storageRef.getFile(localfile).addOnSuccessListener {
-            bitmap = BitmapFactory.decodeFile(localfile.absolutePath)
-            binding.imageView.setImageBitmap(bitmap)
-        }.addOnFailureListener{
-            binding.imageView.setImageResource(R.drawable.basic_profile)
-        }
-        binding.imageView.setBackground(ShapeDrawable(OvalShape()));
-        binding.imageView.setClipToOutline(true);
+//        val storageRef = FirebaseStorage.getInstance().getReference().child("image/${FirebaseUtil.getAuth().currentUser!!.uid}.jpg")
+//        val localfile = File.createTempFile("tempImage", "jpg")
+//        storageRef.getFile(localfile).addOnSuccessListener {
+//            bitmap = BitmapFactory.decodeFile(localfile.absolutePath)
+//            binding.imageView.setImageBitmap(bitmap)
+//        }.addOnFailureListener{
+//            binding.imageView.setImageResource(R.drawable.basic_profile)
+//        }
+//        binding.imageView.setBackground(ShapeDrawable(OvalShape()));
+//        binding.imageView.setClipToOutline(true);
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

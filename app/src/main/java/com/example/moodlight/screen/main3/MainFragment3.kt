@@ -24,10 +24,13 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.example.moodlight.R
+import com.example.moodlight.api.ServerClient
+import com.example.moodlight.database.UserData
 import com.example.moodlight.database.UserDatabase
 import com.example.moodlight.databinding.FragmentMain3Binding
 import com.example.moodlight.screen.initial.InitialActivity
 import com.example.moodlight.dialog.CommonDialog
+import com.example.moodlight.model.setting.UserModel
 import com.example.moodlight.screen.MainActivity
 import com.example.moodlight.screen.main3.setting.SettingActivity
 import com.example.moodlight.util.FirebaseUtil
@@ -38,9 +41,17 @@ import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import retrofit2.Call
+import retrofit2.Response
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.io.File
+import java.text.SimpleDateFormat
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+import java.time.temporal.ChronoField
+import java.util.*
+import javax.security.auth.callback.Callback
 
 class MainFragment3 : Fragment() {
     private var activity : MainActivity? = MainActivity()
@@ -66,7 +77,6 @@ class MainFragment3 : Fragment() {
         binding.fragment = this
 
 
-
         (binding.wholeLayout as ViewGroup).layoutTransition.apply {
             val appearingAnimator = ObjectAnimator.ofFloat(view, "translationX", -1000f, 0f)
             val disappearingAnimator = ObjectAnimator.ofFloat(view, "translationX", 0f, 1000f)
@@ -76,12 +86,12 @@ class MainFragment3 : Fragment() {
             this.setDuration(LayoutTransition.APPEARING, 700L)
         }
 
+
         if (viewModel.email.value.equals(""))
             Main3Helper.setAnimation(binding)
         else
             Main3Helper.setVisible(binding)
         loadProFileImage()
-        setAnimation()
 
 
         binding.main3CommentSwitch.setOnCheckedChangeListener { buttonView, isChecked ->
@@ -116,36 +126,62 @@ class MainFragment3 : Fragment() {
     }
 
     private fun loadProFileImage() {
-        val storageRef = FirebaseStorage.getInstance().getReference().child("image/${FirebaseUtil.getAuth().currentUser!!.uid}.jpg")
-        val localfile = File.createTempFile("tempImage", "jpg")
-        storageRef.getFile(localfile).addOnSuccessListener {
-            bitmap = BitmapFactory.decodeFile(localfile.absolutePath)
-            binding.main3ProfileIv.setImageBitmap(bitmap)
-        }.addOnFailureListener{
-            binding.main3ProfileIv.setImageResource(R.drawable.basic_profile)
-        }
-        binding.main3ProfileIv.setBackground(ShapeDrawable(OvalShape()));
-        binding.main3ProfileIv.setClipToOutline(true);
+//        val storageRef = FirebaseStorage.getInstance().getReference().child("image/${FirebaseUtil.getAuth().currentUser!!.uid}.jpg")
+//        val localfile = File.createTempFile("tempImage", "jpg")
+//        storageRef.getFile(localfile).addOnSuccessListener {
+//            bitmap = BitmapFactory.decodeFile(localfile.absolutePath)
+//            binding.main3ProfileIv.setImageBitmap(bitmap)
+//        }.addOnFailureListener{
+//            binding.main3ProfileIv.setImageResource(R.drawable.basic_profile)
+//        }
+//        binding.main3ProfileIv.setBackground(ShapeDrawable(OvalShape()));
+//        binding.main3ProfileIv.setClipToOutline(true);
     }
 
 
     @SuppressLint("SetTextI18n")
     private fun setUi() {
+        val db = UserDatabase.getInstance(requireContext())
         CoroutineScope(Dispatchers.IO).launch {
-            FirebaseUtil.getFireStoreInstance().collection("users")
-                .document(FirebaseUtil.getUid())
-                .get()
-                .addOnCompleteListener {
-                    val millisTime = it.result!!.get("joinTime") as Long
-                    val time = GetTime.getTime(millisTime)
-                    viewModel.username.value = it.result!!.get("nickname") as String
-                    viewModel.email.value = FirebaseUtil.getAuth().currentUser!!.email
-                    viewModel.main3Tv1Text.value = "무드등을 시작한지 $time 지났어요!"
-                    viewModel.subscription.value = GetTime.modifyJoinTime(millisTime).toString()
-                    viewModel.commentIsChecked.value = it.result!!.get("commentAlarm") as Boolean
-                    viewModel.likeIsChecked.value = it.result!!.get("likeAlarm") as Boolean
-                }
+            ServerClient.getApiService().getUserInfo()
+                .enqueue(object : retrofit2.Callback<UserModel>{
+                    override fun onResponse(call: Call<UserModel>, response: Response<UserModel>) {
+                        val it = response.body();
+                        Log.d(TAG, "onResponse: result $it $response")
+                        if(response.code() == 200){
+                            Log.d(TAG, "onResponse: it time : ${it!!.created_date}")
+                            setAnimation()
+                            var sf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.ss'Z'")
+                            var date = sf.parse(it.created_date)
+                            var minus = GetTime.getTime(date.time)
+
+                            viewModel.username.value = it!!.nickname
+                            viewModel.email.value = it.email
+                            viewModel.main3Tv1Text.value = "무드등을 시작한지 ${minus}지났어요."
+                        }
+                    }
+
+                    override fun onFailure(call: Call<UserModel>, t: Throwable) {
+                        t.printStackTrace()
+                    }
+
+                })
         }
+//        CoroutineScope(Dispatchers.IO).launch {
+//            FirebaseUtil.getFireStoreInstance().collection("users")
+//                .document(FirebaseUtil.getUid())
+//                .get()
+//                .addOnCompleteListener {
+//                    val millisTime = it.result!!.get("joinTime") as Long
+//                    val time = GetTime.getTime(millisTime)
+//                    viewModel.username.value = it.result!!.get("nickname") as String
+//                    viewModel.email.value = FirebaseUtil.getAuth().currentUser!!.email
+//                    viewModel.main3Tv1Text.value = "무드등을 시작한지 $time 지났어요!"
+//                    viewModel.subscription.value = GetTime.modifyJoinTime(millisTime).toString()
+//                    viewModel.commentIsChecked.value = it.result!!.get("commentAlarm") as Boolean
+//                    viewModel.likeIsChecked.value = it.result!!.get("likeAlarm") as Boolean
+//                }
+//        }
     }
     public fun signOut(view: View): Unit {
         CoroutineScope(Dispatchers.IO).launch {

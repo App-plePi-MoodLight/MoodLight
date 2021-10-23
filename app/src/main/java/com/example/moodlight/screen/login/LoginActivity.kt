@@ -1,5 +1,6 @@
 package com.example.moodlight.screen.login
 
+import android.content.ContentValues.TAG
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -74,6 +75,7 @@ class LoginActivity : AppCompatActivity() {
                                     initialActivity.finish()
                                     finish()
                                 } else {
+                                    Log.d(TAG, "onResponse: respone : ${response}")
                                     errorVisible("가입하지 않은 아이디이거나, 잘못된 비밀번호입니다.")
                                 }
                             }

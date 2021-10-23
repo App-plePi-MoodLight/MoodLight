@@ -59,7 +59,7 @@ class ChangePasswordActivity : AppCompatActivity() {
         }
         else{
             CoroutineScope(Dispatchers.IO).launch {
-                val userDb = db.userDao().getuserLoginTable() as List<com.example.moodlight.database.UserData>
+                val userDb = db.userDao().getUserFromUserLoginTable() as List<com.example.moodlight.database.UserData>
                 var isChangePw = true
                 runOnUiThread {
                     Log.d(TAG, "checkIsRightPw: password : ${userDb[0].password}")
@@ -82,7 +82,6 @@ class ChangePasswordActivity : AppCompatActivity() {
                 }
             }
         }
-
     }
 
     private fun changePw() {
@@ -99,7 +98,7 @@ class ChangePasswordActivity : AppCompatActivity() {
                         val result = response.body()!!
                         if(result.success){
                             CoroutineScope(Dispatchers.IO).launch {
-                                val userDb = db.userDao().getuserLoginTable()!!
+                                val userDb = db.userDao().getUserFromUserLoginTable()!!
                                 db.userDao().update(com.example.moodlight.database.UserData(userDb[0].id, binding.newPwEt.text.toString()))
                             }
                             Toast.makeText(this@ChangePasswordActivity, "비밀번호 변경에 성공하였습니다.", Toast.LENGTH_SHORT)

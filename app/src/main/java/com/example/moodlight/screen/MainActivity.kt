@@ -28,6 +28,15 @@ import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import androidx.core.app.ActivityCompat.startActivityForResult
+import com.example.moodlight.screen.main3.setting.SettingActivity
+import android.R.attr.data
+import android.R.attr
+import android.R.attr.data
+
+
+
+
 
 @Suppress("DEPRECATION")
 class MainActivity : AppCompatActivity(), CommonDialogInterface, LogoutDialogInterface {
@@ -41,9 +50,9 @@ class MainActivity : AppCompatActivity(), CommonDialogInterface, LogoutDialogInt
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(com.example.moodlight.R.layout.activity_main)
         changeFragment(mainStatisticsFragment)
-        findViewById<BottomNavigationView>(R.id.bottomNavigation).selectedItemId = R.id.nullItem
+        findViewById<BottomNavigationView>(com.example.moodlight.R.id.bottomNavigation).selectedItemId = R.id.nullItem
 
 
         if (networkStatus == NetworkStatus.TYPE_NOT_CONNECTED) {
@@ -58,20 +67,20 @@ class MainActivity : AppCompatActivity(), CommonDialogInterface, LogoutDialogInt
 
 
 
-        findViewById<BottomNavigationView>(R.id.bottomNavigation).setOnItemSelectedListener { item ->
+        findViewById<BottomNavigationView>(com.example.moodlight.R.id.bottomNavigation).setOnItemSelectedListener { item ->
             when (item.itemId) {
-                R.id.main2 -> {
+                com.example.moodlight.R.id.main2 -> {
                     changeFragment(mainFragment2)
                     true
                 }
-                R.id.main3 -> {
+                com.example.moodlight.R.id.main3 -> {
                     changeFragment(mainFragment3)
                     true
                 }
                 else -> false
             }
         }
-        findViewById<FloatingActionButton>(R.id.faBtn).setOnClickListener {
+        findViewById<FloatingActionButton>(com.example.moodlight.R.id.faBtn).setOnClickListener {
             startActivity(Intent(this, CommunityActiviy::class.java))
             //병주 클래스
         }
@@ -79,7 +88,7 @@ class MainActivity : AppCompatActivity(), CommonDialogInterface, LogoutDialogInt
 
         private fun changeFragment(fragment: Fragment) {
             supportFragmentManager.beginTransaction()
-                .replace(R.id.mainFrame, fragment).commit()
+                .replace(com.example.moodlight.R.id.mainFrame, fragment).commit()
 
         }
 
@@ -91,8 +100,13 @@ class MainActivity : AppCompatActivity(), CommonDialogInterface, LogoutDialogInt
                 2 -> {
                     logoutDialogShow()
                 }
+                3 ->{
+                    val intent = Intent(this@MainActivity, SettingActivity::class.java)
+                    startActivityForResult(intent, 100)
+                }
             }
         }
+
 
         private fun logoutDialogShow() {
             logoutDialog.show()
@@ -127,6 +141,7 @@ class MainActivity : AppCompatActivity(), CommonDialogInterface, LogoutDialogInt
                     }
 
                     override fun onFailure(call: Call<DeleteUserModel>, t: Throwable) {
+                        Toast.makeText(this@MainActivity, "회원탈퇴에 실패하였습니다.", Toast.LENGTH_SHORT).show()
                     }
 
                 })

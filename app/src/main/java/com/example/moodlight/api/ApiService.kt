@@ -4,10 +4,7 @@ import com.example.moodlight.model.IsExistModel
 import com.example.moodlight.model.JoinBodyModel
 import com.example.moodlight.model.LoginModel
 import com.example.moodlight.model.RegisterConfirmModel
-import com.example.moodlight.model.setting.ChangePasswordModel
-import com.example.moodlight.model.setting.UserModel
-import com.example.moodlight.model.setting.DeleteUserModel
-import com.example.moodlight.model.setting.SuccussChangePasswordModel
+import com.example.moodlight.model.setting.*
 import retrofit2.Call
 import retrofit2.http.*
 
@@ -38,4 +35,10 @@ interface ApiService {
 
     @DELETE("user/")
     fun deleteUser() : Call<DeleteUserModel>
+
+    @PUT("user/")
+    fun updateNickName(@Body userUpdateModel: UserUpdateModel) : Call<SuccussChangePasswordModel>
+
+    @GET("user/exist")
+    fun distinctNickName(@Query("nickname") nickname: String) : Call<UserExistModel>
 }

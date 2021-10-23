@@ -3,6 +3,7 @@ package com.example.moodlight.screen.main3
 import android.animation.LayoutTransition
 import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.ContentValues.TAG
 import android.content.Context
 import android.content.DialogInterface
@@ -58,6 +59,8 @@ class MainFragment3 : Fragment() {
 
     private lateinit var binding: FragmentMain3Binding
     private lateinit var bitmap : Bitmap
+    private lateinit var userId : String
+    private lateinit var userEmail : String
     private val viewModel: Main3ViewModel by lazy {
         ViewModelProvider(this).get(Main3ViewModel::class.java)
     }
@@ -107,7 +110,9 @@ class MainFragment3 : Fragment() {
         }
 
         binding.main3Btn1.setOnClickListener {
-            startActivity(Intent(requireActivity(), SettingActivity::class.java))
+            startActivityForResult(Intent(requireActivity(), SettingActivity::class.java)
+                .putExtra("userId", userId)
+                .putExtra("userEmail", userEmail), 100)
         }
 
         binding.main3WithdrawalTv.setOnClickListener {
@@ -125,6 +130,14 @@ class MainFragment3 : Fragment() {
         return binding.root
     }
 
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if(requestCode == 100 && resultCode == Activity.RESULT_OK){
+            setUi()
+        }
+    }
     private fun loadProFileImage() {
 //        val storageRef = FirebaseStorage.getInstance().getReference().child("image/${FirebaseUtil.getAuth().currentUser!!.uid}.jpg")
 //        val localfile = File.createTempFile("tempImage", "jpg")
@@ -154,7 +167,8 @@ class MainFragment3 : Fragment() {
                             var sf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.ss'Z'")
                             var date = sf.parse(it.created_date)
                             var minus = GetTime.getTime(date.time)
-
+                            userId = it.id
+                            userEmail = it.email
                             viewModel.username.value = it!!.nickname
                             viewModel.email.value = it.email
                             viewModel.main3Tv1Text.value = "무드등을 시작한지 ${minus}지났어요."
@@ -162,7 +176,7 @@ class MainFragment3 : Fragment() {
                     }
 
                     override fun onFailure(call: Call<UserModel>, t: Throwable) {
-                        t.printStackTrace()
+                        Toast.makeText(requireActivity(), "정보를 불러오는데에 실패하였습니다.", Toast.LENGTH_SHORT).show()
                     }
 
                 })

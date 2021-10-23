@@ -1,4 +1,4 @@
-package com.example.moodlight.model
+package com.example.moodlight.model.moodcount
 
 data class MoodCountModelItem(
     val count: Int,

@@ -3,6 +3,7 @@ package com.example.moodlight.screen.mainstatics
 import android.animation.LayoutTransition
 import android.animation.ObjectAnimator
 import android.os.Bundle
+import android.util.Log
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
@@ -15,10 +16,10 @@ import androidx.fragment.app.Fragment
 import com.example.moodlight.R
 import com.example.moodlight.api.ServerClient
 import com.example.moodlight.databinding.FragmentMainStatisticsBinding
-import com.example.moodlight.model.MoodCountModel
-import com.example.moodlight.model.MoodCountModelItem
+import com.example.moodlight.model.moodcount.MoodCountModel
+import com.example.moodlight.model.moodcount.MoodCountModelItem
+import com.example.moodlight.model.question_response.QuestionResponseModel
 import com.example.moodlight.util.AppUtil
-import com.example.moodlight.util.FirebaseUtil
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -45,11 +46,13 @@ class MainStatisticsFragment : Fragment() {
             this.setDuration(LayoutTransition.APPEARING, 700L)
         }
 
+        setNowQuestion()
+        setNowDate()
+        setLastQuestion()
+        setLastDate()
 
-/*        setLastDate()
-        setNowDate()*/
 
-        FirebaseUtil.getFireStoreInstance().collection("post")
+/*        FirebaseUtil.getFireStoreInstance().collection("post")
             .document("information")
             .get()
             .addOnCompleteListener {
@@ -87,13 +90,53 @@ class MainStatisticsFragment : Fragment() {
                 binding.lastMadSum = it.result!!.get("lastMadCount").toString()
                 binding.lastSadSum = it.result!!.get("lastSadCount").toString()
 
-            }
+            }*/
 
         setAnimation()
 
         return binding.root
     }
 
+    private fun setNowQuestion() {
+        Log.e("test",AppUtil.getNowDate())
+        ServerClient.getApiService().getQuestion(AppUtil.getNowDate())
+            .enqueue(object : Callback<QuestionResponseModel> {
+
+                override fun onResponse(
+                    call: Call<QuestionResponseModel>,
+                    response: Response<QuestionResponseModel>
+                ) {
+                    if (response.isSuccessful) {
+                        binding.todayQuestion = response.body()!![0].contents
+                    }
+                }
+
+                override fun onFailure(call: Call<QuestionResponseModel>, t: Throwable) {
+                    t.printStackTrace()
+                }
+
+            })
+    }
+
+    private fun setLastQuestion() {
+        ServerClient.getApiService().getQuestion(AppUtil.getLastDate())
+            .enqueue(object : Callback<QuestionResponseModel> {
+
+                override fun onResponse(
+                    call: Call<QuestionResponseModel>,
+                    response: Response<QuestionResponseModel>
+                ) {
+                    if (response.isSuccessful) {
+                        binding.lastQuestion = response.body()!![0].contents
+                    }
+                }
+
+                override fun onFailure(call: Call<QuestionResponseModel>, t: Throwable) {
+                    t.printStackTrace()
+                }
+
+            })
+    }
 
     private fun setNowDate() {
         ServerClient.getApiService().getMoodCount(AppUtil.getNowDate())
@@ -108,7 +151,7 @@ class MainStatisticsFragment : Fragment() {
                     var todaySadCount = 0
                     if (response.isSuccessful) {
                         val moodCountList : ArrayList<MoodCountModelItem> = response.body()!!
-                        if (moodCountList[0].mood != null) {
+                        if (moodCountList.size > 0 && moodCountList[0].mood != null) {
                             for (i in 0..2) {
                                 when(moodCountList[i].mood) {
                                     "happy" -> {
@@ -153,9 +196,9 @@ class MainStatisticsFragment : Fragment() {
                     var lastSadCount = 0
                     if (response.isSuccessful) {
                         val moodCountList : ArrayList<MoodCountModelItem> = response.body()!!
-                        if (moodCountList[0].mood != null) {
+                        if (moodCountList.size > 0 && moodCountList[0].mood != null) {
                             for (i in 0..2) {
-                                when(moodCountList[i].mood) {
+                                when (moodCountList[i].mood) {
                                     "happy" -> {
                                         lastHappyCount = moodCountList[i].count
                                     }
@@ -167,27 +210,33 @@ class MainStatisticsFragment : Fragment() {
                                     }
                                 }
                             }
-                        }
 
-                        CoroutineScope(Dispatchers.Main).launch {
-                            val counts = setOf(lastHappyCount, lastMadCount, lastSadCount)
-                            when(counts.maxOrNull()) {
-                                lastHappyCount -> {
-                                    binding.mainStatsLastHappyIv.layoutParams = LinearLayout.LayoutParams(getSize(), getSize())
-                                    binding.lastStatsText1 = getString(R.string.happy_topic1)
-                                    binding.lastStatsText2 = getRandomTopic(R.array.happy_topic)
-                                }
-                                lastMadCount -> {
-                                    binding.mainStatsLastMadIv.layoutParams = LinearLayout.LayoutParams(getSize(), getSize())
-                                    binding.lastStatsText1 = getString(R.string.mad_topic1)
-                                    binding.lastStatsText2 = getRandomTopic(R.array.mad_topic)
-                                }
-                                lastSadCount -> {
-                                    binding.mainStatsLastSadIv.layoutParams = LinearLayout.LayoutParams(getSize(), getSize())
-                                    binding.lastStatsText1 = getString(R.string.sad_topic1)
-                                    binding.lastStatsText2 = getRandomTopic(R.array.sad_topic)
+                            CoroutineScope(Dispatchers.Main).launch {
+                                val counts = setOf(lastHappyCount, lastMadCount, lastSadCount)
+                                when (counts.maxOrNull()) {
+                                    lastHappyCount -> {
+                                        binding.mainStatsLastHappyIv.layoutParams =
+                                            LinearLayout.LayoutParams(getSize(), getSize())
+                                        binding.lastStatsText1 = getString(R.string.happy_topic1)
+                                        binding.lastStatsText2 = getRandomTopic(R.array.happy_topic)
+                                    }
+                                    lastMadCount -> {
+                                        binding.mainStatsLastMadIv.layoutParams =
+                                            LinearLayout.LayoutParams(getSize(), getSize())
+                                        binding.lastStatsText1 = getString(R.string.mad_topic1)
+                                        binding.lastStatsText2 = getRandomTopic(R.array.mad_topic)
+                                    }
+                                    lastSadCount -> {
+                                        binding.mainStatsLastSadIv.layoutParams =
+                                            LinearLayout.LayoutParams(getSize(), getSize())
+                                        binding.lastStatsText1 = getString(R.string.sad_topic1)
+                                        binding.lastStatsText2 = getRandomTopic(R.array.sad_topic)
+                                    }
                                 }
                             }
+                        } else {
+                            binding.lastStatsText1 = "어제는 아무 게시물이 올라오지 않았어요."
+                            binding.lastStatsText2 = ""
                         }
 
                         binding.lastHappySum = lastHappyCount.toString()

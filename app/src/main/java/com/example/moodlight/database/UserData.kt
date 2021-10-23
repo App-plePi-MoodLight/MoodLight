@@ -1,11 +1,24 @@
 package com.example.moodlight.database
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "userLoginTable")
-data class UserData(
-    @PrimaryKey
-    var id : String,
-    var password : String
-)
+@Entity
+class UserData {
+
+    @PrimaryKey(autoGenerate = true)
+    public var loginID : Int = 0
+
+    @ColumnInfo(name = "id")
+    public var id : String
+
+    @ColumnInfo(name = "password")
+    public var password : String
+
+    constructor(id : String, password : String) {
+        this.id = id
+        this.password = password
+    }
+
+}

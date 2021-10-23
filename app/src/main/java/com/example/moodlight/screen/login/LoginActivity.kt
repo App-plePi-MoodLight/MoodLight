@@ -31,6 +31,9 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
+
+        val db = UserDatabase.getInstance(applicationContext)
+
         findViewById<AppCompatButton>(R.id.loginBtn).setOnClickListener {
 
             val email: String = findViewById<EditText>(R.id.loginIdEtv).text.toString()
@@ -57,14 +60,11 @@ class LoginActivity : AppCompatActivity() {
 
                                     // Sign in success, update UI with the signed-in user's information
                                     val userData = UserData(email, password)
+                                    Log.e("a",userData.id)
 
-                                    val db = UserDatabase.getInstance(applicationContext)
                                     CoroutineScope(Dispatchers.IO).launch {
-                                        if ( db!!.userDao().getuserLoginTable() != null)
-                                            db.userDao().update(userData)
-
-                                        else
-                                            db.userDao().insert(userData)
+                                        Log.e("asdf",userData.toString())
+                                        db!!.userDao().insert(userData)
                                     }
 
                                     Log.d("Login", "signInWithEmail:success")

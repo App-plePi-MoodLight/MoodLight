@@ -1,38 +1,36 @@
 package com.example.moodlight.screen.main2
 
-import android.content.ContentValues.TAG
-import android.content.Context
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.moodlight.R
+import com.example.moodlight.api.ServerClient
 import com.example.moodlight.databinding.FragmentMain2Binding
+import com.example.moodlight.model.my_answer.MyAnswerModel
+import com.example.moodlight.model.my_answer.MyAnswerModelItem
 import com.example.moodlight.screen.main2.calendar.CalendarHelper
 import com.example.moodlight.screen.main2.calendar.Main2CalendarAdapter
 import com.example.moodlight.screen.main2.calendar.Main2CalendarData
 import com.example.moodlight.screen.main2.calendar.Main2CalendarViewModel
-import com.example.moodlight.util.DataType
-import java.util.*
-import kotlin.collections.ArrayList
 import com.example.moodlight.screen.main2.diaryRecyclerview.data.DateAdapter
 import com.example.moodlight.screen.main2.diaryRecyclerview.data.DateClass
 import com.example.moodlight.screen.main2.diaryRecyclerview.data.QnAData
-import com.example.moodlight.util.FirebaseUtil
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import java.lang.NullPointerException
-import kotlin.collections.HashMap
+import com.example.moodlight.util.AppUtil
+import com.example.moodlight.util.DataType
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class MainFragment2 : Fragment() {
 
     private val calendarHelper by lazy { CalendarHelper() }
     private var writePostMap: Map<String, *>? = null
+
+    private lateinit var myAnswerList : MyAnswerModel
 
     private val viewModel: Main2ViewModel by lazy {
         ViewModelProvider(this).get(Main2ViewModel::class.java)
@@ -58,9 +56,8 @@ class MainFragment2 : Fragment() {
         binding.viewModel = viewModel
         binding.lifecycleOwner = this
         binding.fragment = this
-        Log.e("version", "3")
 
-        CoroutineScope(Dispatchers.IO).launch {
+/*        CoroutineScope(Dispatchers.IO).launch {
             FirebaseUtil.getFireStoreInstance().collection("users")
                 .document(FirebaseUtil.getUid())
                 .get()
@@ -68,7 +65,27 @@ class MainFragment2 : Fragment() {
                     writePostMap = it.result!!.get("writePostMap") as Map<String, *>?
                     setUi()
                 }
-        }
+        }*/
+
+
+        ServerClient.getApiService().getMyAnswer()
+            .enqueue(object : Callback<MyAnswerModel> {
+
+                override fun onResponse(
+                    call: Call<MyAnswerModel>,
+                    response: Response<MyAnswerModel>
+                ) {
+                    if (response.isSuccessful) {
+                        myAnswerList = response.body()!!
+                        setUi()
+                    }
+                }
+
+                override fun onFailure(call: Call<MyAnswerModel>, t: Throwable) {
+                    t.printStackTrace()
+                }
+
+            })
 
 
         dataLoding()
@@ -85,7 +102,7 @@ class MainFragment2 : Fragment() {
             data.add(QnAData("오늘 저녁은 뭐 먹죠?", "저녁을 먹죠 ㅎㅎ"))
             list.add(DateClass("3월 16일", data))
             list.add(DateClass("4월 16일", data))
-            Log.d(TAG, "onActivityCreated: 내 리스트 data$data $list")
+
         }
         binding.recycler.adapter = DateAdapter(requireContext(), list)
         binding.recycler.setHasFixedSize(true)
@@ -101,12 +118,8 @@ class MainFragment2 : Fragment() {
     }
 
     private fun setCalendar() {
-        calendarViewModel.dateList = ArrayList()
-        val lastEndDay: Int
-        var postArray : List<String>? = null
-        if (writePostMap != null)
-            postArray = writePostMap!!.keys.toList()
 
+        val lastEndDay: Int
         when (calendarHelper.getMonth() + 1) {
             1 -> {
                 viewModel.month.value = "January"
@@ -168,9 +181,7 @@ class MainFragment2 : Fragment() {
         }
 
         for (i in calendarHelper.getStartDayOfWeek() - 2 downTo 0) {
-
             calendarViewModel.dateList.add(
-
                 Main2CalendarData(
                     (lastEndDay - i).toString(),
                     DataType.NONE_MOOD,
@@ -179,53 +190,66 @@ class MainFragment2 : Fragment() {
             )
         }
 
-        var run = false
-        for (j in 0 until calendarHelper.getEndDay()) {
-            run = false
-            if (writePostMap != null) {
-                for (k in 0 until writePostMap!!.size) {
-                    Log.e("test", postArray!!.get(k).split(".").get(0))
-                    if (postArray.get(k).split(".").get(0).equals(calendarHelper.getYear().toString())
-                            && postArray.get(k).split(".").get(1).equals((calendarHelper.getMonth() + 1).toString())
-                        && postArray[k].split(".")[2].equals((j + 1).toString())
-                    ) {
+        val targetAnswerList = ArrayList<MyAnswerModelItem>()
 
-                        calendarViewModel.dateList.add(
-                            Main2CalendarData(
-                                (j + 1).toString(),
-                                writePostMap!![postArray[k]].toString().toInt(),
-                                DataType.CURRENT_DAY
-                            )
-                        )
-                        run = true
-                        break
+        for (j in 0 until myAnswerList.size) {
+            if (CalendarHelper.dateTransformationToMonth(myAnswerList[j].createdDate).toInt()
+            == calendarHelper.getMonth()+1 &&
+                CalendarHelper.dateTransformationToYear(myAnswerList[j].createdDate).toInt()
+            == calendarHelper.getYear()) {
+                targetAnswerList.add(myAnswerList[j])
+            } else {
+                continue
+            }
+
+        }
+
+        if (targetAnswerList.size <= 0) {
+            for (k in 0 until calendarHelper.getEndDay()) {
+                val main2CalendarData : Main2CalendarData = Main2CalendarData(
+                    (k+1).toString(),
+                    DataType.NONE_MOOD,
+                    DataType.CURRENT_DAY)
+                calendarViewModel.dateList.add(main2CalendarData)
+            }
+        }
+        else {
+            for (k in 0 until calendarHelper.getEndDay()) {
+                var main2CalendarData : Main2CalendarData? = null
+                for (l in 0 until targetAnswerList.size) {
+
+                    if (CalendarHelper.dateTransformationToDay(targetAnswerList[l].createdDate)
+                            .toInt() == k) {
+                                var moodType : Int = 0
+                                when(targetAnswerList[l].question.mood) {
+                                    "happy" -> moodType = DataType.HAPPY_MOOD
+                                    "sad" -> moodType = DataType.SAD_MOOD
+                                    "mad" -> moodType = DataType.MAD_MOOD
+                                }
+                         main2CalendarData = Main2CalendarData(
+                            (k + 1).toString(),
+                            moodType,
+                            DataType.CURRENT_DAY)
                     }
                 }
-                if (!run) {
-                    calendarViewModel.dateList.add(
-                        Main2CalendarData(
-                            (j + 1).toString(),
-                            DataType.NONE_MOOD,
-                            DataType.CURRENT_DAY
-                        )
-                    )
-                }
 
-            } else {
-                calendarViewModel.dateList.add(
-                    Main2CalendarData(
-                        (j + 1).toString(),
+                if (main2CalendarData == null) {
+                    main2CalendarData = Main2CalendarData(
+                        (k+1).toString(),
                         DataType.NONE_MOOD,
                         DataType.CURRENT_DAY
                     )
-                )
+                }
+                calendarViewModel.dateList.add(main2CalendarData)
+                main2CalendarData = null
             }
         }
 
 
-        for (k in 1..7 - calendarHelper.getEndDayOfWeek()) {
+
+        for (m in 1..7 - calendarHelper.getEndDayOfWeek()) {
             calendarViewModel.dateList.add(
-                Main2CalendarData(k.toString(), DataType.NONE_MOOD, DataType.LAST_DAY)
+                Main2CalendarData(m.toString(), DataType.NONE_MOOD, DataType.LAST_DAY)
             )
         }
 
@@ -233,21 +257,24 @@ class MainFragment2 : Fragment() {
     }
 
     public fun plusMonth(view: View) {
-        calendarHelper.plusMonth()
+        if (calendarHelper.getYear() == AppUtil.getNowYear()
+            && calendarHelper.getMonth()+1 == AppUtil.getNowMonth()) {
 
-        if (calendarHelper.getYear().toString() != binding.year)
-            binding.year = calendarHelper.getYear().toString()
+        } else {
+            calendarHelper.plusMonth()
+            if (calendarHelper.getYear().toString() != binding.year)
+                binding.year = calendarHelper.getYear().toString()
 
-        setCalendar()
+            calendarViewModel.dateList.clear()
+
+            setCalendar()
+        }
     }
 
     public fun minusMonth(view: View) {
         calendarHelper.minusMonth()
-        Log.e(
-            "year,month",
-            calendarHelper.getYear().toString() + ":  " + calendarHelper.getMonth().toString()
-        )
 
+        calendarViewModel.dateList.clear()
         setCalendar()
     }
 

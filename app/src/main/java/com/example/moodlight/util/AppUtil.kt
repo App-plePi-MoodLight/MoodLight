@@ -18,5 +18,13 @@ class AppUtil {
 
             return formatter.format(timeToDate)
         }
+        fun getNowYear(): Int {
+            val calendar = Calendar.getInstance()
+            return calendar.get(Calendar.YEAR)
+        }
+        fun getNowMonth(): Int {
+            val calendar = Calendar.getInstance()
+            return calendar.get(Calendar.MONTH)+1
+        }
     }
 }

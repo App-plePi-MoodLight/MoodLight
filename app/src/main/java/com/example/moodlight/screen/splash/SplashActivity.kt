@@ -79,7 +79,7 @@ class SplashActivity : AppCompatActivity() {
                              * occurred creating the request or processing the response.
                              */
                             override fun onFailure(call: Call<LoginModel>, t: Throwable) {
-                                TODO("Not yet implemented")
+                                t.printStackTrace()
                             }
                         })
                 } else {
@@ -90,58 +90,6 @@ class SplashActivity : AppCompatActivity() {
                 }
 
         }, 2500)
-/*        }, 2500)
-
-        Handler(Looper.getMainLooper()).postDelayed({
-
-            CoroutineScope(Dispatchers.IO).launch {
-                Log.e("asd", db!!.userDao().getIdFromUserLoginTable().toString())
-            }
-
-
-            if (db!!.userDao().getIdFromUserLoginTable() != null) {
-                val id: String = db!!.userDao().getUserFromUserLoginTable()!![0]!!.id
-                val password: String = db!!.userDao().getUserFromUserLoginTable()!![0]!!.password
-
-                val loginModel: LoginModel = LoginModel(id, password)
-                ServerClient.getApiService().login(loginModel)
-                    .enqueue(object : Callback<LoginModel> {
-
-                        override fun onResponse(
-                            call: Call<LoginModel>,
-                            response: Response<LoginModel>
-                        ) {
-                            if (response.isSuccessful) {
-                                ServerClient.accessToken = response.body()!!.accessToken
-
-                                // Sign in success, update UI with the signed-in user's information
-                                val userData = UserData(id, password)
-
-                                val db = UserDatabase.getInstance(applicationContext)
-                                Log.d("Login", "signInWithEmail:success")
-                                val intent: Intent =
-                                    Intent(applicationContext, MainActivity::class.java)
-                                startActivity(intent)
-                                finish()
-                            }
-                        }
-
-                        */
-        /**
-         * Invoked when a network exception occurred talking to the server or when an unexpected exception
-         * occurred creating the request or processing the response.
-         *//*
-                        override fun onFailure(call: Call<LoginModel>, t: Throwable) {
-                            TODO("Not yet implemented")
-                        }
-                    })
-            } else {
-
-                intent = Intent(applicationContext, OnboardingActivity::class.java)
-                startActivity(intent)
-                finish()
-            }
-                    }, 2500)*/
 
     }
 }

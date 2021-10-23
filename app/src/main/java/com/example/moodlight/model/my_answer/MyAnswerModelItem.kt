@@ -4,5 +4,6 @@ data class MyAnswerModelItem(
     val contents: String,
     val createdDate: String,
     val id: Int,
-    val `private`: Boolean
+    val `private`: Boolean,
+    val question: Question
 )

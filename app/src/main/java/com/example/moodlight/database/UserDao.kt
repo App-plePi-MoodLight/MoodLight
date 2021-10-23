@@ -21,7 +21,10 @@ interface UserDao {
     fun deleteUserLoginTable()
 
     @Query("SELECT id FROM UserData ")
-    fun getIdFromUserLoginTable() : String
+    fun getId() : String
+
+    @Query("SELECT password FROM UserData")
+    fun getPassword() : String
 
     @Query("SELECT * FROM UserData")
     fun getUserFromUserLoginTable() : List<UserData>

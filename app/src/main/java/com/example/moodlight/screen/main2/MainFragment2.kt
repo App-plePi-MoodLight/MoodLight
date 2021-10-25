@@ -60,15 +60,15 @@ class MainFragment2 : Fragment() {
         binding.fragment = this
         Log.e("version", "3")
 
-        CoroutineScope(Dispatchers.IO).launch {
-            FirebaseUtil.getFireStoreInstance().collection("users")
-                .document(FirebaseUtil.getUid())
-                .get()
-                .addOnCompleteListener {
-                    writePostMap = it.result!!.get("writePostMap") as Map<String, *>?
-                    setUi()
-                }
-        }
+//        CoroutineScope(Dispatchers.IO).launch {
+//            FirebaseUtil.getFireStoreInstance().collection("users")
+//                .document(FirebaseUtil.getUid())
+//                .get()
+//                .addOnCompleteListener {
+//                    writePostMap = it.result!!.get("writePostMap") as Map<String, *>?
+//                    setUi()
+//                }
+//        }
 
 
         dataLoding()
@@ -81,7 +81,7 @@ class MainFragment2 : Fragment() {
     private fun dataLoding() {
         val data: ArrayList<QnAData> = ArrayList()
         if(list.isEmpty()){
-            data.add(QnAData("오늘 점심은 뭐 먹죠?", "점심을 먹죠 ㅎㅎ"))
+            data.add(QnAData("오늘 점심은 뭐 먹죠?", "점심을 먹죠 ㅎㅎ 아 점심을 먹는다니 참 감미로운 일이네요."))
             data.add(QnAData("오늘 저녁은 뭐 먹죠?", "저녁을 먹죠 ㅎㅎ"))
             list.add(DateClass("3월 16일", data))
             list.add(DateClass("4월 16일", data))

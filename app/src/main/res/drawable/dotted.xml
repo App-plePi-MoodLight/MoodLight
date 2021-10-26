@@ -1,10 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-    <shape xmlns:android="http://schemas.android.com/apk/res/android"
-        android:shape="line">
-
-        <stroke
-            android:color="#b36a6a6a"
-            android:dashWidth="30px"
-            android:dashGap="20px"
-            android:width="3dp" />
-    </shape>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:top="-8dp"
+        android:bottom="-8dp"
+        android:right="-10dp">
+        <shape>
+            <solid android:color="@android:color/transparent"/>
+            <stroke
+                android:width="2dp"
+                android:color="#b36a6a6a"
+                android:dashGap="6dp"
+                android:dashWidth="15dp"/>
+        </shape>
+    </item>
+</layer-list>

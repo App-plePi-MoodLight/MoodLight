@@ -1,33 +1,34 @@
 package com.example.moodlight.screen.main2
 
 import android.content.ContentValues.TAG
-import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import com.example.moodlight.R
+import com.example.moodlight.api.ServerClient
 import com.example.moodlight.databinding.FragmentMain2Binding
+import com.example.moodlight.model.myanswermodel.MyAnswerListModel
 import com.example.moodlight.screen.main2.calendar.CalendarHelper
 import com.example.moodlight.screen.main2.calendar.Main2CalendarAdapter
 import com.example.moodlight.screen.main2.calendar.Main2CalendarData
 import com.example.moodlight.screen.main2.calendar.Main2CalendarViewModel
 import com.example.moodlight.util.DataType
-import java.util.*
 import kotlin.collections.ArrayList
 import com.example.moodlight.screen.main2.diaryRecyclerview.data.DateAdapter
 import com.example.moodlight.screen.main2.diaryRecyclerview.data.DateClass
 import com.example.moodlight.screen.main2.diaryRecyclerview.data.QnAData
-import com.example.moodlight.util.FirebaseUtil
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.lang.NullPointerException
-import kotlin.collections.HashMap
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class MainFragment2 : Fragment() {
 
@@ -71,7 +72,9 @@ class MainFragment2 : Fragment() {
 //        }
 
 
-        dataLoding()
+        if(list.isEmpty()){
+            dataLoding()
+        }
 
 
 
@@ -79,6 +82,29 @@ class MainFragment2 : Fragment() {
     }
 
     private fun dataLoding() {
+        CoroutineScope(Dispatchers.IO).launch { 
+            ServerClient.getApiService().getMyAnswer()
+                .enqueue(object : Callback<MyAnswerListModel> {
+                    override fun onResponse(
+                        call: Call<MyAnswerListModel>,
+                        response: Response<MyAnswerListModel>
+                    ) {
+                        val result = response.body()
+                        if(response.code() == 200){
+                            Log.d(TAG, "onResponse: data : $result")
+                            processingData(result)
+                        }
+                        else{
+                            Toast.makeText(requireContext(), "내 답변 리스트를 불러오는데에 실패하였습니다.", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+
+                    override fun onFailure(call: Call<MyAnswerListModel>, t: Throwable) {
+                        Toast.makeText(requireContext(), "내 답변 리스트를 불러오는데에 실패하였습니다.", Toast.LENGTH_SHORT).show()
+                    }
+
+                })
+        }
         val data: ArrayList<QnAData> = ArrayList()
         if(list.isEmpty()){
             data.add(QnAData("오늘 점심은 뭐 먹죠?", "점심을 먹죠 ㅎㅎ 아 점심을 먹는다니 참 감미로운 일이네요."))
@@ -89,6 +115,15 @@ class MainFragment2 : Fragment() {
         }
         binding.recycler.adapter = DateAdapter(requireContext(), list)
         binding.recycler.setHasFixedSize(true)
+    }
+
+    private fun processingData(result: MyAnswerListModel?) {
+        val data: ArrayList<QnAData> = ArrayList()
+        for(i in 1 until result!!.size){
+            if(result[i].createdDate != result[i-1].createdDate){
+
+            }
+        }
     }
 
     private fun setUi() {

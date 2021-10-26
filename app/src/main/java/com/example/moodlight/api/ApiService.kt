@@ -4,6 +4,7 @@ import com.example.moodlight.model.IsExistModel
 import com.example.moodlight.model.JoinBodyModel
 import com.example.moodlight.model.LoginModel
 import com.example.moodlight.model.RegisterConfirmModel
+import com.example.moodlight.model.myanswermodel.MyAnswerListModel
 import com.example.moodlight.model.setting.*
 import retrofit2.Call
 import retrofit2.http.*
@@ -41,4 +42,7 @@ interface ApiService {
 
     @GET("user/exist")
     fun distinctNickName(@Query("nickname") nickname: String) : Call<UserExistModel>
+
+    @GET("answer/my")
+    fun getMyAnswer() : Call<MyAnswerListModel>
 }

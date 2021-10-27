@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.moodlight.R
 import java.util.*
 
-class  QnAAdapter(val context : Context, val DataList: ArrayList<QnAData>): RecyclerView.Adapter<QnAAdapter.MyViewHolder>(){
+class  QnAAdapter(val context : Context, val DataList: List<QnAData>): RecyclerView.Adapter<QnAAdapter.MyViewHolder>(){
     class MyViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
         //ex)val 변수명 = itemView.findViewById<xml이름>(아이디네임)
         val Qcontents = itemView.findViewById<TextView>(R.id.Qcontents)

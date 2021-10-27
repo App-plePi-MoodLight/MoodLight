@@ -16,7 +16,7 @@
 
     <View
         android:id="@+id/dottedImg"
-        android:layout_width="4dp"
+        android:layout_width="2dp"
         android:layout_height="0dp"
         android:layout_marginLeft="35dp"
         android:background="@drawable/dotted"
@@ -51,30 +51,17 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/Acontents"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="sans-serif-medium"
-            android:textStyle="normal"
-            android:text="답변내용"
-            android:paddingBottom="10dp"
-            android:paddingLeft="20dp"
-            android:textColor="#8b8b8b"
-            android:textSize="16sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/Qcontents" />
-
-        <TextView
             android:id="@+id/AcontentsTv"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif-medium"
-            android:text=".............."
             android:paddingBottom="10dp"
+            android:text=".............."
+            android:paddingLeft="20dp"
             android:textColor="#8b8b8b"
             android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/Acontents"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/Qcontents" />
 
 <!--        <androidx.viewpager.widget.ViewPager-->

@@ -1,5 +1,6 @@
 package com.example.moodlight.screen.main2
 
+import android.annotation.SuppressLint
 import android.content.ContentValues.TAG
 import android.os.Bundle
 import android.util.Log
@@ -18,17 +19,19 @@ import com.example.moodlight.screen.main2.calendar.CalendarHelper
 import com.example.moodlight.screen.main2.calendar.Main2CalendarAdapter
 import com.example.moodlight.screen.main2.calendar.Main2CalendarData
 import com.example.moodlight.screen.main2.calendar.Main2CalendarViewModel
+import com.example.moodlight.screen.main2.diaryRecyclerview.data.DateAdapter
 import com.example.moodlight.util.DataType
 import kotlin.collections.ArrayList
-import com.example.moodlight.screen.main2.diaryRecyclerview.data.DateAdapter
 import com.example.moodlight.screen.main2.diaryRecyclerview.data.DateClass
 import com.example.moodlight.screen.main2.diaryRecyclerview.data.QnAData
+import com.example.moodlight.util.GetTime
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.text.SimpleDateFormat
 
 class MainFragment2 : Fragment() {
 
@@ -93,6 +96,10 @@ class MainFragment2 : Fragment() {
                         if(response.code() == 200){
                             Log.d(TAG, "onResponse: data : $result")
                             processingData(result)
+                            requireActivity().runOnUiThread {
+                                binding.recycler.adapter = DateAdapter(requireContext(), list)
+                                binding.recycler.setHasFixedSize(true)
+                            }
                         }
                         else{
                             Toast.makeText(requireContext(), "내 답변 리스트를 불러오는데에 실패하였습니다.", Toast.LENGTH_SHORT).show()
@@ -105,25 +112,55 @@ class MainFragment2 : Fragment() {
 
                 })
         }
-        val data: ArrayList<QnAData> = ArrayList()
-        if(list.isEmpty()){
-            data.add(QnAData("오늘 점심은 뭐 먹죠?", "점심을 먹죠 ㅎㅎ 아 점심을 먹는다니 참 감미로운 일이네요."))
-            data.add(QnAData("오늘 저녁은 뭐 먹죠?", "저녁을 먹죠 ㅎㅎ"))
-            list.add(DateClass("3월 16일", data))
-            list.add(DateClass("4월 16일", data))
-            Log.d(TAG, "onActivityCreated: 내 리스트 data$data $list")
-        }
-        binding.recycler.adapter = DateAdapter(requireContext(), list)
-        binding.recycler.setHasFixedSize(true)
+//        val data: ArrayList<QnAData> = ArrayList()
+//        if(list.isEmpty()){
+//            data.add(QnAData("오늘 점심은 뭐 먹죠?", "점심을 먹죠 ㅎㅎ 아 점심을 먹는다니 참 감미로운 일이네요."))
+//            data.add(QnAData("오늘 저녁은 뭐 먹죠?", "저녁을 먹죠 ㅎㅎ"))
+//            list.add(DateClass("3월 16일", data))
+//            list.add(DateClass("4월 16일", data))
+//            Log.d(TAG, "onActivityCreated: 내 리스트 data$data $list")
+//        }
     }
 
     private fun processingData(result: MyAnswerListModel?) {
-        val data: ArrayList<QnAData> = ArrayList()
-        for(i in 1 until result!!.size){
-            if(result[i].createdDate != result[i-1].createdDate){
+        var data: ArrayList<QnAData> = ArrayList()
+        for(i in 0 until result!!.size){
+            result[i].createdDate = changeCreateDate(result[i].createdDate)
+            Log.d(TAG, "processingData: date : ${result[i].createdDate}")
+        }
 
+        var startIndex = 0
+        for(i in 1 until result.size){
+            if(result[i].createdDate == result[i-1].createdDate){
+                data.add(QnAData(result[i-1].question.contents, result[i-1].contents))
+            }
+            else{
+                data.add(QnAData(result[i-1].question.contents, result[i-1].contents))
+                list.add(DateClass(result[i-1].createdDate, data))
+                startIndex = i-1
+            }
+            if(i == result.size-1){
+                if(result[i].createdDate == result[i-1].createdDate){
+                    data.add(QnAData(result[i].question.contents, result[i].contents))
+                    list.add(DateClass(result[i].createdDate, data))
+                }
+                else{
+                    list.add(DateClass(result[i-1].createdDate, data))
+                    data.add(QnAData(result[i].question.contents, result[i].contents))
+                    list.add(DateClass(result[i].createdDate, data))
+                }
             }
         }
+        Log.d(TAG, "processingData: list : ${list}")
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    private fun changeCreateDate(createdDate: String) : String {
+        var createSf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.ss'Z'")
+        var changeSf = SimpleDateFormat("MM'월' dd일")
+        var date = createSf.parse(createdDate)
+        
+        return changeSf.format(date)
     }
 
     private fun setUi() {

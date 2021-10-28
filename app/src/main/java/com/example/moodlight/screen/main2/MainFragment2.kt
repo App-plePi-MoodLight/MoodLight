@@ -2,6 +2,7 @@ package com.example.moodlight.screen.main2
 
 import android.annotation.SuppressLint
 import android.content.ContentValues.TAG
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -15,6 +16,7 @@ import com.example.moodlight.R
 import com.example.moodlight.api.ServerClient
 import com.example.moodlight.databinding.FragmentMain2Binding
 import com.example.moodlight.model.myanswermodel.MyAnswerListModel
+import com.example.moodlight.model.myanswermodel.MyAnswerListModelItem
 import com.example.moodlight.screen.main2.calendar.CalendarHelper
 import com.example.moodlight.screen.main2.calendar.Main2CalendarAdapter
 import com.example.moodlight.screen.main2.calendar.Main2CalendarData
@@ -86,18 +88,23 @@ class MainFragment2 : Fragment() {
 
     private fun dataLoding() {
         CoroutineScope(Dispatchers.IO).launch { 
-            ServerClient.getApiService().getMyAnswer()
+            ServerClient.getApiService().getMyAnswer(0, 10)
                 .enqueue(object : Callback<MyAnswerListModel> {
                     override fun onResponse(
                         call: Call<MyAnswerListModel>,
                         response: Response<MyAnswerListModel>
                     ) {
                         val result = response.body()
+                        Log.d(TAG, "onResponse: $response")
                         if(response.code() == 200){
                             Log.d(TAG, "onResponse: data : $result")
                             processingData(result)
                             requireActivity().runOnUiThread {
-                                binding.recycler.adapter = DateAdapter(requireContext(), list)
+                                binding.recycler.adapter = DateAdapter(requireContext(), list){data ->
+                                    Toast.makeText(requireActivity(), "${data.id}", Toast.LENGTH_SHORT).show()
+                                    startActivity(Intent(requireActivity(), DetailAnswerActivity::class.java)
+                                        .putExtra("data", data))
+                                }
                                 binding.recycler.setHasFixedSize(true)
                             }
                         }
@@ -122,34 +129,32 @@ class MainFragment2 : Fragment() {
 //        }
     }
 
-    private fun processingData(result: MyAnswerListModel?) {
-        var data: ArrayList<QnAData> = ArrayList()
-        for(i in 0 until result!!.size){
+    private fun processingData(result: MyAnswerListModel?){
+
+        for( i in 0 until result!!.size){
             result[i].createdDate = changeCreateDate(result[i].createdDate)
             Log.d(TAG, "processingData: date : ${result[i].createdDate}")
         }
 
-        var startIndex = 0
-        for(i in 1 until result.size){
-            if(result[i].createdDate == result[i-1].createdDate){
-                data.add(QnAData(result[i-1].question.contents, result[i-1].contents))
-            }
-            else{
-                data.add(QnAData(result[i-1].question.contents, result[i-1].contents))
-                list.add(DateClass(result[i-1].createdDate, data))
-                startIndex = i-1
-            }
-            if(i == result.size-1){
-                if(result[i].createdDate == result[i-1].createdDate){
-                    data.add(QnAData(result[i].question.contents, result[i].contents))
-                    list.add(DateClass(result[i].createdDate, data))
+        var i = 0
+        while(result.size-1 >i){
+            val data: ArrayList<MyAnswerListModelItem> = ArrayList()
+            data.add(result[i])
+            var plusI = 0
+            for(j in i+1 until result.size){
+                if(result[j].createdDate == result[i].createdDate){
+                    data.add(result[j])
+                    plusI++
+                    if(j == result.size-1){
+                        list.add(DateClass(result[i].createdDate,data))
+                    }
                 }
                 else{
-                    list.add(DateClass(result[i-1].createdDate, data))
-                    data.add(QnAData(result[i].question.contents, result[i].contents))
-                    list.add(DateClass(result[i].createdDate, data))
+                    list.add(DateClass(result[i].createdDate,data))
+                    break
                 }
             }
+            i += plusI+1
         }
         Log.d(TAG, "processingData: list : ${list}")
     }

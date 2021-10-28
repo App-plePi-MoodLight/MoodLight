@@ -70,6 +70,7 @@
 <!--            android:layout_height="30dp" />-->
 
         <View
+            android:id="@+id/colorMoodView"
             android:layout_width="match_parent"
             android:layout_height="20dp"
             android:background="@drawable/list_item_color_round"

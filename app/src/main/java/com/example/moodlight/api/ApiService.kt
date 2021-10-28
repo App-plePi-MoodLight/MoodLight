@@ -44,5 +44,5 @@ interface ApiService {
     fun distinctNickName(@Query("nickname") nickname: String) : Call<UserExistModel>
 
     @GET("answer/my")
-    fun getMyAnswer() : Call<MyAnswerListModel>
+    fun getMyAnswer(@Query("skip") skip : Int, @Query("take") take : Int) : Call<MyAnswerListModel>
 }

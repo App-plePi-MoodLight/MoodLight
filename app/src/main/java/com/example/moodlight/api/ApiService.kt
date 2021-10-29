@@ -5,6 +5,7 @@ import com.example.moodlight.model.JoinBodyModel
 import com.example.moodlight.model.LoginModel
 import com.example.moodlight.model.RegisterConfirmModel
 import com.example.moodlight.model.myanswermodel.MyAnswerListModel
+import com.example.moodlight.model.myanswermodel.detailandcomment.AnswerCommentModel
 import com.example.moodlight.model.setting.*
 import retrofit2.Call
 import retrofit2.http.*
@@ -45,4 +46,8 @@ interface ApiService {
 
     @GET("answer/my")
     fun getMyAnswer(@Query("skip") skip : Int, @Query("take") take : Int) : Call<MyAnswerListModel>
+
+    @GET("comment/{questionId}")
+    fun getMyAnswerComment(@Path("questionId")questionId : String,
+                           @Query("skip") skip : Int, @Query("take") take : Int) : Call<ArrayList<AnswerCommentModel>>
 }

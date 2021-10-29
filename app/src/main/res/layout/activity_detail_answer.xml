@@ -38,10 +38,11 @@
             app:layout_constraintTop_toBottomOf="@+id/main2Toolbar" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayout2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginHorizontal="25dp"
             android:layout_marginTop="10dp"
-            android:layout_marginHorizontal="20dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/QcontentTextView">
@@ -51,17 +52,17 @@
                 android:layout_width="15dp"
                 android:layout_height="15dp"
                 android:src="@drawable/circle"
+                app:layout_constraintBottom_toBottomOf="@+id/isDateAnswerTextView"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:tint="#000" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <View
                 android:id="@+id/colorMood2"
                 android:layout_width="2dp"
                 android:layout_height="0dp"
-                android:background="#000"
                 android:layout_marginTop="5dp"
-                android:layout_marginBottom="10dp"
+                android:layout_marginBottom="5dp"
+                android:background="#000"
                 app:layout_constraintBottom_toTopOf="@id/colorMood3"
                 app:layout_constraintEnd_toEndOf="@+id/colorMood1"
                 app:layout_constraintStart_toStartOf="@+id/colorMood1"
@@ -72,32 +73,58 @@
                 android:layout_width="15dp"
                 android:layout_height="15dp"
                 android:src="@drawable/circle"
-                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintBottom_toBottomOf="@+id/commentTextView"
                 app:layout_constraintStart_toStartOf="parent"
-                app:tint="#000" />
+                app:layout_constraintTop_toTopOf="@+id/commentTextView" />
 
             <TextView
                 android:id="@+id/isDateAnswerTextView"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="2021.03.13 나의 답변"
+                android:layout_marginLeft="16dp"
                 android:fontFamily="@font/roboto_bold"
+                android:text="2021.03.13 나의 답변"
                 android:textColor="#000"
-                android:layout_marginLeft="10dp"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.64"
                 app:layout_constraintStart_toEndOf="@+id/colorMood1"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
+                android:id="@+id/AcontentTextView"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginVertical="10dp"
+                android:layout_marginLeft="22dp"
                 android:fontFamily="@font/roboto_regular"
-                android:text="2021.03.13 나의 답변"
-                android:layout_marginLeft="16dp"
+                android:text="2021.03.13 나의 답변ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
                 android:textColor="#000"
+                app:layout_constraintBottom_toTopOf="@+id/commentTextView"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/colorMood2"
                 app:layout_constraintTop_toBottomOf="@+id/isDateAnswerTextView" />
+
+            <TextView
+                android:id="@+id/commentTextView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:fontFamily="@font/roboto_bold"
+                android:text="다른 사람이 달아준 댓글"
+                android:textColor="#000"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/colorMood3" />
         </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/constraintLayout2"
+            tools:listitem="@layout/row_answer_comment" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -1,5 +1,6 @@
 package com.example.moodlight.screen.main2
 
+import android.annotation.SuppressLint
 import android.content.ContentValues.TAG
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
@@ -8,6 +9,8 @@ import android.util.Log
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.moodlight.R
 import com.example.moodlight.api.ServerClient
 import com.example.moodlight.databinding.ActivityDetailAnswerBinding
@@ -26,6 +29,12 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 class DetailAnswerActivity : AppCompatActivity() {
+
+    private var limitPage : Int = 10
+    private var startPage : Int = 0
+    private var correntId : Int = 1
+    private var isLoding : Boolean = false
+    private val commentList : ArrayList<AnswerCommentModel?> = ArrayList()
     private lateinit var binding: ActivityDetailAnswerBinding
     private lateinit var intentData : MyAnswerListModelItem
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,8 +46,23 @@ class DetailAnswerActivity : AppCompatActivity() {
         setUi()
         lodingData()
 
-        setSupportActionBar(binding.main2Toolbar)
+        binding.recycler.addOnScrollListener(object :  RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
 
+
+                if(!isLoding){
+                    if((recyclerView.layoutManager as LinearLayoutManager?)!!.findLastVisibleItemPosition() == commentList.size-1){
+                        limitPage+=10
+                        startPage+=10
+                        lodingData()
+                        this@DetailAnswerActivity.isLoding = true
+                    }
+                }
+            }
+        })
+
+        setSupportActionBar(binding.main2Toolbar)
         supportActionBar!!.setDisplayShowTitleEnabled(false)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setHomeAsUpIndicator(R.drawable.left_btn)
@@ -46,18 +70,38 @@ class DetailAnswerActivity : AppCompatActivity() {
 
     private fun lodingData() {
         CoroutineScope(Dispatchers.IO).launch {
-            ServerClient.getApiService().getMyAnswerComment(intentData.id.toString(), 0, 20)
+            ServerClient.getApiService().getMyAnswerComment(intentData.id.toString(),
+                this@DetailAnswerActivity.startPage,
+                this@DetailAnswerActivity.limitPage
+            )
                 .enqueue(object : Callback<ArrayList<AnswerCommentModel>>{
+                    @SuppressLint("NotifyDataSetChanged")
                     override fun onResponse(
                         call: Call<ArrayList<AnswerCommentModel>>,
                         response: Response<ArrayList<AnswerCommentModel>>
                     ) {
                         val result = response.body()
                         if(response.isSuccessful){
-                            Log.d(TAG, "onResponse: $result")
-                            val commentList : ArrayList<AnswerCommentModel?> = ArrayList()
-                            result?.let { commentList.addAll(it) }
-                            binding.recycler.adapter = AnswerCommentAdapter(commentList)
+                            Log.d(TAG, "onResponse: 댓글리스트 : $result 정보 : $response")
+                            if(result!!.size!=0){
+                                if(commentList.size == 0){
+                                    result?.let { commentList.addAll(it) }
+                                    commentList.add(AnswerCommentModel(" ", " ", 2147483647))
+                                    binding.recycler.adapter = AnswerCommentAdapter(commentList)
+                                }
+                                else{
+                                    AnswerCommentAdapter(commentList).deletLodingItem()
+                                    result?.let { commentList.addAll(it) }
+                                    commentList.add(AnswerCommentModel(" ", " ", 2147483647))
+                                    binding.recycler.adapter!!.notifyDataSetChanged()
+                                    isLoding = false
+                                }
+                            }
+                            else if(result.size == 0){
+                                Log.d(TAG, "onResponse: resultsize : 클럭됨")
+                                AnswerCommentAdapter(commentList).deletLodingItem()
+                                binding.recycler.adapter!!.notifyDataSetChanged()
+                            }
                         }
                         else{
                             Toast.makeText(this@DetailAnswerActivity, "댓글 리스트를 불러오는데에 실패하였습니다.2", Toast.LENGTH_SHORT).show()

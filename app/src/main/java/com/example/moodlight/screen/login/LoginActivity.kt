@@ -57,7 +57,7 @@ class LoginActivity : AppCompatActivity() {
                             ) {
                                 if (response.isSuccessful) {
                                     ServerClient.accessToken = response.body()!!.accessToken
-
+                                    Log.e("zxbzfbsd",response.body()!!.accessToken)
                                     // Sign in success, update UI with the signed-in user's information
                                     val userData = UserData(email, password)
                                     Log.e("a",userData.id)

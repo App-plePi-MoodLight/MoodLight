@@ -107,7 +107,11 @@ class MainStatisticsFragment : Fragment() {
                     response: Response<QuestionResponseModel>
                 ) {
                     if (response.isSuccessful) {
-                        binding.todayQuestion = response.body()!![0].contents
+                        try {
+                            binding.todayQuestion = response.body()!![0].contents
+                        } catch (e : IndexOutOfBoundsException) {
+                            binding.todayQuestion = "아직 오늘의 질문이 등록되지 않았어요."
+                        }
                     }
                 }
 
@@ -127,7 +131,12 @@ class MainStatisticsFragment : Fragment() {
                     response: Response<QuestionResponseModel>
                 ) {
                     if (response.isSuccessful) {
-                        binding.lastQuestion = response.body()!![0].contents
+
+                        try {
+                            binding.lastQuestion = response.body()!![0].contents
+                        } catch (e : IndexOutOfBoundsException) {
+                            binding.lastQuestion = "어제의 질문이 등록되지 않았어요."
+                        }
                     }
                 }
 

@@ -1,6 +1,7 @@
 package com.example.moodlight.screen.main2
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -68,7 +69,7 @@ class MainFragment2 : Fragment() {
         }*/
 
 
-        ServerClient.getApiService().getMyAnswer()
+        ServerClient.getApiService().getMyAnswerAll()
             .enqueue(object : Callback<MyAnswerModel> {
 
                 override fun onResponse(
@@ -78,6 +79,9 @@ class MainFragment2 : Fragment() {
                     if (response.isSuccessful) {
                         myAnswerList = response.body()!!
                         setUi()
+                    }
+                    else {
+                        Log.e("cc",response.code().toString())
                     }
                 }
 
@@ -205,6 +209,7 @@ class MainFragment2 : Fragment() {
         }
 
         if (targetAnswerList.size <= 0) {
+            // 만약 사용자가 작성한 게시글이 없을 시
             for (k in 0 until calendarHelper.getEndDay()) {
                 val main2CalendarData : Main2CalendarData = Main2CalendarData(
                     (k+1).toString(),
@@ -214,23 +219,37 @@ class MainFragment2 : Fragment() {
             }
         }
         else {
+
+            // 사용자가 작성한 게시글이 존재할 시
             for (k in 0 until calendarHelper.getEndDay()) {
                 var main2CalendarData : Main2CalendarData? = null
                 for (l in 0 until targetAnswerList.size) {
 
-                    if (CalendarHelper.dateTransformationToDay(targetAnswerList[l].createdDate)
-                            .toInt() == k) {
-                                var moodType : Int = 0
-                                when(targetAnswerList[l].question.mood) {
-                                    "happy" -> moodType = DataType.HAPPY_MOOD
-                                    "sad" -> moodType = DataType.SAD_MOOD
-                                    "mad" -> moodType = DataType.MAD_MOOD
-                                }
-                         main2CalendarData = Main2CalendarData(
-                            (k + 1).toString(),
-                            moodType,
-                            DataType.CURRENT_DAY)
-                    }
+/*                    try {*/
+                        if (CalendarHelper.dateTransformationToDay(targetAnswerList[l].createdDate)
+                                .toInt() == k
+                        ) {
+                            Log.e("zbs",targetAnswerList[l].createdDate)
+                            var moodType: Int = 0
+                            when (targetAnswerList[l].question.mood) {
+                                "happy" -> moodType = DataType.HAPPY_MOOD
+                                "sad" -> moodType = DataType.SAD_MOOD
+                                "mad" -> moodType = DataType.MAD_MOOD
+                            }
+                            main2CalendarData = Main2CalendarData(
+                                (k + 1).toString(),
+                                moodType,
+                                DataType.CURRENT_DAY
+                            )
+                        }
+/*                    } catch (e : NullPointerException) {
+                        // 사용자가 작성한 게시글이 존재하지만 이번달에 작성한 게시물이 없을시
+                        main2CalendarData = Main2CalendarData(
+                        (k+1).toString(),
+                        DataType.NONE_MOOD,
+                        DataType.CURRENT_DAY)
+                    }*/
+
                 }
 
                 if (main2CalendarData == null) {

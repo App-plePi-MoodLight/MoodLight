@@ -12,11 +12,14 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.moodlight.R
 import com.example.moodlight.api.ServerClient
 import com.example.moodlight.databinding.FragmentMain2Binding
 import com.example.moodlight.model.myanswermodel.MyAnswerListModel
 import com.example.moodlight.model.myanswermodel.MyAnswerListModelItem
+import com.example.moodlight.model.myanswermodel.Question
 import com.example.moodlight.screen.main2.calendar.CalendarHelper
 import com.example.moodlight.screen.main2.calendar.Main2CalendarAdapter
 import com.example.moodlight.screen.main2.calendar.Main2CalendarData
@@ -48,6 +51,10 @@ class MainFragment2 : Fragment() {
         ViewModelProvider(this).get(Main2CalendarViewModel::class.java)
     }
 
+    private var isLoding : Boolean = false
+    private var limitPage : Int = 1
+    private var startPage : Int = 0
+
     private lateinit var binding: FragmentMain2Binding
     var list: ArrayList<DateClass> = ArrayList()
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -76,6 +83,21 @@ class MainFragment2 : Fragment() {
 //                }
 //        }
 
+//        binding.recycler.addOnScrollListener(object :  RecyclerView.OnScrollListener() {
+//            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+//                super.onScrolled(recyclerView, dx, dy)
+//
+//
+//                if(!isLoding){
+//                    if((recyclerView.layoutManager as LinearLayoutManager?)!!.findLastVisibleItemPosition() == list.size-1){
+//                        limitPage+=3
+//                        startPage+=3
+//                        dataLoding()
+//                        this@MainFragment2.isLoding = true
+//                    }
+//                }
+//            }
+//        })
 
         if(list.isEmpty()){
             dataLoding()
@@ -88,8 +110,9 @@ class MainFragment2 : Fragment() {
 
     private fun dataLoding() {
         CoroutineScope(Dispatchers.IO).launch { 
-            ServerClient.getApiService().getMyAnswer(0, 10)
+            ServerClient.getApiService().getMyAnswer(0, 300)
                 .enqueue(object : Callback<MyAnswerListModel> {
+                    @SuppressLint("NotifyDataSetChanged")
                     override fun onResponse(
                         call: Call<MyAnswerListModel>,
                         response: Response<MyAnswerListModel>
@@ -98,14 +121,32 @@ class MainFragment2 : Fragment() {
                         Log.d(TAG, "onResponse: $response")
                         if(response.code() == 200){
                             Log.d(TAG, "onResponse: data : $result")
-                            processingData(result)
-                            requireActivity().runOnUiThread {
-                                binding.recycler.adapter = DateAdapter(requireContext(), list){data ->
-                                    Toast.makeText(requireActivity(), "${data.id}", Toast.LENGTH_SHORT).show()
-                                    startActivity(Intent(requireActivity(), DetailAnswerActivity::class.java)
-                                        .putExtra("data", data))
+                            if(result!!.size != 0){
+                                if(list.isNotEmpty()){
+                                    list.removeAt(list.lastIndex)
+                                    processingData(result)
+                                    requireActivity().runOnUiThread {
+                                        binding.recycler.adapter = DateAdapter(requireContext(), list){data ->
+                                            startActivity(Intent(requireActivity(), DetailAnswerActivity::class.java)
+                                                .putExtra("data", data))
+                                        }
+                                        binding.recycler.setHasFixedSize(true)
+                                    }
                                 }
-                                binding.recycler.setHasFixedSize(true)
+                                else{
+                                    processingData(result)
+                                    requireActivity().runOnUiThread {
+                                        binding.recycler.adapter = DateAdapter(requireContext(), list){data ->
+                                            startActivity(Intent(requireActivity(), DetailAnswerActivity::class.java)
+                                                .putExtra("data", data))
+                                        }
+                                        binding.recycler.setHasFixedSize(true)
+                                    }
+                                }
+                            }
+                            else{
+                                list.removeAt(list.lastIndex)
+                                binding.recycler.adapter!!.notifyDataSetChanged()
                             }
                         }
                         else{
@@ -157,6 +198,9 @@ class MainFragment2 : Fragment() {
             i += plusI+1
         }
         Log.d(TAG, "processingData: list : ${list}")
+        val progressList : ArrayList<MyAnswerListModelItem> = ArrayList()
+        //progressList.add(MyAnswerListModelItem(" ", " ", 21, false, Question(true," "," ", " ", " ")))
+        //list.add(DateClass(" ", progressList))
     }
 
     @SuppressLint("SimpleDateFormat")

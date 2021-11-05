@@ -97,10 +97,10 @@ class DetailAnswerActivity : AppCompatActivity() {
                                     isLoding = false
                                 }
                             }
-                            else if(result.size == 0){
+                            else if(result.size == 0 && commentList.size != 0){
                                 Log.d(TAG, "onResponse: resultsize : 클럭됨")
-                                AnswerCommentAdapter(commentList).deletLodingItem()
                                 binding.recycler.adapter!!.notifyDataSetChanged()
+                                AnswerCommentAdapter(commentList).deletLodingItem()
                             }
                         }
                         else{

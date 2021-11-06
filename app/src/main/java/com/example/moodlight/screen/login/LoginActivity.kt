@@ -1,5 +1,6 @@
 package com.example.moodlight.screen.login
 
+import android.content.ContentValues.TAG
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -63,8 +64,15 @@ class LoginActivity : AppCompatActivity() {
                                     Log.e("a",userData.id)
 
                                     CoroutineScope(Dispatchers.IO).launch {
+
+                                        if ( db!!.userDao().getUserFromUserLoginTable() != null)
+                                            db.userDao().update(userData)
+
+                                        else
+                                          db!!.userDao().insert(userData)
+
                                         Log.e("asdf",userData.toString())
-                                        db!!.userDao().insert(userData)
+
                                     }
 
                                     Log.d("Login", "signInWithEmail:success")
@@ -74,6 +82,7 @@ class LoginActivity : AppCompatActivity() {
                                     initialActivity.finish()
                                     finish()
                                 } else {
+                                    Log.d(TAG, "onResponse: respone : ${response}")
                                     errorVisible("가입하지 않은 아이디이거나, 잘못된 비밀번호입니다.")
                                 }
                             }

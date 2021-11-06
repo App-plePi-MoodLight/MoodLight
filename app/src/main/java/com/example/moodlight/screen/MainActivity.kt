@@ -6,11 +6,16 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.example.moodlight.R
+import com.example.moodlight.api.ServerClient
+import com.example.moodlight.database.UserDatabase
 import com.example.moodlight.dialog.CommonDialog
 import com.example.moodlight.dialog.CommonDialogInterface
 import com.example.moodlight.dialog.LogoutDialog
 import com.example.moodlight.dialog.LogoutDialogInterface
+import com.example.moodlight.model.setting.DeleteUserModel
 import com.example.moodlight.screen.initial.InitialActivity
+import com.example.moodlight.screen.mainstatics.MainStatisticsFragment
+import com.example.moodlight.screen.login.LoginActivity
 import com.example.moodlight.screen.main1.CommunityActiviy
 import com.example.moodlight.screen.main2.MainFragment2
 import com.example.moodlight.screen.main3.MainFragment3
@@ -22,6 +27,18 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import androidx.core.app.ActivityCompat.startActivityForResult
+import com.example.moodlight.screen.main3.setting.SettingActivity
+import android.R.attr.data
+import android.R.attr
+import android.R.attr.data
+
+
+
+
 
 @Suppress("DEPRECATION")
 class MainActivity : AppCompatActivity(), CommonDialogInterface, LogoutDialogInterface {
@@ -35,9 +52,9 @@ class MainActivity : AppCompatActivity(), CommonDialogInterface, LogoutDialogInt
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(com.example.moodlight.R.layout.activity_main)
         changeFragment(mainStatisticsFragment)
-        findViewById<BottomNavigationView>(R.id.bottomNavigation).selectedItemId = R.id.nullItem
+        findViewById<BottomNavigationView>(com.example.moodlight.R.id.bottomNavigation).selectedItemId = R.id.nullItem
 
 
         if (networkStatus == NetworkStatus.TYPE_NOT_CONNECTED) {
@@ -52,20 +69,20 @@ class MainActivity : AppCompatActivity(), CommonDialogInterface, LogoutDialogInt
 
 
 
-        findViewById<BottomNavigationView>(R.id.bottomNavigation).setOnItemSelectedListener { item ->
+        findViewById<BottomNavigationView>(com.example.moodlight.R.id.bottomNavigation).setOnItemSelectedListener { item ->
             when (item.itemId) {
-                R.id.main2 -> {
+                com.example.moodlight.R.id.main2 -> {
                     changeFragment(mainFragment2)
                     true
                 }
-                R.id.main3 -> {
+                com.example.moodlight.R.id.main3 -> {
                     changeFragment(mainFragment3)
                     true
                 }
                 else -> false
             }
         }
-        findViewById<FloatingActionButton>(R.id.faBtn).setOnClickListener {
+        findViewById<FloatingActionButton>(com.example.moodlight.R.id.faBtn).setOnClickListener {
             startActivity(Intent(this, CommunityActiviy::class.java))
             //병주 클래스
         }
@@ -73,7 +90,7 @@ class MainActivity : AppCompatActivity(), CommonDialogInterface, LogoutDialogInt
 
         private fun changeFragment(fragment: Fragment) {
             supportFragmentManager.beginTransaction()
-                .replace(R.id.mainFrame, fragment).commit()
+                .replace(com.example.moodlight.R.id.mainFrame, fragment).commit()
 
         }
 
@@ -85,8 +102,13 @@ class MainActivity : AppCompatActivity(), CommonDialogInterface, LogoutDialogInt
                 2 -> {
                     logoutDialogShow()
                 }
+                3 ->{
+                    val intent = Intent(this@MainActivity, SettingActivity::class.java)
+                    startActivityForResult(intent, 100)
+                }
             }
         }
+
 
         private fun logoutDialogShow() {
             logoutDialog.show()
@@ -97,26 +119,35 @@ class MainActivity : AppCompatActivity(), CommonDialogInterface, LogoutDialogInt
         }
 
         override fun onCheckBtnClick() {
-            FirebaseUtil.getAuth().currentUser!!.delete()
-                .addOnCompleteListener {
-
-                    if (it.isSuccessful) {
-                        CoroutineScope(Dispatchers.IO).launch {
-                            FirebaseUtil.getFireStoreInstance().collection("users")
-                                .document(FirebaseUtil.getUid())
-                                .delete()
+            CoroutineScope(Dispatchers.IO).launch {
+                ServerClient.getApiService().deleteUser().enqueue(object : Callback<DeleteUserModel> {
+                    override fun onResponse(
+                        call: Call<DeleteUserModel>,
+                        response: Response<DeleteUserModel>
+                    ) {
+                        val result = response.body()
+                        if(response.code() == 200){
+                            if(!result!!.success){
+                                Toast.makeText(this@MainActivity, "회원탈퇴에 실패하였습니다.", Toast.LENGTH_SHORT).show()
+                            }
+                            else{
+                                CoroutineScope(Dispatchers.IO).launch{
+                                    UserDatabase.getInstance(this@MainActivity)!!.userDao().deleteUserLoginTable()
+                                }
+                                Toast.makeText(this@MainActivity, result.message, Toast.LENGTH_SHORT).show()
+                                startActivity(Intent(this@MainActivity, InitialActivity::class.java))
+                                dialog.dismiss()
+                                finish()
+                            }
                         }
-                        Toast.makeText(this, "회원탈퇴가 완료되었습니다.", Toast.LENGTH_SHORT).show()
-                        startActivity(Intent(this, InitialActivity::class.java))
-                        dialog.dismiss()
-                        finish()
-                    } else {
-                        Toast.makeText(this, "오류가 발생하였습니다. 다시 시도해주세요.", Toast.LENGTH_SHORT).show()
                     }
-                }
-                .addOnFailureListener {
-                    Toast.makeText(this, "오류가 발생하였습니다. 다시 시도해주세요.", Toast.LENGTH_SHORT).show()
-                }
+
+                    override fun onFailure(call: Call<DeleteUserModel>, t: Throwable) {
+                        Toast.makeText(this@MainActivity, "회원탈퇴에 실패하였습니다.", Toast.LENGTH_SHORT).show()
+                    }
+
+                })
+            }
         }
 
     override fun onCancleBtnClick() {
@@ -124,11 +155,11 @@ class MainActivity : AppCompatActivity(), CommonDialogInterface, LogoutDialogInt
     }
 
     override fun onClickLogout() {
-
-        FirebaseUtil.getAuth().signOut()
+        CoroutineScope(Dispatchers.IO).launch{
+            UserDatabase.getInstance(this@MainActivity)!!.userDao().deleteUserLoginTable()
+        }
         logoutDialog.dismiss()
-        startActivity(Intent(this, InitialActivity::class.java))
-        logoutDialog.dismiss()
+        startActivity(Intent(this, LoginActivity::class.java))
         finish()
     }
 

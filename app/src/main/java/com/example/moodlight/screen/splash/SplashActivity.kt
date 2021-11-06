@@ -1,5 +1,6 @@
 package com.example.moodlight.screen.splash
 
+import android.content.ContentValues.TAG
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
@@ -47,8 +48,7 @@ class SplashActivity : AppCompatActivity() {
         val handler: Handler = Handler()
 
         handler.postDelayed(Runnable {
-
-
+            Log.d(TAG, "onCreate: ${id} ${password}")
                 if (id != null && password != null) {
 
 

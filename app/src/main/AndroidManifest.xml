@@ -13,6 +13,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MoodLight">
         <activity
+            android:name=".screen.main2.DetailAnswerActivity"
+            android:exported="false" />
+        <activity
             android:name=".screen.main3.setting.ChangePasswordActivity"
             android:exported="false" />
         <activity android:name=".screen.main1.AnswerActivity" />

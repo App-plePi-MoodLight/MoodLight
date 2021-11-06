@@ -4,7 +4,7 @@
 
     @Dao
     interface UserDao {
-
+      
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert (userData: UserData)
 

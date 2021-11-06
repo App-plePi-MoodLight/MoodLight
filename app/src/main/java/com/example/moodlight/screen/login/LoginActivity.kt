@@ -64,7 +64,6 @@ class LoginActivity : AppCompatActivity() {
                                     Log.e("a",userData.id)
 
                                     CoroutineScope(Dispatchers.IO).launch {
-
                                         if ( db!!.userDao().getUserFromUserLoginTable() != null)
                                             db.userDao().update(userData)
 

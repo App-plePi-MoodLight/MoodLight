@@ -1,185 +1,126 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/taools"
+    xmlns:tools1="http://schemas.android.com/tools">
 
     <data>
         <variable
             name="activity"
-            type="com.example.moodlight.screen.main1.CommunityActiviy" />
+            type="com.example.moodlight.screen.main1.CommunityActivity" />
 
+        <variable
+            name="viewModel"
+            type="com.example.moodlight.screen.main1.viewmodel.CommunityViewModel" />
     </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".screen.main1.CommunityActiviy">
+        tools:context=".screen.main1.CommunitiyFragment">
 
-        <ImageView
-            android:id="@+id/night1"
+        <Toolbar
+            android:id="@+id/communityToolBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_night1"
-            android:scaleType="centerCrop"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_star"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
-
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:src="@drawable/ic_starline"
-            android:scaleType="centerCrop"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
-        <ImageView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="40dp"
-            android:paddingBottom="10dp"
-            android:elevation="3dp"
-            android:scaleType="centerCrop"
-            android:src="@drawable/ic_night2"
-            app:layout_constraintBottom_toBottomOf="@id/night1"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="45dp"
-            android:src="@drawable/ic_moon"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent"
+            >
+            <ImageButton
+                android:id="@+id/backBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="#00000000"
+                android:src="@drawable/back_btn"
+                android:onClick="@{()-> activity.finish()}"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:fontFamily="@font/roboto_bold"
+                android:text="게시글"
+                android:textColor="#212121"
+                android:textSize="18sp" />
+        </Toolbar>
 
         <TextView
-            android:id="@+id/todaymood"
+            android:id="@+id/communityTodayQuestion"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="오늘의 기분은 어떠세요?"
+            android:layout_marginTop="20dp"
+            android:text="@{viewModel.todayQuestion}"
+            android:textSize="16sp"
             android:textColor="#000000"
-            android:textSize="17sp"
             android:fontFamily="@font/roboto_bold"
-            app:layout_constraintBottom_toTopOf="@id/enterbtn"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-
-        <LinearLayout
-            android:orientation="horizontal"
-            android:id="@+id/moodpicker"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/todaymood">
-
-            <LinearLayout
-                android:orientation="vertical"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="18dp">
-                <ImageButton
-                    android:id="@+id/happy"
-                    android:layout_width="82dp"
-                    android:layout_height="82dp"
-                    android:background="#00000000"
-                    android:src="@drawable/icon_happy"
-                    android:onClick="@{activity::setMood}"
-                    />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:layout_gravity="center"
-                    android:text="행복"
-                    android:textSize="15sp"
-                    android:textColor="#000000"
-                    android:fontFamily="@font/roboto_medium"
-                    />
-            </LinearLayout>
-
-            <LinearLayout
-                android:orientation="vertical"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="18dp">
-                <ImageButton
-                    android:id="@+id/mad"
-                    android:layout_width="82dp"
-                    android:layout_height="82dp"
-                    android:background="#00000000"
-                    android:src="@drawable/icon_mad"
-                    android:onClick="@{activity::setMood}"
-                    />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="10dp"
-                    android:fontFamily="@font/roboto_medium"
-                    android:text="분노"
-                    android:textColor="#000000"
-                    android:textSize="15sp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:orientation="vertical"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="18dp">
-                <ImageButton
-                    android:id="@+id/sad"
-                    android:layout_width="82dp"
-                    android:layout_height="82dp"
-                    android:background="#00000000"
-                    android:src="@drawable/icon_sad"
-                    android:onClick="@{activity::setMood}"
-                    />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:layout_gravity="center"
-                    android:text="슬픔"
-                    android:textSize="15sp"
-                    android:textColor="#000000"
-                    android:fontFamily="@font/roboto_medium"
-                    />
-            </LinearLayout>
-
-        </LinearLayout>
+            app:layout_constraintTop_toBottomOf="@id/communityToolBar"/>
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/enterbtn"
+            android:id="@+id/communityAnswerBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:layout_marginBottom="30dp"
-            android:background="@drawable/btn_none_backgroun2"
-            android:fontFamily="@font/roboto_bold"
-            android:onClick="@{activity::next}"
-            android:paddingTop="16dp"
-            android:paddingBottom="16dp"
-            android:text="입장하기"
+            android:layout_marginTop="30dp"
+            android:layout_marginRight="30dp"
+            android:layout_marginLeft="30dp"
+            android:padding="15dp"
+            app:cornerRadius="30dp"
+            android:background="@{viewModel.buttonMood}"
+            android:text="답변하기"
+            android:onClick="@{activity::access}"
             android:textSize="15sp"
             android:textColor="#ffffff"
-            app:cornerRadius="7dp"
+            android:fontFamily="@font/roboto_bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/communityTodayQuestion"/>
+
+        <ImageView
+            android:id="@+id/comment_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="17dp"
+            android:src="@drawable/comment_icon"
+            app:layout_constraintBottom_toBottomOf="@+id/hint_text"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/hint_text" />
+
+        <TextView
+            android:id="@+id/hint_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:layout_marginLeft="8dp"
+            android:text="다른 사람들의 답변에 댓글을 남겨보세요"
+            android:textSize="14sp"
+            android:textColor="#000000"
+            android:fontFamily="@font/roboto_medium"
+            app:layout_constraintStart_toEndOf="@id/comment_icon"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/communityAnswerBtn"
+            app:layout_constraintHorizontal_bias="0.0"/>
+
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/swipeLayout"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/hint_text"
+            app:layout_constraintVertical_bias="0.0">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/communityAnswerRecycler"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="20dp"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools1:listitem="@layout/item_answer" />
+
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

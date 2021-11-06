@@ -3,6 +3,7 @@ package com.example.moodlight.api
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Request
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
@@ -15,6 +16,9 @@ object ServerClient {
     public var accessToken : String? = null
 
     fun getInstance() : Retrofit {
+
+        val loggingInterceptor = HttpLoggingInterceptor()
+        loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
 
         val interceptor: Interceptor = Interceptor { chain ->
             if (accessToken != null) {
@@ -29,6 +33,7 @@ object ServerClient {
             .connectTimeout(100, TimeUnit.SECONDS)
             .readTimeout(100, TimeUnit.SECONDS)
             .addInterceptor(interceptor)
+            .addInterceptor(loggingInterceptor)
             .build()
 
         val instance : Retrofit = Retrofit.Builder()

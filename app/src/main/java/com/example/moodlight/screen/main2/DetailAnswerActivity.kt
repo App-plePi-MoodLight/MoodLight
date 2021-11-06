@@ -93,13 +93,13 @@ class DetailAnswerActivity : AppCompatActivity() {
                                     binding.recycler.adapter!!.notifyDataSetChanged()
                                     isLoding = false
                                 }
+                                correntId = commentList[commentList.lastIndex-1]!!.id
                             }
                             else if(result.size == 0 && commentList.size != 0){
                                 Log.d(TAG, "onResponse: resultsize : 클럭됨")
                                 binding.recycler.adapter!!.notifyDataSetChanged()
                                 AnswerCommentAdapter(commentList).deletLodingItem()
                             }
-                            correntId = commentList[commentList.lastIndex-1]!!.id
                         }
                         else{
                             Toast.makeText(this@DetailAnswerActivity, "댓글 리스트를 불러오는데에 실패하였습니다.2", Toast.LENGTH_SHORT).show()

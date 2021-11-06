@@ -352,7 +352,7 @@ class MainFragment2 : Fragment() {
             for (k in 0 until calendarHelper.getEndDay()) {
                 var main2CalendarData : Main2CalendarData? = null
                 for (l in 0 until targetAnswerList.size) {
-
+                    Log.e("vvvvvvvvvvvvvvv",CalendarHelper.dateTransformationToDay(targetAnswerList[l].createdDate))
 /*                    try {*/
                         if (CalendarHelper.dateTransformationToDay(targetAnswerList[l].createdDate)
                                 .toInt() == k

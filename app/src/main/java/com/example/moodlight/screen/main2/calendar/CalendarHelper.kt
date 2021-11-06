@@ -76,7 +76,7 @@ class CalendarHelper {
             val format = SimpleDateFormat("yyyy-MM-dd")
             val date: Date = format.parse(str)
             Log.e("nn",date.day.toString())
-            return (date.day+17).toString()
+            return (date.day).toString()
         }
 
     }

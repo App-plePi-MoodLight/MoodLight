@@ -36,67 +36,15 @@ class SettingActivity : AppCompatActivity() {
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_setting)
 
-        rdb = UserDatabase.getInstance(this)!!
-        db = FirebaseUtil.getFireStoreInstance()
-        getUserList()
-        getCurUserPw()
-        loadProFileImage()
-        binding.imageView.setBackground(ShapeDrawable(OvalShape()));
-        binding.imageView.setClipToOutline(true);
-        binding.distinctCheckBtn.setOnClickListener {
-            if (binding.nickNameEt.text.toString().isEmpty()){
-                dangerResult("빈칸을 입력해주세요.")
-            }
-            else if (binding.nickNameEt.text.toString() in userList){
-                dangerResult("이미 존재하는 닉네임입니다.")
-            }
-            else{
-                binding.successLayout.visibility = View.VISIBLE
-                binding.dangerLayout.visibility = View.INVISIBLE
-            }
-        }
 
         binding.IVBtn.setOnClickListener {
             fileChooser()
         }
 
-        binding.checkBtn.setOnClickListener {
-            if(binding.newPwEt.text.isEmpty() or binding.newPwAgainEt.text.isEmpty() or binding.defaultPwEt.text.isEmpty()){
-                dangerPwResult("빈칸을 입력해주세요.")
-//                if(sha.encryptSHA(binding.defaultPwEt.text.toString()) != curPw){
-//                    Log.d(TAG, "onCreate: ${sha.encryptSHA(binding.defaultPwEt.text.toString()) != curPw}")
-//                    dangerPwResult("기존의 비밀번호가 일치하지않습니다.")
-//                    if(binding.newPwEt.text.toString() != binding.newPwAgainEt.text.toString()){
-//                        dangerPwResult("비밀번호가 서로 일치하지 않습니다.")
-//                    }
-//                    else{
-////                        binding.successPwLayout.visibility = View.VISIBLE
-////                        binding.dangerPwLayout.visibility = View.INVISIBLE
-//                    }
-//                }
-            }
-            else if(sha.encryptSHA(binding.defaultPwEt.text.toString()) != curPw){
-                dangerPwResult("기존의 비밀번호가 일치하지않습니다.")
-            }
-            else if(binding.newPwEt.text.toString() != binding.newPwAgainEt.text.toString()){
-                dangerPwResult("비밀번호가 서로 일치하지 않습니다.")
-            }
-            else{
-                binding.successPwLayout.visibility = View.VISIBLE
-                binding.dangerPwLayout.visibility = View.INVISIBLE
-                changePw(binding.newPwEt.text.toString(), binding.nickNameEt.text.toString())
-                var imageRef = FirebaseStorage.getInstance().reference.child("image/${FirebaseUtil.getAuth().currentUser!!.uid}.jpg")
-                imageRef.putFile(filepath)
-                    .addOnSuccessListener {
-                        Toast.makeText(this, "정보 수정이 완료되었습니다.", Toast.LENGTH_SHORT).show()
-                    }
-                    .addOnFailureListener{
-                        Toast.makeText(this, "정보 수정에 실패하였습니다. 다시 시도해주세요.", Toast.LENGTH_SHORT).show()
-                    }
-            }
-        }
 
 
+
+        loadProFileImage()
         setSupportActionBar(binding.main2Toolbar)
 
         supportActionBar!!.setDisplayShowTitleEnabled(false)
@@ -134,56 +82,6 @@ class SettingActivity : AppCompatActivity() {
         }
         binding.imageView.setBackground(ShapeDrawable(OvalShape()));
         binding.imageView.setClipToOutline(true);
-    }
-
-    private fun changePw(s : String, nickname : String) {
-        val auth = FirebaseUtil.getAuth()
-        auth.currentUser!!.updatePassword(s)
-            .addOnCompleteListener {
-                if(it.isSuccessful){
-                    Toast.makeText(this, "비밀번호 변경이 완료되었습니다.", Toast.LENGTH_SHORT).show()
-                    db.collection("users").document(FirebaseUtil.getUid()).update("password", sha.encryptSHA(s), "nickname", nickname)
-                        .addOnCompleteListener {
-                            Toast.makeText(this, "", Toast.LENGTH_SHORT).show()
-                        }
-
-                }
-                else{
-                    Toast.makeText(this, "오류가 발생하였습니다. 다시 시도해주세요.", Toast.LENGTH_SHORT).show()
-                }
-            }
-            .addOnFailureListener {
-                Toast.makeText(this, "오류가 발생하였습니다. 다시 시도해주세요.", Toast.LENGTH_SHORT).show()
-            }
-    }
-
-    private fun dangerPwResult(s: String) {
-        binding.successPwLayout.visibility = View.INVISIBLE
-        binding.dangerPwLayout.visibility = View.VISIBLE
-        binding.dangerPwTv.text  = s
-    }
-
-    private fun getCurUserPw() {
-        val auth = FirebaseUtil.getAuth()
-        db.collection("users").document(auth.currentUser!!.uid).get()
-            .addOnCompleteListener {
-                curPw = it.result!!.get("password").toString()
-            }
-    }
-
-    private fun dangerResult(s: String) {
-        binding.successLayout.visibility = View.INVISIBLE
-        binding.dangerLayout.visibility = View.VISIBLE
-        binding.dangerTv.text = s
-    }
-
-    private fun getUserList() {
-        db.collection("users").document("Storage").get()
-            .addOnCompleteListener {
-                if(it.isSuccessful){
-                    userList = it.result!!.get("nicknameArray") as ArrayList<String>
-                }
-            }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

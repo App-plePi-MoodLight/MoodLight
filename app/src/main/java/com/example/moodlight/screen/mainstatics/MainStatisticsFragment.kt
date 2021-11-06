@@ -13,12 +13,14 @@ import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import com.example.moodlight.R
 import com.example.moodlight.api.ServerClient
 import com.example.moodlight.databinding.FragmentMainStatisticsBinding
 import com.example.moodlight.model.moodcount.MoodCountModel
 import com.example.moodlight.model.moodcount.MoodCountModelItem
 import com.example.moodlight.model.question_response.QuestionResponseModel
+import com.example.moodlight.screen.main2.calendar.Main2CalendarViewModel
 import com.example.moodlight.util.AppUtil
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -26,6 +28,7 @@ import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.util.*
 
 class MainStatisticsFragment : Fragment() {
 
@@ -50,6 +53,8 @@ class MainStatisticsFragment : Fragment() {
         setNowDate()
         setLastQuestion()
         setLastDate()
+
+        AppUtil.setBaseCalendarList(ViewModelProvider(requireActivity()).get(Main2CalendarViewModel::class.java))
 
 
 /*        FirebaseUtil.getFireStoreInstance().collection("post")

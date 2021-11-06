@@ -36,6 +36,8 @@
             android:fontFamily="@font/roboto_medium"
             android:hint="비밀번호를 입력해주세요"
             android:inputType="textPassword"
+            android:background="@drawable/gray_background"
+            android:padding="17sp"
             android:text="@={viewModel.password}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

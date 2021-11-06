@@ -43,11 +43,11 @@ class MainFragment2 : Fragment() {
     private lateinit var myAnswerList : MyAnswerModel
 
     private val viewModel: Main2ViewModel by lazy {
-        ViewModelProvider(this).get(Main2ViewModel::class.java)
+        ViewModelProvider(requireActivity()).get(Main2ViewModel::class.java)
     }
 
     private val calendarViewModel: Main2CalendarViewModel by lazy {
-        ViewModelProvider(this).get(Main2CalendarViewModel::class.java)
+        ViewModelProvider(requireActivity()).get(Main2CalendarViewModel::class.java)
     }
 
     private var isLoding : Boolean = false
@@ -99,6 +99,10 @@ class MainFragment2 : Fragment() {
                 }
         }*/
 
+
+        val adapter: Main2CalendarAdapter = Main2CalendarAdapter(calendarViewModel)
+        binding.main2CalendarRecyclerView.adapter = adapter
+        binding.main2CalendarRecyclerView.adapter!!.notifyDataSetChanged()
 
         ServerClient.getApiService().getMyAnswerAll()
             .enqueue(object : Callback<MyAnswerModel> {
@@ -238,14 +242,14 @@ class MainFragment2 : Fragment() {
 
     private fun setUi() {
 
-        val adapter: Main2CalendarAdapter = Main2CalendarAdapter(calendarViewModel)
-        binding.main2CalendarRecyclerView.adapter = adapter
         calendarViewModel.today = calendarHelper.getDate()
 
         setCalendar()
     }
 
     private fun setCalendar() {
+
+        calendarViewModel.dateList.clear()
 
         val lastEndDay: Int
         when (calendarHelper.getMonth() + 1) {
@@ -429,5 +433,9 @@ class MainFragment2 : Fragment() {
         setCalendar()
     }
 
-
+    override fun onStop() {
+        super.onStop()
+        calendarViewModel.dateList.clear()
+        AppUtil.setBaseCalendarList(calendarViewModel)
+    }
 }

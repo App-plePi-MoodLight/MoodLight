@@ -36,6 +36,8 @@
             android:fontFamily="@font/roboto_medium"
             android:hint="닉네임을 입력해주세요"
             android:inputType="text"
+            android:background="@drawable/gray_background"
+            android:padding="17sp"
             android:text="@={viewModel.nickname}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

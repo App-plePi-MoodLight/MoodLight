@@ -37,4 +37,7 @@ interface ApiService {
 
     @GET("answer/my")
     fun getMyAnswer() : Call<MyAnswerModel>
+
+    @GET("answer/my/all")
+    fun getMyAnswerAll() : Call<MyAnswerModel>
 }

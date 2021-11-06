@@ -10,11 +10,11 @@ import com.example.moodlight.dialog.CommonDialog
 import com.example.moodlight.dialog.CommonDialogInterface
 import com.example.moodlight.dialog.LogoutDialog
 import com.example.moodlight.dialog.LogoutDialogInterface
-import com.example.moodlight.screen.mainstatics.MainStatisticsFragment
 import com.example.moodlight.screen.initial.InitialActivity
 import com.example.moodlight.screen.main1.CommunityActiviy
 import com.example.moodlight.screen.main2.MainFragment2
 import com.example.moodlight.screen.main3.MainFragment3
+import com.example.moodlight.screen.mainstatics.MainStatisticsFragment
 import com.example.moodlight.util.FirebaseUtil
 import com.example.moodlight.util.NetworkStatus
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -41,7 +41,7 @@ class MainActivity : AppCompatActivity(), CommonDialogInterface, LogoutDialogInt
 
 
         if (networkStatus == NetworkStatus.TYPE_NOT_CONNECTED) {
-            Toast.makeText(baseContext, "무드등을 이용하시려면 Wifi 연결이 필요합니다.", Toast.LENGTH_SHORT).show()
+            Toast.makeText(baseContext, "무드등을 이용하시려면 인터넷 연결이 필요합니다.", Toast.LENGTH_SHORT).show()
         }
 
         dialog = CommonDialog(

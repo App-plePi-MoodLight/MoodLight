@@ -1,19 +1,14 @@
 package com.example.moodlight.api
 
 import com.example.moodlight.model.*
-import retrofit2.Call
-import retrofit2.Response
-import com.example.moodlight.model.IsExistModel
-import com.example.moodlight.model.JoinBodyModel
-import com.example.moodlight.model.LoginModel
-import com.example.moodlight.model.RegisterConfirmModel
-import com.example.moodlight.model.myanswermodel.MyAnswerListModel
-import com.example.moodlight.model.myanswermodel.detailandcomment.AnswerCommentModel
-import com.example.moodlight.model.setting.*
 import com.example.moodlight.model.moodcount.MoodCountModel
 import com.example.moodlight.model.my_answer.MyAnswerModel
+import com.example.moodlight.model.myanswermodel.MyAnswerListModel
+import com.example.moodlight.model.myanswermodel.detailandcomment.AnswerCommentModel
 import com.example.moodlight.model.question_response.QuestionResponseModel
+import com.example.moodlight.model.setting.*
 import retrofit2.Call
+import retrofit2.Response
 import retrofit2.http.*
 
 interface ApiService {
@@ -70,7 +65,6 @@ interface ApiService {
         @Header("accessToken") token: String?,
         @Body commentPostModel: CommentPostModel
     ): Call<CommentPostModel>
-    : Call<RegisterConfirmModel>
 
     @GET("auth/")
     fun getUserInfo() : Call<UserModel>

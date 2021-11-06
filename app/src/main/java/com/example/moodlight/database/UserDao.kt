@@ -22,13 +22,13 @@
     @Query("DELETE from UserData")
     fun deleteUserLoginTable()
 
-    @Query("SELECT id FROM userLoginTable ")
+    @Query("SELECT id FROM UserData ")
     fun getId() : String
 
-    @Query("SELECT password FROM userLoginTable")
+    @Query("SELECT password FROM UserData")
     fun getPassword() : String
 
-    @Query("SELECT * FROM userLoginTable")
+    @Query("SELECT * FROM UserData")
     fun getUserFromUserLoginTable() : List<UserData>
 
     }

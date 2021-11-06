@@ -14,15 +14,13 @@ import com.example.moodlight.dialog.LogoutDialog
 import com.example.moodlight.dialog.LogoutDialogInterface
 import com.example.moodlight.model.setting.DeleteUserModel
 import com.example.moodlight.screen.initial.InitialActivity
+import com.example.moodlight.screen.login.LoginActivity
 import com.example.moodlight.screen.main1.CommunityActivity
 import com.example.moodlight.screen.main1.PickMoodActivity
-import com.example.moodlight.screen.mainstatics.MainStatisticsFragment
-import com.example.moodlight.screen.login.LoginActivity
-import com.example.moodlight.screen.main1.CommunityActiviy
 import com.example.moodlight.screen.main2.MainFragment2
 import com.example.moodlight.screen.main3.MainFragment3
+import com.example.moodlight.screen.main3.setting.SettingActivity
 import com.example.moodlight.screen.mainstatics.MainStatisticsFragment
-import com.example.moodlight.util.FirebaseUtil
 import com.example.moodlight.util.NetworkStatus
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -32,14 +30,6 @@ import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import androidx.core.app.ActivityCompat.startActivityForResult
-import com.example.moodlight.screen.main3.setting.SettingActivity
-import android.R.attr.data
-import android.R.attr
-import android.R.attr.data
-
-
-
 
 
 @Suppress("DEPRECATION")
@@ -56,7 +46,8 @@ class MainActivity : AppCompatActivity(), CommonDialogInterface, LogoutDialogInt
         super.onCreate(savedInstanceState)
         setContentView(com.example.moodlight.R.layout.activity_main)
         changeFragment(mainStatisticsFragment)
-        findViewById<BottomNavigationView>(com.example.moodlight.R.id.bottomNavigation).selectedItemId = R.id.nullItem
+        findViewById<BottomNavigationView>(com.example.moodlight.R.id.bottomNavigation).selectedItemId =
+            R.id.nullItem
 
 
         if (networkStatus == NetworkStatus.TYPE_NOT_CONNECTED) {
@@ -86,13 +77,14 @@ class MainActivity : AppCompatActivity(), CommonDialogInterface, LogoutDialogInt
         }
         findViewById<FloatingActionButton>(R.id.faBtn).setOnClickListener {
             startActivity(Intent(this, PickMoodActivity::class.java))
-        findViewById<FloatingActionButton>(com.example.moodlight.R.id.faBtn).setOnClickListener {
-            startActivity(Intent(this, CommunityActiviy::class.java))
-            //병주 클래스
+            findViewById<FloatingActionButton>(com.example.moodlight.R.id.faBtn).setOnClickListener {
+                startActivity(Intent(this, CommunityActivity::class.java))
+                //병주 클래스
+            }
         }
-    }
 
-        private fun changeFragment(fragment: Fragment) {
+    }
+        fun changeFragment(fragment: Fragment) {
             supportFragmentManager.beginTransaction()
                 .replace(com.example.moodlight.R.id.mainFrame, fragment).commit()
 
@@ -112,7 +104,6 @@ class MainActivity : AppCompatActivity(), CommonDialogInterface, LogoutDialogInt
                 }
             }
         }
-
 
         private fun logoutDialogShow() {
             logoutDialog.show()

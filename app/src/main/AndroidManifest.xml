@@ -23,11 +23,6 @@
         <activity
             android:name=".screen.main3.setting.ChangePasswordActivity"
             android:exported="false" />
-        <activity android:name=".screen.main1.AnswerActivity" />
-        <activity android:name=".screen.main1.CommunityActiviy" />
-        <activity android:name=".screen.main1.CommunityMainActivity" />
-        <activity android:name=".screen.main1.CommentActivity" />
-        <activity android:name=".screen.main3.setting.SettingActivity" />
         <activity android:name=".screen.onboarding.OnboardingActivity" />
         <activity
             android:name=".screen.mainstatics.MainStatisticsFragment"

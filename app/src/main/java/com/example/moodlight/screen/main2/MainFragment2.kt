@@ -12,26 +12,21 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.moodlight.R
 import com.example.moodlight.api.ServerClient
 import com.example.moodlight.databinding.FragmentMain2Binding
-import com.example.moodlight.model.myanswermodel.MyAnswerListModel
-import com.example.moodlight.model.myanswermodel.MyAnswerListModelItem
-import com.example.moodlight.model.myanswermodel.Question
 import com.example.moodlight.model.my_answer.MyAnswerModel
 import com.example.moodlight.model.my_answer.MyAnswerModelItem
+import com.example.moodlight.model.myanswermodel.MyAnswerListModel
+import com.example.moodlight.model.myanswermodel.MyAnswerListModelItem
 import com.example.moodlight.screen.main2.calendar.CalendarHelper
 import com.example.moodlight.screen.main2.calendar.Main2CalendarAdapter
 import com.example.moodlight.screen.main2.calendar.Main2CalendarData
 import com.example.moodlight.screen.main2.calendar.Main2CalendarViewModel
 import com.example.moodlight.screen.main2.diaryRecyclerview.data.DateAdapter
-import com.example.moodlight.util.DataType
-import kotlin.collections.ArrayList
 import com.example.moodlight.screen.main2.diaryRecyclerview.data.DateClass
-import com.example.moodlight.screen.main2.diaryRecyclerview.data.QnAData
-import com.example.moodlight.util.GetTime
+import com.example.moodlight.util.AppUtil
+import com.example.moodlight.util.DataType
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -39,13 +34,6 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.text.SimpleDateFormat
-import com.example.moodlight.screen.main2.diaryRecyclerview.data.DateClass
-import com.example.moodlight.screen.main2.diaryRecyclerview.data.QnAData
-import com.example.moodlight.util.AppUtil
-import com.example.moodlight.util.DataType
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 class MainFragment2 : Fragment() {
 
@@ -367,16 +355,24 @@ class MainFragment2 : Fragment() {
                         ) {
                             Log.e("zbs",targetAnswerList[l].createdDate)
                             var moodType: Int = 0
-                            when (targetAnswerList[l].question.mood) {
-                                "happy" -> moodType = DataType.HAPPY_MOOD
-                                "sad" -> moodType = DataType.SAD_MOOD
-                                "mad" -> moodType = DataType.MAD_MOOD
+                            try {
+                                when (targetAnswerList[l].question.mood) {
+                                    "happy" -> moodType = DataType.HAPPY_MOOD
+                                    "sad" -> moodType = DataType.SAD_MOOD
+                                    "mad" -> moodType = DataType.MAD_MOOD
+                                }
+                                main2CalendarData = Main2CalendarData(
+                                    (k + 1).toString(),
+                                    moodType,
+                                    DataType.CURRENT_DAY
+                                )
+                            } catch (e : NullPointerException) {
+                                main2CalendarData = Main2CalendarData(
+                                    (k + 1).toString(),
+                                    DataType.NONE_MOOD,
+                                    DataType.CURRENT_DAY
+                                )
                             }
-                            main2CalendarData = Main2CalendarData(
-                                (k + 1).toString(),
-                                moodType,
-                                DataType.CURRENT_DAY
-                            )
                         }
 /*                    } catch (e : NullPointerException) {
                         // 사용자가 작성한 게시글이 존재하지만 이번달에 작성한 게시물이 없을시

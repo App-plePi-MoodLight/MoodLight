@@ -5,13 +5,10 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.RecyclerView
 import com.example.moodlight.R
 import com.example.moodlight.databinding.ItemCommentBinding
 import com.example.moodlight.model.CommentModel
-import com.example.moodlight.screen.main1.viewmodel.CommentViewModel
 import com.example.moodlight.util.DataType
 
 class CommentAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -32,7 +29,7 @@ class CommentAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val binding = ItemCommentBinding.inflate(
-            LayoutInflater.from(parent.context),comple
+            LayoutInflater.from(parent.context),
             parent,
             false
         )

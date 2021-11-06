@@ -7,6 +7,9 @@ import com.example.moodlight.model.RegisterConfirmModel
 import com.example.moodlight.model.myanswermodel.MyAnswerListModel
 import com.example.moodlight.model.myanswermodel.detailandcomment.AnswerCommentModel
 import com.example.moodlight.model.setting.*
+import com.example.moodlight.model.moodcount.MoodCountModel
+import com.example.moodlight.model.my_answer.MyAnswerModel
+import com.example.moodlight.model.question_response.QuestionResponseModel
 import retrofit2.Call
 import retrofit2.http.*
 
@@ -50,4 +53,13 @@ interface ApiService {
     @GET("comment/{questionId}")
     fun getMyAnswerComment(@Path("questionId")questionId : String,
                            @Query("skip") skip : Int, @Query("take") take : Int) : Call<ArrayList<AnswerCommentModel>>
+  
+    @GET("answer/count/{activate_date}")
+    fun getMoodCount(@Path("activate_date") date: String) : Call<MoodCountModel>
+
+    @GET("question")
+    fun getQuestion(@Query("date") date : String) : Call<QuestionResponseModel>
+
+    @GET("answer/my/all")
+    fun getMyAnswerAll() : Call<MyAnswerModel>
 }

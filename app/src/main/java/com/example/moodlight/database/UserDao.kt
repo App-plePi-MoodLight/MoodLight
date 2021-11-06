@@ -1,9 +1,9 @@
-package com.example.moodlight.database
+    package com.example.moodlight.database
 
-import androidx.room.*
+    import androidx.room.*
 
-@Dao
-interface UserDao {
+    @Dao
+    interface UserDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert (userData: UserData)
@@ -17,7 +17,9 @@ interface UserDao {
     @Update
     fun updateLoginTable(userData: UserData)
 
-    @Query("DELETE from userLoginTable")
+    //@Query("DELETE from userLoginTable")
+
+    @Query("DELETE from UserData")
     fun deleteUserLoginTable()
 
     @Query("SELECT id FROM userLoginTable ")
@@ -29,4 +31,4 @@ interface UserDao {
     @Query("SELECT * FROM userLoginTable")
     fun getUserFromUserLoginTable() : List<UserData>
 
-}
+    }

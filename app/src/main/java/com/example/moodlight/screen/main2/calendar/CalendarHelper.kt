@@ -1,7 +1,7 @@
 package com.example.moodlight.screen.main2.calendar
 
 import android.util.Log
-import android.view.View
+import java.text.SimpleDateFormat
 import java.util.*
 
 class CalendarHelper {
@@ -52,6 +52,34 @@ class CalendarHelper {
         return cal2.getActualMaximum(Calendar.DAY_OF_MONTH)
     }
 
+    companion object {
+
+        fun dateTransformationToYear(str : String) : String {
+            // ex) str require :  2021-10-21T14:27:47.134Z
+
+            val format = SimpleDateFormat("yyyy-MM-dd")
+            val date: Date = format.parse(str)
+            return (date.year+1900).toString()
+        }
+
+        fun dateTransformationToMonth(str : String) : String {
+            // ex) str require :  2021-10-21T14:27:47.134Z
+
+            val format = SimpleDateFormat("yyyy-MM-dd")
+            val date: Date = format.parse(str)
+
+            return (date.month+1).toString()
+        }
+
+        fun dateTransformationToDay(str : String) : String {
+            // ex) str require :  2021-10-21T14:27:47.134Z
+            val format = SimpleDateFormat("yyyy-MM-dd")
+            val date: Date = format.parse(str)
+            Log.e("nn",date.day.toString())
+            return (date.day+17).toString()
+        }
+
+    }
 
 
 }

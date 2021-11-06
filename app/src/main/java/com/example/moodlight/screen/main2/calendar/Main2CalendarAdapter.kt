@@ -1,7 +1,6 @@
 package com.example.moodlight.screen.main2.calendar
 
 import android.graphics.Color
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,7 +15,7 @@ class Main2CalendarAdapter (val viewModel : Main2CalendarViewModel) :
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CalendarViewHolder {
         val context = parent.context
-        val view = LayoutInflater.from(context).inflate(R.layout.item_calendar_day,
+        val view = LayoutInflater.from(context).inflate(R.layout.column_calendar_day,
             parent, false)
 
         return CalendarViewHolder(view)

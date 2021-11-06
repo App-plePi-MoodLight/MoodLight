@@ -35,7 +35,7 @@ class CommunityActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        refresh()
+        initRecycler()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -95,12 +95,15 @@ class CommunityActivity : AppCompatActivity() {
 
     private fun refresh() {
         binding.swipeLayout.setOnRefreshListener {
-            isNext = true
-            adapter.removeAll()
-            viewModel.refresh()
+            initRecycler()
             binding.swipeLayout.isRefreshing = false
         }
     }
 
+    private fun initRecycler(){
+        isNext = true
+        adapter.removeAll()
+        viewModel.refresh()
+    }
 
 }

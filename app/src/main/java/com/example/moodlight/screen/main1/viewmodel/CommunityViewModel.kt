@@ -38,6 +38,7 @@ class CommunityViewModel(application: Application) : ViewModel() {
     init {
         id.value = null
         todayQuestion.value = ""
+        answerList.value = ArrayList()
         buttonMood.value = MoodUtilCode.setButtonMood(application.applicationContext)
         getQuestion()
     }

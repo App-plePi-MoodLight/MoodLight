@@ -12,17 +12,26 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MoodLight">
-
         <activity android:name=".screen.main1.CommunityActivity"/>
         <activity android:name=".screen.main1.PickMoodActivity"/>
         <activity android:name=".screen.main1.CommentActivity"/>
         <activity android:name=".screen.main3.setting.SettingActivity" />
         <activity android:name=".screen.main1.AnswerActivity"/>
-
+        <activity
+            android:name=".screen.main2.DetailAnswerActivity"
+            android:exported="false" />
+        <activity
+            android:name=".screen.main3.setting.ChangePasswordActivity"
+            android:exported="false" />
+        <activity android:name=".screen.main1.AnswerActivity" />
+        <activity android:name=".screen.main1.CommunityActiviy" />
+        <activity android:name=".screen.main1.CommunityMainActivity" />
+        <activity android:name=".screen.main1.CommentActivity" />
+        <activity android:name=".screen.main3.setting.SettingActivity" />
         <activity android:name=".screen.onboarding.OnboardingActivity" />
-        <activity android:name="com.example.moodlight.screen.mainstatics.MainStatisticsFragment"
+        <activity
+            android:name=".screen.mainstatics.MainStatisticsFragment"
             tools:ignore="Instantiatable" />
-
         <activity android:name=".screen.initial.InitialActivity" />
         <activity android:name=".screen.register.RegisterActivity" />
         <activity android:name=".screen.splash.SplashActivity">

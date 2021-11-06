@@ -185,49 +185,67 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <EditText
+            <TextView
                 android:id="@+id/defaultPwEt"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="50dp"
                 android:layout_marginTop="10dp"
                 android:background="@drawable/setting_edittext"
+                android:gravity="center_vertical"
                 android:inputType="textPassword"
-                android:hint="기존의 비밀번호를 입력해주세요."
                 android:paddingLeft="10dp"
-                android:textSize="15sp"
-                app:layout_constraintEnd_toEndOf="parent"
+                android:text="**********"
+                app:layout_constraintWidth_percent="0.6"
+
+                android:textSize="20sp"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView23" />
 
-            <EditText
-                android:id="@+id/newPwEt"
-                android:layout_width="match_parent"
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/passwordChangeBtn"
+                android:layout_width="0dp"
                 android:layout_height="50dp"
-                android:layout_marginTop="10dp"
-                android:background="@drawable/setting_edittext"
-                android:hint="새로운 비밀번호를 입력해주세요."
-                android:inputType="textPassword"
-                android:paddingLeft="10dp"
-                android:textSize="15sp"
-                android:theme="@style/editText"
+                android:layout_marginRight="2dp"
+                android:layout_marginLeft="10dp"
+                android:background="@drawable/setting_button"
+                android:backgroundTint="#fff"
+                android:elevation="0dp"
+                android:text="비밀번호 변경"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/defaultPwEt" />
+                app:layout_constraintStart_toEndOf="@+id/defaultPwEt"
+                app:layout_constraintTop_toTopOf="@+id/defaultPwEt" />
 
-            <EditText
-                android:id="@+id/newPwAgainEt"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_marginTop="10dp"
-                android:background="@drawable/setting_edittext"
-                android:hint="새로운 비밀번호를 입력해주세요."
-                android:inputType="textPassword"
-                android:paddingLeft="10dp"
-                android:textSize="15sp"
-                android:theme="@style/editText"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/newPwEt" />
+<!--            <EditText-->
+<!--                android:id="@+id/newPwEt"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="50dp"-->
+<!--                android:layout_marginTop="10dp"-->
+<!--                android:background="@drawable/setting_edittext"-->
+<!--                android:hint="새로운 비밀번호를 입력해주세요."-->
+<!--                android:inputType="textPassword"-->
+<!--                android:paddingLeft="10dp"-->
+<!--                android:textSize="15sp"-->
+<!--                android:theme="@style/editText"-->
+<!--                app:layout_constraintEnd_toEndOf="parent"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintTop_toBottomOf="@+id/defaultPwEt" />-->
+
+<!--            <EditText-->
+<!--                android:id="@+id/newPwAgainEt"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="50dp"-->
+<!--                android:layout_marginTop="10dp"-->
+<!--                android:background="@drawable/setting_edittext"-->
+<!--                android:hint="새로운 비밀번호를 입력해주세요."-->
+<!--                android:inputType="textPassword"-->
+<!--                android:paddingLeft="10dp"-->
+<!--                android:textSize="15sp"-->
+<!--                android:theme="@style/editText"-->
+<!--                app:layout_constraintEnd_toEndOf="parent"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintTop_toBottomOf="@+id/newPwEt" />-->
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.appcompat.widget.AppCompatButton
@@ -288,25 +306,25 @@
             app:layout_constraintTop_toBottomOf="@+id/constraintLayout4"
             app:layout_constraintWidth_percent="0.85">
 
-            <ImageView
-                android:id="@+id/imageView4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/img_danger"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+<!--            <ImageView-->
+<!--                android:id="@+id/imageView4"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:src="@drawable/img_danger"-->
+<!--                app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintTop_toTopOf="parent" />-->
 
-            <TextView
-                android:id="@+id/dangerPwTv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:text="이미 존재하는 닉네임입니다."
-                android:textColor="#FD3939"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/imageView4"
-                app:layout_constraintTop_toTopOf="parent" />
+<!--            <TextView-->
+<!--                android:id="@+id/dangerPwTv"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginLeft="10dp"-->
+<!--                android:text="이미 존재하는 닉네임입니다."-->
+<!--                android:textColor="#FD3939"-->
+<!--                app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                app:layout_constraintStart_toEndOf="@+id/imageView4"-->
+<!--                app:layout_constraintTop_toTopOf="parent" />-->
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

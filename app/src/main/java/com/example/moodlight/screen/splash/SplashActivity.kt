@@ -1,5 +1,6 @@
 package com.example.moodlight.screen.splash
 
+import android.content.ContentValues.TAG
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
@@ -40,54 +41,53 @@ class SplashActivity : AppCompatActivity() {
         var password: String? = null
 
         CoroutineScope(Dispatchers.IO).launch {
-            id = db!!.userDao().getId()
-            password = db!!.userDao().getPassword()
+                id = db!!.userDao().getId()
+                password = db!!.userDao().getPassword()
         }
 
         val handler: Handler = Handler()
 
         handler.postDelayed(Runnable {
+            Log.d(TAG, "onCreate: ${id} ${password}")
+                if (id != null && password != null) {
 
 
-            if (id != null && password != null) {
+                    val loginModel: LoginModel = LoginModel(id!!, password!!)
+                    ServerClient.getApiService().login(loginModel)
+                        .enqueue(object : Callback<LoginModel> {
 
+                            override fun onResponse(
+                                call: Call<LoginModel>,
+                                response: Response<LoginModel>
+                            ) {
+                                if (response.isSuccessful) {
+                                    ServerClient.accessToken = response.body()!!.accessToken
+                                    // Sign in success, update UI with the signed-in user's information
 
-                val loginModel: LoginModel = LoginModel(id!!, password!!)
-                ServerClient.getApiService().login(loginModel)
-                    .enqueue(object : Callback<LoginModel> {
-
-                        override fun onResponse(
-                            call: Call<LoginModel>,
-                            response: Response<LoginModel>
-                        ) {
-                            if (response.isSuccessful) {
-                                ServerClient.accessToken = response.body()!!.accessToken
-                                // Sign in success, update UI with the signed-in user's information
-
-                                Log.d("Login", "signInWithEmail:success")
-                                val intent: Intent =
-                                    Intent(applicationContext, MainActivity::class.java)
-                                startActivity(intent)
-                                finish()
-                            } else {
-                                Log.e("z",response.code().toString())
+                                    Log.d("Login", "signInWithEmail:success")
+                                    val intent: Intent =
+                                        Intent(applicationContext, MainActivity::class.java)
+                                    startActivity(intent)
+                                    finish()
+                                } else {
+                                    Log.e("z",response.code().toString())
+                                }
                             }
-                        }
 
-                        /**
-                         * Invoked when a network exception occurred talking to the server or when an unexpected exception
-                         * occurred creating the request or processing the response.
-                         */
-                        override fun onFailure(call: Call<LoginModel>, t: Throwable) {
-                            t.printStackTrace()
-                        }
-                    })
-            } else {
+                            /**
+                             * Invoked when a network exception occurred talking to the server or when an unexpected exception
+                             * occurred creating the request or processing the response.
+                             */
+                            override fun onFailure(call: Call<LoginModel>, t: Throwable) {
+                                t.printStackTrace()
+                            }
+                        })
+                } else {
 
-                intent = Intent(applicationContext, OnboardingActivity::class.java)
-                startActivity(intent)
-                finish()
-            }
+                    intent = Intent(applicationContext, OnboardingActivity::class.java)
+                    startActivity(intent)
+                    finish()
+                }
 
         }, 2500)
 

@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <import type="com.example.moodlight.util.DataType"/>
+
+        <variable
+            name="activity"
+            type="com.example.moodlight.screen.main1.PickMoodActivity" />
+        <variable
+            name="viewModel"
+            type="com.example.moodlight.screen.main1.viewmodel.PickMoodViewModel" />
+
+    </data>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".screen.main1.CommunityActiviy">
+
+        <ImageView
+            android:id="@+id/pickMoodBackground"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_night1"
+            android:scaleType="centerCrop"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_star"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_starline"
+            android:scaleType="centerCrop"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:paddingBottom="10dp"
+            android:elevation="3dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_night2"
+            app:layout_constraintBottom_toBottomOf="@id/pickMoodBackground"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="45dp"
+            android:src="@drawable/ic_moon"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <TextView
+            android:id="@+id/pickMoodTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="오늘의 기분은 어떠세요?"
+            android:textColor="#000000"
+            android:textSize="17sp"
+            android:fontFamily="@font/roboto_bold"
+            app:layout_constraintBottom_toTopOf="@id/pickMoodNextButton"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:id="@+id/pickMoodLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/pickMoodTitle">
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="18dp">
+                <ImageButton
+                    android:id="@+id/pickMoodHappy"
+                    android:layout_width="82dp"
+                    android:layout_height="82dp"
+                    android:background="#00000000"
+                    android:src="@drawable/icon_happy"
+                    android:onClick="@{() -> viewModel.setMood(DataType.HAPPY_MOOD)}"
+                    />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_gravity="center"
+                    android:text="행복"
+                    android:textSize="15sp"
+                    android:textColor="#000000"
+                    android:fontFamily="@font/roboto_medium"
+                    />
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="18dp">
+                <ImageButton
+                    android:id="@+id/pickMoodMad"
+                    android:layout_width="82dp"
+                    android:layout_height="82dp"
+                    android:background="#00000000"
+                    android:src="@drawable/icon_mad"
+                    android:onClick="@{() -> viewModel.setMood(DataType.MAD_MOOD)}"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="10dp"
+                    android:fontFamily="@font/roboto_medium"
+                    android:text="분노"
+                    android:textColor="#000000"
+                    android:textSize="15sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="18dp">
+
+                <ImageButton
+                    android:id="@+id/pickMoodSad"
+                    android:layout_width="82dp"
+                    android:layout_height="82dp"
+                    android:background="#00000000"
+                    android:src="@drawable/icon_sad"
+                    android:onClick="@{() -> viewModel.setMood(DataType.SAD_MOOD)}"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_gravity="center"
+                    android:text="슬픔"
+                    android:textSize="15sp"
+                    android:textColor="#000000"
+                    android:fontFamily="@font/roboto_medium"
+                    />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/pickMoodNextButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginBottom="30dp"
+            android:background="@{viewModel.buttonMood}"
+            android:fontFamily="@font/roboto_bold"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp"
+            android:text="입장하기"
+            android:textSize="15sp"
+            android:textColor="#ffffff"
+            android:onClick="@{activity::access}"
+            app:cornerRadius="7dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

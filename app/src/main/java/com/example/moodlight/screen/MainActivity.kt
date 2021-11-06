@@ -12,7 +12,8 @@ import com.example.moodlight.dialog.LogoutDialog
 import com.example.moodlight.dialog.LogoutDialogInterface
 import com.example.moodlight.screen.mainstatics.MainStatisticsFragment
 import com.example.moodlight.screen.initial.InitialActivity
-import com.example.moodlight.screen.main1.CommunityActiviy
+import com.example.moodlight.screen.main1.CommunityActivity
+import com.example.moodlight.screen.main1.PickMoodActivity
 import com.example.moodlight.screen.main2.MainFragment2
 import com.example.moodlight.screen.main3.MainFragment3
 import com.example.moodlight.util.FirebaseUtil
@@ -66,7 +67,7 @@ class MainActivity : AppCompatActivity(), CommonDialogInterface, LogoutDialogInt
             }
         }
         findViewById<FloatingActionButton>(R.id.faBtn).setOnClickListener {
-            startActivity(Intent(this, CommunityActiviy::class.java))
+            startActivity(Intent(this, PickMoodActivity::class.java))
             //병주 클래스
         }
     }

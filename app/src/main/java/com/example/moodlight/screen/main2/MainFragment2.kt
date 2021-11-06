@@ -134,7 +134,7 @@ class MainFragment2 : Fragment() {
 
     private fun dataLoding() {
         CoroutineScope(Dispatchers.IO).launch { 
-            ServerClient.getApiService().getMyAnswer(0, 300)
+            ServerClient.getApiService().getMyAllAnswer()
                 .enqueue(object : Callback<MyAnswerListModel> {
                     @SuppressLint("NotifyDataSetChanged")
                     override fun onResponse(

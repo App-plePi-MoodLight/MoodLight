@@ -62,6 +62,9 @@ class SplashActivity : AppCompatActivity() {
                             ) {
                                 if (response.isSuccessful) {
                                     ServerClient.accessToken = response.body()!!.accessToken
+
+                                    Log.e("token", response.body()!!.accessToken)
+
                                     // Sign in success, update UI with the signed-in user's information
 
                                     Log.d("Login", "signInWithEmail:success")

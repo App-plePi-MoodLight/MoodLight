@@ -86,7 +86,6 @@ class RegisterFragment4 : Fragment() {
         }
 
 
-
         return binding.root
     }
 
@@ -113,10 +112,10 @@ class RegisterFragment4 : Fragment() {
     }
 
     private fun saveLoginData() : Unit {
-        val userDataBase : UserDatabase = UserDatabase.getInstance(requireContext())!!
+        val db = UserDatabase.getInstance(requireContext())
         CoroutineScope(Dispatchers.IO).launch {
             val userData: UserData = UserData(viewModel.email.value!!, viewModel.password.value!!)
-            userDataBase.userDao().insert(userData)
+            db!!.userDao().insert(userData)
         }
     }
 

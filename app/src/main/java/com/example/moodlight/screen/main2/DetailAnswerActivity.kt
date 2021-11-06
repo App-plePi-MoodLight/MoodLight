@@ -31,8 +31,7 @@ import kotlin.collections.ArrayList
 class DetailAnswerActivity : AppCompatActivity() {
 
     private var limitPage : Int = 10
-    private var startPage : Int = 0
-    private var correntId : Int = 1
+    private var correntId : Int = -1
     private var isLoding : Boolean = false
     private val commentList : ArrayList<AnswerCommentModel?> = ArrayList()
     private lateinit var binding: ActivityDetailAnswerBinding
@@ -53,8 +52,6 @@ class DetailAnswerActivity : AppCompatActivity() {
 
                 if(!isLoding){
                     if((recyclerView.layoutManager as LinearLayoutManager?)!!.findLastVisibleItemPosition() == commentList.size-1){
-                        limitPage+=10
-                        startPage+=10
                         lodingData()
                         this@DetailAnswerActivity.isLoding = true
                     }
@@ -71,8 +68,8 @@ class DetailAnswerActivity : AppCompatActivity() {
     private fun lodingData() {
         CoroutineScope(Dispatchers.IO).launch {
             ServerClient.getApiService().getMyAnswerComment(intentData.id.toString(),
-                this@DetailAnswerActivity.startPage,
-                this@DetailAnswerActivity.limitPage
+                correntId,
+                10
             )
                 .enqueue(object : Callback<ArrayList<AnswerCommentModel>>{
                     @SuppressLint("NotifyDataSetChanged")
@@ -102,6 +99,7 @@ class DetailAnswerActivity : AppCompatActivity() {
                                 binding.recycler.adapter!!.notifyDataSetChanged()
                                 AnswerCommentAdapter(commentList).deletLodingItem()
                             }
+                            correntId = commentList[commentList.lastIndex-1]!!.id
                         }
                         else{
                             Toast.makeText(this@DetailAnswerActivity, "댓글 리스트를 불러오는데에 실패하였습니다.2", Toast.LENGTH_SHORT).show()

@@ -84,9 +84,12 @@ interface ApiService {
     @GET("answer/my")
     fun getMyAnswer(@Query("skip") skip : Int, @Query("take") take : Int) : Call<MyAnswerListModel>
 
+    @GET("answer/my/all")
+    fun getMyAllAnswer() : Call<MyAnswerListModel>
+
     @GET("comment/{questionId}")
     fun getMyAnswerComment(@Path("questionId")questionId : String,
-                           @Query("skip") skip : Int, @Query("take") take : Int) : Call<ArrayList<AnswerCommentModel>>
+                           @Query("start") skip : Int, @Query("take") take : Int) : Call<ArrayList<AnswerCommentModel>>
   
     @GET("answer/count/{activate_date}")
     fun getMoodCount(@Path("activate_date") date: String) : Call<MoodCountModel>

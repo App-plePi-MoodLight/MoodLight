@@ -130,6 +130,9 @@ class MainFragment2 : Fragment() {
         if(list.isEmpty()){
             dataLoding()
         }
+        else{
+            setAdapter()
+        }
 
 
 
@@ -154,21 +157,13 @@ class MainFragment2 : Fragment() {
                                     list.removeAt(list.lastIndex)
                                     processingData(result)
                                     requireActivity().runOnUiThread {
-                                        binding.recycler.adapter = DateAdapter(requireContext(), list){data ->
-                                            startActivity(Intent(requireActivity(), DetailAnswerActivity::class.java)
-                                                .putExtra("data", data))
-                                        }
-                                        binding.recycler.setHasFixedSize(true)
+                                        setAdapter()
                                     }
                                 }
                                 else{
                                     processingData(result)
                                     requireActivity().runOnUiThread {
-                                        binding.recycler.adapter = DateAdapter(requireContext(), list){data ->
-                                            startActivity(Intent(requireActivity(), DetailAnswerActivity::class.java)
-                                                .putExtra("data", data))
-                                        }
-                                        binding.recycler.setHasFixedSize(true)
+                                        setAdapter()
                                     }
                                 }
                             }
@@ -196,6 +191,14 @@ class MainFragment2 : Fragment() {
 //            list.add(DateClass("4월 16일", data))
 //            Log.d(TAG, "onActivityCreated: 내 리스트 data$data $list")
 //        }
+    }
+
+    private fun setAdapter() {
+        binding.recycler.adapter = DateAdapter(requireContext(), list){data ->
+            startActivity(Intent(requireActivity(), DetailAnswerActivity::class.java)
+                .putExtra("data", data))
+        }
+        binding.recycler.setHasFixedSize(true)
     }
 
     private fun processingData(result: MyAnswerListModel?){

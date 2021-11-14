@@ -35,10 +35,11 @@
         <entry key="..\:/Users/OIS/AndroidStudioProjects/MoodLightApplication/app/src/main/res/layout/row_diary_main.xml" value="0.3374094202898551" />
         <entry key="..\:/Users/OIS/AndroidStudioProjects/MoodLightApplication/app/src/main/res/layout/row_diary_sub.xml" value="0.3374094202898551" />
         <entry key="..\:/Users/OIS/AndroidStudioProjects/MoodLightApplication/app/src/main/res/menu/menu.xml" value="0.28888888888888886" />
+        <entry key="..\:/Users/Zen/AndroidStudioProjects/MoodLightApplication2/app/src/main/res/layout/activity_pcik_mood.xml" value="0.264" />
       </map>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">

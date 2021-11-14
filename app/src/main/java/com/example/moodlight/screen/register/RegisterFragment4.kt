@@ -1,8 +1,10 @@
 package com.example.moodlight.screen.register
 
+import android.content.ContentValues
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,6 +18,7 @@ import com.example.moodlight.api.ServerClient
 import com.example.moodlight.database.UserData
 import com.example.moodlight.database.UserDatabase
 import com.example.moodlight.databinding.FragmentRegister4Binding
+import com.example.moodlight.model.LoginModel
 import com.example.moodlight.model.RegisterConfirmModel
 import com.example.moodlight.screen.MainActivity
 import com.example.moodlight.screen.initial.InitialActivity
@@ -68,9 +71,7 @@ class RegisterFragment4 : Fragment() {
                             if (response.isSuccessful) {
                                 saveLoginData()
                                 val intent : Intent = Intent(requireContext(), MainActivity::class.java)
-                                startActivity(intent)
-                                initialActivity.finish()
-                                requireActivity().finish()
+                                login()
                             } else {
                                 Toast.makeText(requireContext(), response.code().toString(), Toast.LENGTH_SHORT).show()
                             }
@@ -117,6 +118,37 @@ class RegisterFragment4 : Fragment() {
             val userData: UserData = UserData(viewModel.email.value!!, viewModel.password.value!!)
             db!!.userDao().insert(userData)
         }
+    }
+
+    private fun login() : Unit {
+        val loginModel : LoginModel = LoginModel(viewModel.email.value!!, viewModel.password.value!!)
+        ServerClient.getApiService().login(loginModel)
+            .enqueue(object : Callback<LoginModel> {
+
+                override fun onResponse(
+                    call: Call<LoginModel>,
+                    response: Response<LoginModel>
+                ) {
+                    if (response.isSuccessful) {
+                        ServerClient.accessToken = response.body()!!.accessToken
+                        Log.e("zxbzfbsd", response.body()!!.accessToken)
+                        // Sign in success, update UI with the signed-in user's information
+
+                        Log.d("Login", "signInWithEmail:success")
+                        val intent : Intent = Intent(requireContext(), MainActivity::class.java)
+                        startActivity(intent)
+                        initialActivity.finish()
+                        requireActivity().finish()
+
+                    } else {
+                        Log.d(ContentValues.TAG, "onResponse: respone : ${response}")
+                    }
+                }
+
+                override fun onFailure(call: Call<LoginModel>, t: Throwable) {
+                    t.printStackTrace()
+                }
+            })
     }
 
 }

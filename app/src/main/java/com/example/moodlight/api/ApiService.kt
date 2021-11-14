@@ -99,4 +99,15 @@ interface ApiService {
 
     @GET("answer/my/all")
     fun getMyAnswerAll() : Call<MyAnswerModel>
+
+    @POST("auth/find-password")
+    fun findPassword(@Body email : String) : Call<SuccessResponseModel>
+
+    @POST("auth/confirm-find-password")
+    fun confirmFindPassword(@Body confirmFindPasswordModel: ConfirmFindPasswordModel) : Call<SuccessResponseModel>
+
+    @POST("auth/confirm-check")
+    fun checkConfirm(@Body confirmCheckModel: ConfirmCheckModel) : Call<SuccessResponseModel>
+
+
 }

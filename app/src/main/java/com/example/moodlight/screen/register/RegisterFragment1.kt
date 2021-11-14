@@ -2,7 +2,6 @@ package com.example.moodlight.screen.register
 
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
@@ -17,10 +16,6 @@ import com.example.moodlight.api.ServerClient
 import com.example.moodlight.databinding.FragmentRegister1Binding
 import com.example.moodlight.model.IsExistModel
 import com.example.moodlight.util.Expression
-import com.example.moodlight.util.FirebaseUtil
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -40,18 +35,6 @@ class RegisterFragment1 : Fragment() {
             container, false)
         binding.viewModel = viewModel
         binding.lifecycleOwner = requireActivity()
-        lateinit var emailArray : ArrayList<String>
-
-        CoroutineScope(Dispatchers.IO).launch {
-            FirebaseUtil.getFireStoreInstance().collection("users")
-                .document("Storage")
-                .get()
-                .addOnSuccessListener {
-                    emailArray = it.get("emailArray")!! as ArrayList<String>
-                    Log.e("test",emailArray[0])
-                }
-        }
-
 
         viewModel.email.observe( requireActivity(), Observer {
             // it is email.

@@ -1,6 +1,5 @@
 package com.example.moodlight.screen.register
 
-import android.content.ContentValues.TAG
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
@@ -17,10 +16,9 @@ import com.example.moodlight.R
 import com.example.moodlight.api.ServerClient
 import com.example.moodlight.database.UserData
 import com.example.moodlight.databinding.FragmentRegister3Binding
-import com.example.moodlight.hash.sha
+import com.example.moodlight.model.IsExistModel
 import com.example.moodlight.model.JoinBodyModel
 import com.example.moodlight.screen.initial.InitialActivity
-import com.example.moodlight.util.FirebaseUtil
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -48,26 +46,34 @@ class RegisterFragment3 : Fragment() {
         binding.viewModel = viewModel
         lateinit var nicknameArray: ArrayList<String>
 
-
-
-        Log.d(TAG, "onCreateView: 비밀번호 ${sha.encryptSHA(viewModel.password.value)}")
-
-        CoroutineScope(Dispatchers.IO).launch {
-            FirebaseUtil.getFireStoreInstance().collection("users")
-                .document("Storage")
-                .get()
-                .addOnSuccessListener {
-                    nicknameArray = it.get("nicknameArray")!! as ArrayList<String>
-                }
-
-        }
-
-
         viewModel.nickname.observe(requireActivity(), Observer {
 
 
             if (!it.equals("")) {
-                setActive()
+
+                ServerClient.getApiService().isExistNickname(it)
+                    .enqueue(object : Callback<IsExistModel> {
+
+                        override fun onResponse(
+                            call: Call<IsExistModel>,
+                            response: Response<IsExistModel>
+                        ) {
+                            if (response.isSuccessful) {
+                                val isExistNickname : Boolean = response.body()!!.exist
+
+                                if (isExistNickname)
+                                    setOverlapInActive()
+                                else
+                                    setActive()
+                            }
+                        }
+
+                        override fun onFailure(call: Call<IsExistModel>, t: Throwable) {
+                            t.printStackTrace()
+                        }
+
+                    })
+
             } else
                 setFailureInActive()
 

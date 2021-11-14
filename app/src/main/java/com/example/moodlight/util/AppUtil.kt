@@ -10,17 +10,27 @@ import java.util.*
 class AppUtil {
     companion object {
         fun getNowDate(): String {
-            val now =  System.currentTimeMillis()
+/*            val now =  System.currentTimeMillis()
             val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.KOREAN).format(now)
-            return simpleDateFormat
+            return simpleDateFormat*/
+            val calendar = Calendar.getInstance()
+            calendar.add(Calendar.DAY_OF_YEAR, +1)
+            val date = calendar.time
+            val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.KOREA)
+            val today = sdf.format(date)
+
+            return today
+
         }
         fun getLastDate() : String {
-            val calendar = Calendar.getInstance()
-            calendar.add(Calendar.DAY_OF_YEAR, -1)
-            val timeToDate = calendar.time
-            val formatter = SimpleDateFormat("yyyy-MM-dd")
 
-            return formatter.format(timeToDate)
+            val calendar = Calendar.getInstance()
+            var dDate = calendar.time
+            val dSdf = SimpleDateFormat("yyyy-MM-dd", Locale.KOREA)
+
+            val yesterday = dSdf.format(dDate)
+
+            return yesterday
         }
         fun getNowYear(): Int {
             val calendar = Calendar.getInstance()

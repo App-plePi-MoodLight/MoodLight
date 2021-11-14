@@ -112,7 +112,12 @@ class MainFragment2 : Fragment() {
                     response: Response<MyAnswerModel>
                 ) {
                     if (response.isSuccessful) {
-                        myAnswerList = response.body()!!
+                        if (response.body() == null) {
+                            myAnswerList = MyAnswerModel()
+                        }
+                        else {
+                            myAnswerList = response.body()!!
+                        }
                         setUi()
                     }
                     else {

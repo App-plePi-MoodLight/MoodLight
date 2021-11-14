@@ -128,6 +128,7 @@ class MainStatisticsFragment : Fragment() {
     }
 
     private fun setLastQuestion() {
+        Log.e("xx",AppUtil.getLastDate())
         ServerClient.getApiService().getQuestion(AppUtil.getLastDate())
             .enqueue(object : Callback<QuestionResponseModel> {
 

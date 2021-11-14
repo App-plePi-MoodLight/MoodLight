@@ -48,7 +48,7 @@ class SplashActivity : AppCompatActivity() {
         val handler: Handler = Handler()
 
         handler.postDelayed(Runnable {
-            Log.d(TAG, "onCreate: ${id} ${password}")
+            Log.e(TAG, "onCreate: ${id} ${password}")
                 if (id != null && password != null) {
 
 

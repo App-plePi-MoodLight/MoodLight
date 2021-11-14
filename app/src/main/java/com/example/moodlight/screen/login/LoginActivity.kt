@@ -16,6 +16,7 @@ import com.example.moodlight.database.UserData
 import com.example.moodlight.database.UserDatabase
 import com.example.moodlight.model.LoginModel
 import com.example.moodlight.screen.MainActivity
+import com.example.moodlight.screen.findpassword.FindPasswordActivity
 import com.example.moodlight.screen.initial.InitialActivity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -64,13 +65,8 @@ class LoginActivity : AppCompatActivity() {
                                     Log.e("a",userData.id)
 
                                     CoroutineScope(Dispatchers.IO).launch {
-                                        if ( db!!.userDao().getUserFromUserLoginTable() != null)
-                                            db.userDao().update(userData)
-
-                                        else
-                                          db!!.userDao().insert(userData)
-
-                                        Log.e("asdf",userData.toString())
+                                        db!!.userDao().insert(userData)
+                                        Log.e("asdf", userData.toString())
 
                                     }
 
@@ -93,6 +89,11 @@ class LoginActivity : AppCompatActivity() {
                         })
                 }
             }
+        }
+
+        findViewById<TextView>(R.id.loginFindpasswordTv).setOnClickListener {
+            val intent : Intent = Intent(applicationContext, FindPasswordActivity::class.java)
+            startActivity(intent)
         }
 
     }

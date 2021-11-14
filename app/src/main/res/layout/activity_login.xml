@@ -90,5 +90,19 @@
         app:layout_constraintStart_toEndOf="@id/loginErrorIv"
         app:layout_constraintTop_toBottomOf="@id/loginPasswordEtv" />
 
+    <TextView
+        android:id="@+id/loginFindpasswordTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="비밀번호 찾기"
+        android:textColor="#b0b0b0"
+        android:fontFamily="@font/roboto_medium"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/loginBtn"
+        android:layout_marginTop="15sp"
+        android:padding="2sp"
+        />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

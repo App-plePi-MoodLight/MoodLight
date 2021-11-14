@@ -101,7 +101,7 @@ interface ApiService {
     fun getMyAnswerAll() : Call<MyAnswerModel>
 
     @POST("auth/find-password")
-    fun findPassword(@Body email : String) : Call<SuccessResponseModel>
+    fun sentFindPassword(@Body findPasswordRequestModel: FindPasswordRequestModel) : Call<SuccessResponseModel>
 
     @POST("auth/confirm-find-password")
     fun confirmFindPassword(@Body confirmFindPasswordModel: ConfirmFindPasswordModel) : Call<SuccessResponseModel>

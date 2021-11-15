@@ -10,9 +10,6 @@ import java.util.*
 class AppUtil {
     companion object {
         fun getNowDate(): String {
-/*            val now =  System.currentTimeMillis()
-            val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.KOREAN).format(now)
-            return simpleDateFormat*/
             val calendar = Calendar.getInstance()
             calendar.add(Calendar.DAY_OF_YEAR, +1)
             val date = calendar.time

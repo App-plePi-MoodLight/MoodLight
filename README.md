@@ -1,7 +1,7 @@
 # MoodLight Application
 
 ## 📚 Description
-This is MoodLight Application.
+It is an application mood light that records, talks, and shares my feelings.
 
 ## 👨‍👧‍👦 Team
 

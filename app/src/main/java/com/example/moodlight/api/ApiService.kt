@@ -100,6 +100,9 @@ interface ApiService {
     @GET("answer/my/all")
     fun getMyAnswerAll() : Call<MyAnswerModel>
 
+    @GET("/answer/my/exist/{activateDate}")
+    fun getMyAnswerExist(@Path("activateDate") activateDate: String) : Call<AnswerExistModel>
+
     @POST("auth/find-password")
     fun sentFindPassword(@Body findPasswordRequestModel: FindPasswordRequestModel) : Call<SuccessResponseModel>
 

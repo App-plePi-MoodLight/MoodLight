@@ -17,7 +17,7 @@ import retrofit2.Response
 class CommunityRepository {
     val _todayQuestion = MutableLiveData<String?>()
     val questionId = MutableLiveData<String?>()
-    val _answerList = MutableLiveData<ArrayList<AnswerItemModel?>>()
+    val _answerList = MutableLiveData<ArrayList<AnswerItemModel?>>(ArrayList())
 
     var lastId = "-1"
     private val client = ServerClient.getApiService()

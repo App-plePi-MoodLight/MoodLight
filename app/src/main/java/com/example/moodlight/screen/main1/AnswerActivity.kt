@@ -35,7 +35,6 @@ class AnswerActivity : AppCompatActivity() {
     }
 
     fun postAnswer(view: View) {
-
         val model = AnswerPostModel(
             viewModel.answer.value!!,
             viewModel.privateChecked.value!!,

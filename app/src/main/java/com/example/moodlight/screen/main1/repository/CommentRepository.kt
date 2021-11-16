@@ -10,7 +10,7 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class CommentRepository {
-    val _commentList = MutableLiveData<ArrayList<CommentModel?>>()
+    val _commentList = MutableLiveData<ArrayList<CommentModel?>>(ArrayList())
     var lastId = "-1"
     private val client = ServerClient.getApiService()
 
@@ -27,7 +27,6 @@ class CommentRepository {
                             lastId =
                                 (response.body() as ArrayList<CommentModel?>)[(response.body() as ArrayList<CommentModel?>).lastIndex]!!.id.toString()
                         }
-                        Log.d(TAG, "onResponse: $lastId")
                     }
                 }
 
@@ -38,6 +37,5 @@ class CommentRepository {
 
     fun refresh() {
         lastId = "-1"
-        _commentList.value!!.clear()
     }
 }

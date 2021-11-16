@@ -171,10 +171,6 @@ class MainFragment2 : Fragment() {
                                     }
                                 }
                             }
-                            else{
-                                list.removeAt(list.lastIndex)
-                                binding.recycler.adapter!!.notifyDataSetChanged()
-                            }
                         }
                         else{
                             Toast.makeText(requireContext(), "내 답변 리스트를 불러오는데에 실패하였습니다.", Toast.LENGTH_SHORT).show()

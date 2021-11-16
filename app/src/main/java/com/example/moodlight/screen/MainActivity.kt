@@ -148,7 +148,7 @@ class MainActivity : AppCompatActivity(), CommonDialogInterface, LogoutDialogInt
             UserDatabase.getInstance(this@MainActivity)!!.userDao().deleteUserLoginTable()
         }
         logoutDialog.dismiss()
-        startActivity(Intent(this, LoginActivity::class.java))
+        startActivity(Intent(this, InitialActivity::class.java))
         finish()
     }
 

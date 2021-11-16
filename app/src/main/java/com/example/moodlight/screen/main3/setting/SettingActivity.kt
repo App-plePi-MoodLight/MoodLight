@@ -54,9 +54,6 @@ class SettingActivity : AppCompatActivity() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_setting)
 
 
-        binding.IVBtn.setOnClickListener {
-            fileChooser()
-        }
         binding.passwordChangeBtn.setOnClickListener {
             startActivity(Intent(this, ChangePasswordActivity::class.java))
         }

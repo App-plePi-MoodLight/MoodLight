@@ -24,8 +24,8 @@ class CommentViewModel(application: Application,private val answerId: Int) : Vie
         get() = commentRepository._commentList
 
     init {
-        commentList.value = arrayListOf()
         commentButton.value = MoodUtilCode.setButtonMood(application.applicationContext)
+        getComment()
     }
 
     fun getComment(){
@@ -33,7 +33,8 @@ class CommentViewModel(application: Application,private val answerId: Int) : Vie
     }
 
     fun refresh(){
-        commentList.value = ArrayList()
+        commentList.value = arrayListOf()
         commentRepository.refresh()
+        getComment()
     }
 }

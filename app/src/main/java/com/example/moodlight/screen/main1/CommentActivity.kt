@@ -30,13 +30,7 @@ class CommentActivity : AppCompatActivity() {
             CommentFactory(application, intent.getIntExtra("answerId", 0))
         )[CommentViewModel::class.java]
     }
-    private var startIndex = 1
     private var adapter = CommentAdapter()
-
-    override fun onResume() {
-        super.onResume()
-        refresh()
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,7 +43,7 @@ class CommentActivity : AppCompatActivity() {
         viewModel.commentList.observe(this, Observer {
             adapter.setItem(it)
             adapter.notifyDataSetChanged()
-            if(it.size in 1..14){
+            if(it.size in 0..14){
                 isNext = false
                 adapter.removeLoading()
             }
@@ -109,8 +103,8 @@ class CommentActivity : AppCompatActivity() {
         }
     }
     private fun initRecycler(){
+        isNext = true
         adapter.removeAll()
         viewModel.refresh()
-        isNext = true
     }
 }

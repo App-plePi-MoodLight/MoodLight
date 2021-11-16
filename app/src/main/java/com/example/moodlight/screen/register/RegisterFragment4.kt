@@ -8,10 +8,10 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.moodlight.R
 import com.example.moodlight.api.ServerClient
@@ -49,13 +49,8 @@ class RegisterFragment4 : Fragment() {
         )
         binding.viewModel = viewModel
 
-        viewModel.confirmCode.observe(requireActivity(), Observer {
-            if(it != null && !it.equals("")) {
-                setActive()
-            } else {
-                setFailureInActive()
-            }
-        })
+        setSuccessAlarm(binding.register4Iv1, binding.register4Tv2,
+        "입력하신 이메일로 인증번호를 발송하였습니다.")
 
         binding.register4Btn1.setOnClickListener {
             if (binding.register4Etv1.text != null && binding.register4Etv1.text.toString() != "") {
@@ -73,7 +68,8 @@ class RegisterFragment4 : Fragment() {
                                 val intent : Intent = Intent(requireContext(), MainActivity::class.java)
                                 login()
                             } else {
-                                Toast.makeText(requireContext(), response.code().toString(), Toast.LENGTH_SHORT).show()
+                                setFailureAlarm(binding.register4Iv1, binding.register4Tv2,
+                                    "인증번호가 일치하지 않습니다.")
                             }
                         }
 
@@ -90,26 +86,25 @@ class RegisterFragment4 : Fragment() {
         return binding.root
     }
 
-    private fun setActive() {
-        binding.register4Btn1.isEnabled = true
-        if (binding.register4Tv2.visibility == View.VISIBLE) {
-            binding.register4Tv2.visibility = View.INVISIBLE
-            binding.register4Iv1.visibility = View.INVISIBLE
-
+    private fun setSuccessAlarm (imageView: ImageView, textView: TextView, alarmText : String) {
+        imageView.setImageResource(R.drawable.img_success)
+        textView.setTextColor(Color.parseColor("#009900"))
+        textView.text = alarmText
+        if (imageView.visibility == View.INVISIBLE) {
+            imageView.visibility = View.VISIBLE
+            textView.visibility = View.VISIBLE
         }
     }
 
-    private fun setFailureInActive() {
-        binding.register4Iv1.setImageResource(R.drawable.img_danger)
-        binding.register4Tv2.setTextColor(Color.parseColor("#fd3939"))
-        binding.register4Tv2.text = "인증번호를 입력해주세요."
+    private fun setFailureAlarm (imageView: ImageView, textView: TextView, alarmText : String) {
+        imageView.setImageResource(R.drawable.img_danger)
+        textView.setTextColor(Color.parseColor("#fd3939"))
+        textView.text = alarmText
 
-        if (binding.register4Tv2.visibility == View.INVISIBLE) {
-            binding.register4Tv2.visibility = View.VISIBLE
-            binding.register4Iv1.visibility = View.VISIBLE
+        if (imageView.visibility == View.INVISIBLE) {
+            imageView.visibility = View.VISIBLE
+            textView.visibility = View.VISIBLE
         }
-        if (binding.register4Btn1.isEnabled)
-            binding.register4Btn1.isEnabled = false
     }
 
     private fun saveLoginData() : Unit {

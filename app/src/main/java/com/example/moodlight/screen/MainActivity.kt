@@ -77,17 +77,11 @@ class MainActivity : AppCompatActivity(), CommonDialogInterface, LogoutDialogInt
         }
         findViewById<FloatingActionButton>(R.id.faBtn).setOnClickListener {
             startActivity(Intent(this, PickMoodActivity::class.java))
-            findViewById<FloatingActionButton>(com.example.moodlight.R.id.faBtn).setOnClickListener {
-                startActivity(Intent(this, CommunityActivity::class.java))
-                //병주 클래스
-            }
         }
-
     }
         fun changeFragment(fragment: Fragment) {
             supportFragmentManager.beginTransaction()
                 .replace(com.example.moodlight.R.id.mainFrame, fragment).commit()
-
         }
 
         fun onClickBtnInFragment(i: Int) {

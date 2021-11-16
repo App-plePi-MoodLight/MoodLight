@@ -56,47 +56,6 @@ class MainStatisticsFragment : Fragment() {
 
         AppUtil.setBaseCalendarList(ViewModelProvider(requireActivity()).get(Main2CalendarViewModel::class.java))
 
-
-/*        FirebaseUtil.getFireStoreInstance().collection("post")
-            .document("information")
-            .get()
-            .addOnCompleteListener {
-                val lastHappyCount = it.result!!.get("lastHappyCount").toString().toInt()
-                val lastMadCount = it.result!!.get("lastMadCount").toString().toInt()
-                val lastSadCount = it.result!!.get("lastSadCount").toString().toInt()
-
-                CoroutineScope(Dispatchers.Main).launch {
-                    val counts = setOf(lastHappyCount, lastMadCount, lastSadCount)
-                    when(counts.maxOrNull()) {
-                        lastHappyCount -> {
-                            binding.mainStatsLastHappyIv.layoutParams = LinearLayout.LayoutParams(getSize(), getSize())
-                            binding.lastStatsText1 = getString(R.string.happy_topic1)
-                            binding.lastStatsText2 = getRandomTopic(R.array.happy_topic)
-                        }
-                        lastMadCount -> {
-                            binding.mainStatsLastMadIv.layoutParams = LinearLayout.LayoutParams(getSize(), getSize())
-                            binding.lastStatsText1 = getString(R.string.mad_topic1)
-                            binding.lastStatsText2 = getRandomTopic(R.array.mad_topic)
-                        }
-                        lastSadCount -> {
-                            binding.mainStatsLastSadIv.layoutParams = LinearLayout.LayoutParams(getSize(), getSize())
-                            binding.lastStatsText1 = getString(R.string.sad_topic1)
-                            binding.lastStatsText2 = getRandomTopic(R.array.sad_topic)
-                        }
-                    }
-                }
-
-                binding.todayQuestion = it.result!!.get("todayQuestion") as String
-                binding.lastQuestion = it.result!!.get("lastQuestion") as String
-                binding.happySum = it.result!!.get("todayHappyCount").toString()
-                binding.madSum = it.result!!.get("todayMadCount").toString()
-                binding.sadSum = it.result!!.get("todaySadCount").toString()
-                binding.lastHappySum = it.result!!.get("lastHappyCount").toString()
-                binding.lastMadSum = it.result!!.get("lastMadCount").toString()
-                binding.lastSadSum = it.result!!.get("lastSadCount").toString()
-
-            }*/
-
         setAnimation()
 
         return binding.root
@@ -166,6 +125,8 @@ class MainStatisticsFragment : Fragment() {
                     var todaySadCount = 0
                     if (response.isSuccessful) {
                         val moodCountList : ArrayList<MoodCountModelItem> = response.body()!!
+                        Log.e("nowdate", moodCountList.toString())
+
                         if (moodCountList.size > 0 && moodCountList[0].mood != null) {
                             for (i in 0..2) {
                                 when(moodCountList[i].mood) {

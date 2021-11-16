@@ -11,7 +11,6 @@ class AppUtil {
     companion object {
         fun getNowDate(): String {
             val calendar = Calendar.getInstance()
-            calendar.add(Calendar.DAY_OF_YEAR, +1)
             val date = calendar.time
             val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.KOREA)
             val today = sdf.format(date)
@@ -22,6 +21,7 @@ class AppUtil {
         fun getLastDate() : String {
 
             val calendar = Calendar.getInstance()
+            calendar.add(Calendar.DAY_OF_YEAR, -1)
             var dDate = calendar.time
             val dSdf = SimpleDateFormat("yyyy-MM-dd", Locale.KOREA)
 

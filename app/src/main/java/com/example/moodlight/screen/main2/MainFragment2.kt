@@ -352,15 +352,13 @@ class MainFragment2 : Fragment() {
         else {
 
             // 사용자가 작성한 게시글이 존재할 시
-            for (k in 0 until calendarHelper.getEndDay()) {
+            for (k in 1 until calendarHelper.getEndDay()) {
                 var main2CalendarData : Main2CalendarData? = null
+
                 for (l in 0 until targetAnswerList.size) {
-                    Log.e("vvvvvvvvvvvvvvv",CalendarHelper.dateTransformationToDay(targetAnswerList[l].createdDate))
-/*                    try {*/
                         if (CalendarHelper.dateTransformationToDay(targetAnswerList[l].createdDate)
                                 .toInt() == k
                         ) {
-                            Log.e("zbs",targetAnswerList[l].createdDate)
                             var moodType: Int = 0
                             try {
                                 when (targetAnswerList[l].question.mood) {
@@ -368,38 +366,38 @@ class MainFragment2 : Fragment() {
                                     "sad" -> moodType = DataType.SAD_MOOD
                                     "mad" -> moodType = DataType.MAD_MOOD
                                 }
+
                                 main2CalendarData = Main2CalendarData(
                                     (k).toString(),
                                     moodType,
-                                    DataType.CURRENT_DAY
-                                )
+                                    DataType.CURRENT_DAY)
+
+
+
                             } catch (e : NullPointerException) {
                                 main2CalendarData = Main2CalendarData(
                                     (k).toString(),
                                     DataType.NONE_MOOD,
-                                    DataType.CURRENT_DAY
-                                )
-                            }
-                        }
-/*                    } catch (e : NullPointerException) {
-                        // 사용자가 작성한 게시글이 존재하지만 이번달에 작성한 게시물이 없을시
-                        main2CalendarData = Main2CalendarData(
-                        (k+1).toString(),
-                        DataType.NONE_MOOD,
-                        DataType.CURRENT_DAY)
-                    }*/
+                                    DataType.CURRENT_DAY)
 
+                            }
+
+                        }
+
+                }
+
+                if (k == 13) {
+                    Log.e("cc", "cc")
                 }
 
                 if (main2CalendarData == null) {
                     main2CalendarData = Main2CalendarData(
-                        (k+1).toString(),
+                        (k).toString(),
                         DataType.NONE_MOOD,
                         DataType.CURRENT_DAY
                     )
                 }
                 calendarViewModel.dateList.add(main2CalendarData)
-                main2CalendarData = null
             }
         }
 

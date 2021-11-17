@@ -30,6 +30,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.ArrayList
 
 class CommunityActivity : AppCompatActivity() {
 
@@ -59,7 +60,7 @@ class CommunityActivity : AppCompatActivity() {
         viewModel.answerList.observe(this) {
             adapter.setItem(it)
             adapter.notifyDataSetChanged()
-            if (it.size in 1..14) {
+            if (it.size in 0..14) {
                 isNext = false
                 adapter.removeLoading()
             }

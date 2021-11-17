@@ -352,7 +352,7 @@ class MainFragment2 : Fragment() {
         else {
 
             // 사용자가 작성한 게시글이 존재할 시
-            for (k in 1 until calendarHelper.getEndDay()) {
+            for (k in 1 .. calendarHelper.getEndDay()) {
                 var main2CalendarData : Main2CalendarData? = null
 
                 for (l in 0 until targetAnswerList.size) {
@@ -384,10 +384,6 @@ class MainFragment2 : Fragment() {
 
                         }
 
-                }
-
-                if (k == 13) {
-                    Log.e("cc", "cc")
                 }
 
                 if (main2CalendarData == null) {

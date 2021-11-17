@@ -35,7 +35,7 @@ class CalendarHelper {
     }
 
     fun getEndDay () : Int {
-        return calendar.getActualMaximum(Calendar.DAY_OF_MONTH)-1
+        return calendar.getActualMaximum(Calendar.DAY_OF_MONTH)
     }
 
     fun getEndDayOfWeek () : Int {

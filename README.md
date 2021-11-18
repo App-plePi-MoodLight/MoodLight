@@ -2,6 +2,7 @@
 
 ## 📚 Description
 It is an application mood light that records, talks, and shares my feelings.
+Version : User Application
 
 ## 👨‍👧‍👦 Team
 

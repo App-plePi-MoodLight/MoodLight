@@ -87,17 +87,6 @@ class MainFragment2 : Fragment() {
 //                }
 //            }
 //        })
-      
-/*        CoroutineScope(Dispatchers.IO).launch {
-            FirebaseUtil.getFireStoreInstance().collection("users")
-                .document(FirebaseUtil.getUid())
-                .get()
-                .addOnCompleteListener {
-                    writePostMap = it.result!!.get("writePostMap") as Map<String, *>?
-                    setUi()
-                }
-        }*/
-
 
         val adapter: Main2CalendarAdapter = Main2CalendarAdapter(calendarViewModel)
         binding.main2CalendarRecyclerView.adapter = adapter
@@ -118,9 +107,6 @@ class MainFragment2 : Fragment() {
                             myAnswerList = response.body()!!
                         }
                         setUi()
-                    }
-                    else {
-                        Log.e("cc",response.code().toString())
                     }
                 }
 

@@ -13,7 +13,6 @@ import androidx.core.view.isVisible
 import com.example.moodlight.R
 import com.example.moodlight.api.ServerClient
 import com.example.moodlight.database.UserData
-import com.example.moodlight.database.UserDatabase
 import com.example.moodlight.model.LoginModel
 import com.example.moodlight.screen.MainActivity
 import com.example.moodlight.screen.findpassword.FindPasswordActivity
@@ -32,9 +31,6 @@ class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
-
-
-        val db = UserDatabase.getInstance(applicationContext)
 
         findViewById<AppCompatButton>(R.id.loginBtn).setOnClickListener {
 

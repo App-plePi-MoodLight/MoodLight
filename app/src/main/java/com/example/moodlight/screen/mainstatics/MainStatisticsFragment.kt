@@ -188,30 +188,40 @@ class MainStatisticsFragment : Fragment() {
                             }
 
                             CoroutineScope(Dispatchers.Main).launch {
-                                val counts = setOf(lastHappyCount, lastMadCount, lastSadCount)
-                                when (counts.maxOrNull()) {
-                                    lastHappyCount -> {
-                                        binding.mainStatsLastHappyIv.layoutParams =
-                                            LinearLayout.LayoutParams(getSize(), getSize())
-                                        binding.lastStatsText1 = getString(R.string.happy_topic1)
-                                        binding.lastStatsText2 = getRandomTopic(R.array.happy_topic)
-                                    }
-                                    lastMadCount -> {
-                                        binding.mainStatsLastMadIv.layoutParams =
-                                            LinearLayout.LayoutParams(getSize(), getSize())
-                                        binding.lastStatsText1 = getString(R.string.mad_topic1)
-                                        binding.lastStatsText2 = getRandomTopic(R.array.mad_topic)
-                                    }
-                                    lastSadCount -> {
-                                        binding.mainStatsLastSadIv.layoutParams =
-                                            LinearLayout.LayoutParams(getSize(), getSize())
-                                        binding.lastStatsText1 = getString(R.string.sad_topic1)
-                                        binding.lastStatsText2 = getRandomTopic(R.array.sad_topic)
+                                if (lastHappyCount <= 0 && lastMadCount <= 0 && lastSadCount <= 0) {
+                                    binding.lastStatsText1 = ""
+                                    binding.lastStatsText2 = ""
+                                }
+                                else {
+                                    val counts = setOf(lastHappyCount, lastMadCount, lastSadCount)
+                                    when (counts.maxOrNull()) {
+                                        lastHappyCount -> {
+                                            binding.mainStatsLastHappyIv.layoutParams =
+                                                LinearLayout.LayoutParams(getSize(), getSize())
+                                            binding.lastStatsText1 =
+                                                getString(R.string.happy_topic1)
+                                            binding.lastStatsText2 =
+                                                getRandomTopic(R.array.happy_topic)
+                                        }
+                                        lastMadCount -> {
+                                            binding.mainStatsLastMadIv.layoutParams =
+                                                LinearLayout.LayoutParams(getSize(), getSize())
+                                            binding.lastStatsText1 = getString(R.string.mad_topic1)
+                                            binding.lastStatsText2 =
+                                                getRandomTopic(R.array.mad_topic)
+                                        }
+                                        lastSadCount -> {
+                                            binding.mainStatsLastSadIv.layoutParams =
+                                                LinearLayout.LayoutParams(getSize(), getSize())
+                                            binding.lastStatsText1 = getString(R.string.sad_topic1)
+                                            binding.lastStatsText2 =
+                                                getRandomTopic(R.array.sad_topic)
+                                        }
                                     }
                                 }
                             }
                         } else {
-                            binding.lastStatsText1 = "어제는 아무 게시물이 올라오지 않았어요."
+                            binding.lastStatsText1 = "어제는 아무 게시물도 올라오지 않았어요."
                             binding.lastStatsText2 = ""
                         }
 

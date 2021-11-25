@@ -91,8 +91,8 @@ class FindPasswordFragment1 : Fragment() {
                     call: Call<SuccessResponseModel>,
                     response: Response<SuccessResponseModel>
                 ) {
+                    loading.dismiss()
                     if(response.isSuccessful) {
-                        loading.dismiss()
                         AppUtil.setSuccessAlarm(binding.findpasswordErrorIv1, binding.findpasswordErrorTv1
                             , "인증번호를 전송하였습니다.")
                         visibleConfirmView()
@@ -101,7 +101,12 @@ class FindPasswordFragment1 : Fragment() {
                         binding.findpasswordConfirmBtn.isEnabled = false
                         binding.findpasswordChangeBtn.isEnabled = true
                     }
+                    else if (response.code() == 409) {
+                        AppUtil.setFailureAlarm(binding.findpasswordErrorIv1, binding.findpasswordErrorTv1
+                            , "가입하지 않은 이메일입니다.")
+                    }
                     else {
+
                         Toast.makeText(requireContext(), "error : ${response.code()}", Toast.LENGTH_SHORT).show()
                     }
                 }

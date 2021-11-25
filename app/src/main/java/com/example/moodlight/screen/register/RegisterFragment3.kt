@@ -114,9 +114,10 @@ class RegisterFragment3 : Fragment() {
         call.enqueue(object : Callback<JoinBodyModel> {
 
             override fun onResponse(call: Call<JoinBodyModel>, response: Response<JoinBodyModel>) {
+                loading.dismiss()
                 if (response.isSuccessful) {
                     Log.w("register", "register success!")
-                    loading.dismiss()
+
                     requireActivity().supportFragmentManager.beginTransaction().replace(
                         R.id.registerFrame,
                         RegisterFragment4()

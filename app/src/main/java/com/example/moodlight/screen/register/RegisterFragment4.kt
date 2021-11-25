@@ -87,12 +87,6 @@ class RegisterFragment4 : Fragment() {
             val userData: UserData = UserData(viewModel.email.value!!, viewModel.password.value!!)
             viewModel.insertLoginData(userData)
         }
-
-    /*        val db = UserDatabase.getInstance(requireContext())
-        CoroutineScope(Dispatchers.IO).launch {
-            val userData: UserData = UserData(viewModel.email.value!!, viewModel.password.value!!)
-            db!!.userDao().insert(userData)
-        }*/
     }
 
     private fun login() : Unit {

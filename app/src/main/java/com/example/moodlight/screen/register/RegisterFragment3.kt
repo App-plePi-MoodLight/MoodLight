@@ -1,6 +1,5 @@
 package com.example.moodlight.screen.register
 
-import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.KeyEvent
@@ -14,15 +13,10 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.moodlight.R
 import com.example.moodlight.api.ServerClient
-import com.example.moodlight.database.UserData
 import com.example.moodlight.databinding.FragmentRegister3Binding
 import com.example.moodlight.model.IsExistModel
 import com.example.moodlight.model.JoinBodyModel
-import com.example.moodlight.screen.initial.InitialActivity
 import com.example.moodlight.util.AppUtil
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -33,8 +27,6 @@ class RegisterFragment3 : Fragment() {
         ViewModelProvider(requireActivity()).get(RegisterViewModel::class.java)
     }
     private lateinit var binding: FragmentRegister3Binding
-    private val initialActivity: InitialActivity =
-        InitialActivity.initialActivity as InitialActivity
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -62,12 +54,22 @@ class RegisterFragment3 : Fragment() {
                             if (response.isSuccessful) {
                                 val isExistNickname : Boolean = response.body()!!.exist
 
-                                if (isExistNickname)
+                                if (isExistNickname) {
                                     AppUtil.setFailureAlarm(binding.register3Iv1,
-                                    binding.register3Tv2, binding.register3Btn1, "이미 사용중인 닉네임입니다.")
-                                else
+                                        binding.register3Tv2,
+                                        "이미 사용중인 닉네임입니다.")
+                                    if (!binding.register3Btn1.isEnabled) {
+                                        binding.register3Btn1.isEnabled = true
+                                    }
+                                }
+                                else {
                                     AppUtil.setSuccessAlarm(binding.register3Iv1,
-                                        binding.register3Tv2, binding.register3Btn1, "사용가능한 닉네임입니다.")
+                                        binding.register3Tv2,
+                                        "사용가능한 닉네임입니다.")
+                                    if (!binding.register3Btn1.isEnabled) {
+                                        binding.register3Btn1.isEnabled = true
+                                    }
+                                }
                             }
                         }
 
@@ -77,23 +79,13 @@ class RegisterFragment3 : Fragment() {
 
                     })
 
-            } else
+            } else {
                 AppUtil.setFailureAlarm(binding.register3Iv1,
-                    binding.register3Tv2, binding.register3Btn1, "닉네임을 입력해주세요.")
-
-
-
-/*            if (!it.equals("")) {
-                for (i in 0 until nicknameArray.size) {
-                    if (it.equals(nicknameArray[i])) {
-                        setOverlapInActive()
-                        break
-                    } else {
-                        setActive()
-                    }
+                    binding.register3Tv2, "닉네임을 입력해주세요.")
+                if (!binding.register3Btn1.isEnabled) {
+                    binding.register3Btn1.isEnabled = true
                 }
-            } else
-                setFailureInActive()*/
+            }
 
         })
 
@@ -107,44 +99,6 @@ class RegisterFragment3 : Fragment() {
         binding.register3Etv1.setOnKeyListener(View.OnKeyListener { v, keyCode, event -> keyCode == KeyEvent.KEYCODE_ENTER })
 
         return binding.root
-    }
-
-    private fun setActive() {
-        binding.register3Iv1.setImageResource(R.drawable.img_success)
-        binding.register3Tv2.setTextColor(Color.parseColor("#009900"))
-        binding.register3Tv2.text = "사용가능한 닉네임입니다."
-        binding.register3Btn1.isEnabled = true
-        if (binding.register3Tv2.visibility == View.INVISIBLE) {
-            binding.register3Tv2.visibility = View.VISIBLE
-            binding.register3Iv1.visibility = View.VISIBLE
-
-        }
-    }
-
-    private fun setFailureInActive() {
-        binding.register3Iv1.setImageResource(R.drawable.img_danger)
-        binding.register3Tv2.setTextColor(Color.parseColor("#fd3939"))
-        binding.register3Tv2.text = "닉네임을 입력해주세요."
-
-        if (binding.register3Tv2.visibility == View.INVISIBLE) {
-            binding.register3Tv2.visibility = View.VISIBLE
-            binding.register3Iv1.visibility = View.VISIBLE
-        }
-        if (binding.register3Btn1.isEnabled)
-            binding.register3Btn1.isEnabled = false
-    }
-
-    private fun setOverlapInActive() {
-        binding.register3Iv1.setImageResource(R.drawable.img_danger)
-        binding.register3Tv2.setTextColor(Color.parseColor("#fd3939"))
-        binding.register3Tv2.text = "이미 사용중인 닉네임입니다."
-
-        if (binding.register3Tv2.visibility == View.INVISIBLE) {
-            binding.register3Tv2.visibility = View.VISIBLE
-            binding.register3Iv1.visibility = View.VISIBLE
-        }
-        if (binding.register3Btn1.isEnabled)
-            binding.register3Btn1.isEnabled = false
     }
 
     private fun registerAndMoveNextPage(email: String, password: String, nickname: String) {
@@ -173,10 +127,4 @@ class RegisterFragment3 : Fragment() {
         })
     }
 
-    private fun saveLoginData(joinBodyModel: JoinBodyModel) : Unit {
-        CoroutineScope(Dispatchers.IO).launch {
-            val userData: UserData = UserData(joinBodyModel.email, joinBodyModel.password)
-            viewModel.insertLoginData(userData)
-        }
-    }
 }

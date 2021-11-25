@@ -2,14 +2,11 @@ package com.example.moodlight.screen.register
 
 import android.content.ContentValues
 import android.content.Intent
-import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -22,6 +19,7 @@ import com.example.moodlight.model.LoginModel
 import com.example.moodlight.model.RegisterConfirmModel
 import com.example.moodlight.screen.MainActivity
 import com.example.moodlight.screen.initial.InitialActivity
+import com.example.moodlight.util.AppUtil
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -49,7 +47,7 @@ class RegisterFragment4 : Fragment() {
         )
         binding.viewModel = viewModel
 
-        setSuccessAlarm(binding.register4Iv1, binding.register4Tv2,
+        AppUtil.setSuccessAlarm(binding.register4Iv1, binding.register4Tv2,
         "입력하신 이메일로 인증번호를 발송하였습니다.")
 
         binding.register4Btn1.setOnClickListener {
@@ -65,10 +63,9 @@ class RegisterFragment4 : Fragment() {
                         ) {
                             if (response.isSuccessful) {
                                 saveLoginData()
-                                val intent : Intent = Intent(requireContext(), MainActivity::class.java)
                                 login()
                             } else {
-                                setFailureAlarm(binding.register4Iv1, binding.register4Tv2,
+                                AppUtil.setFailureAlarm(binding.register4Iv1, binding.register4Tv2,
                                     "인증번호가 일치하지 않습니다.")
                             }
                         }
@@ -84,27 +81,6 @@ class RegisterFragment4 : Fragment() {
 
 
         return binding.root
-    }
-
-    private fun setSuccessAlarm (imageView: ImageView, textView: TextView, alarmText : String) {
-        imageView.setImageResource(R.drawable.img_success)
-        textView.setTextColor(Color.parseColor("#009900"))
-        textView.text = alarmText
-        if (imageView.visibility == View.INVISIBLE) {
-            imageView.visibility = View.VISIBLE
-            textView.visibility = View.VISIBLE
-        }
-    }
-
-    private fun setFailureAlarm (imageView: ImageView, textView: TextView, alarmText : String) {
-        imageView.setImageResource(R.drawable.img_danger)
-        textView.setTextColor(Color.parseColor("#fd3939"))
-        textView.text = alarmText
-
-        if (imageView.visibility == View.INVISIBLE) {
-            imageView.visibility = View.VISIBLE
-            textView.visibility = View.VISIBLE
-        }
     }
 
     private fun saveLoginData() : Unit {
@@ -126,7 +102,6 @@ class RegisterFragment4 : Fragment() {
                 ) {
                     if (response.isSuccessful) {
                         ServerClient.accessToken = response.body()!!.accessToken
-                        Log.e("zxbzfbsd", response.body()!!.accessToken)
                         // Sign in success, update UI with the signed-in user's information
 
                         Log.d("Login", "signInWithEmail:success")

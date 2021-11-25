@@ -1,6 +1,5 @@
 package com.example.moodlight.screen.register
 
-import android.graphics.Color
 import android.os.Bundle
 import android.view.KeyEvent
 import android.view.LayoutInflater
@@ -49,18 +48,29 @@ class RegisterFragment1 : Fragment() {
                                 response: Response<IsExistModel>
                             ) {
                                 if (response.isSuccessful) {
-                                    val isExistEmail : Boolean = response.body()!!.exist
+                                    val isExistEmail: Boolean = response.body()!!.exist
 
-                                    if (isExistEmail)
+                                    if (isExistEmail) {
                                         AppUtil.setFailureAlarm(binding.register1Iv1,
-                                            binding.register1Tv2, binding.register1Btn1, "이미 사용중인 이메일입니다.")
-                                    else
+                                            binding.register1Tv2,
+                                            "이미 사용중인 이메일입니다.")
+                                        if (binding.register1Btn1.isEnabled) {
+                                            binding.register1Btn1.isEnabled = false
+                                        }
+                                    } else {
                                         AppUtil.setSuccessAlarm(binding.register1Iv1,
-                                        binding.register1Tv2, binding.register1Btn1, "사용가능한 이메일입니다.")
-
+                                            binding.register1Tv2,
+                                            "사용가능한 이메일입니다.")
+                                        if (!binding.register1Btn1.isEnabled) {
+                                            binding.register1Btn1.isEnabled = true
+                                        }
+                                    }
+                                } else {
+                                    Toast.makeText(requireContext(),
+                                        response.message() + "\n" + "ERRORCODE: " + response.code()
+                                            .toString(),
+                                        Toast.LENGTH_SHORT).show()
                                 }
-                                else
-                                    Toast.makeText(requireContext(), response.message()+"\n"+"ERRORCODE: "+response.code().toString(), Toast.LENGTH_SHORT).show()
                             }
 
                             override fun onFailure(call: Call<IsExistModel>, t: Throwable) {
@@ -70,9 +80,13 @@ class RegisterFragment1 : Fragment() {
                         })
                 }
             }
-            else
+            else {
                 AppUtil.setFailureAlarm(binding.register1Iv1,
-                    binding.register1Tv2, binding.register1Btn1, "이메일 형식에 맞게 입력해주세요.")
+                    binding.register1Tv2, "이메일 형식에 맞게 입력해주세요.")
+                if (binding.register1Btn1.isEnabled) {
+                    binding.register1Btn1.isEnabled = false
+                }
+            }
 
         })
 
@@ -94,40 +108,4 @@ class RegisterFragment1 : Fragment() {
         return binding.root
     }
 
-    private fun setActive () {
-        binding.register1Iv1.setImageResource(R.drawable.img_success)
-        binding.register1Tv2.setTextColor(Color.parseColor("#009900"))
-        binding.register1Tv2.text = "사용가능한 이메일입니다."
-        binding.register1Btn1.isEnabled = true
-        if (binding.register1Tv2.visibility == View.INVISIBLE) {
-            binding.register1Tv2.visibility = View.VISIBLE
-            binding.register1Iv1.visibility = View.VISIBLE
-        }
-    }
-
-    private fun setFailureInActive () {
-        binding.register1Iv1.setImageResource(R.drawable.img_danger)
-        binding.register1Tv2.setTextColor(Color.parseColor("#fd3939"))
-        binding.register1Tv2.text = "이메일 형식에 맞게 입력해주세요."
-
-        if (binding.register1Tv2.visibility == View.INVISIBLE) {
-            binding.register1Tv2.visibility = View.VISIBLE
-            binding.register1Iv1.visibility = View.VISIBLE
-        }
-        if (binding.register1Btn1.isEnabled)
-            binding.register1Btn1.isEnabled = false
-    }
-
-    private fun setOverlapInActive () {
-        binding.register1Iv1.setImageResource(R.drawable.img_danger)
-        binding.register1Tv2.setTextColor(Color.parseColor("#fd3939"))
-        binding.register1Tv2.text = "이미 사용중인 이메일입니다."
-
-        if (binding.register1Tv2.visibility == View.INVISIBLE) {
-            binding.register1Tv2.visibility = View.VISIBLE
-            binding.register1Iv1.visibility = View.VISIBLE
-        }
-        if (binding.register1Btn1.isEnabled)
-            binding.register1Btn1.isEnabled = false
-    }
 }

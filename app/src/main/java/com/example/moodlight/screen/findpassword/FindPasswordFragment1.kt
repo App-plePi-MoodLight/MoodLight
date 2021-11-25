@@ -1,12 +1,9 @@
 package com.example.moodlight.screen.findpassword
 
-import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -17,6 +14,7 @@ import com.example.moodlight.databinding.FragmentFindPassword1Binding
 import com.example.moodlight.model.ConfirmCheckModel
 import com.example.moodlight.model.FindPasswordRequestModel
 import com.example.moodlight.model.SuccessResponseModel
+import com.example.moodlight.util.AppUtil
 import com.example.moodlight.util.Expression
 import retrofit2.Call
 import retrofit2.Callback
@@ -50,7 +48,7 @@ class FindPasswordFragment1 : Fragment() {
 
         binding.findpasswordConfirmBtn.setOnClickListener {
             if (viewModel.email.value == "") {
-                setFailureAlarm(binding.findpasswordErrorIv1, binding.findpasswordErrorTv1
+                AppUtil.setFailureAlarm(binding.findpasswordErrorIv1, binding.findpasswordErrorTv1
                     , "이메일을 입력해주세요.")
             }
             else {
@@ -58,14 +56,14 @@ class FindPasswordFragment1 : Fragment() {
                     sentFindPassword()
                 }
                 else{
-                    setFailureAlarm(binding.findpasswordErrorIv1, binding.findpasswordErrorTv1
+                    AppUtil.setFailureAlarm(binding.findpasswordErrorIv1, binding.findpasswordErrorTv1
                         , "이메일 형식에 맞게 입력해주세요.")
                 }
             }
         }
 
         binding.findpasswordReConfirmBtn.setOnClickListener {
-            setSuccessAlarm(binding.findpasswordErrorIv2, binding.findpasswordErrorTv2
+            AppUtil.setSuccessAlarm(binding.findpasswordErrorIv2, binding.findpasswordErrorTv2
                 , "인증번호를 재전송하였습니다.")
             viewModel.confirmNum.value = ""
             sentFindPassword()
@@ -79,27 +77,6 @@ class FindPasswordFragment1 : Fragment() {
         return binding.root
     }
 
-    private fun setSuccessAlarm (imageView: ImageView, textView: TextView, alarmText : String) {
-        imageView.setImageResource(R.drawable.img_success)
-        textView.setTextColor(Color.parseColor("#009900"))
-        textView.text = alarmText
-        if (imageView.visibility == View.INVISIBLE) {
-            imageView.visibility = View.VISIBLE
-            textView.visibility = View.VISIBLE
-        }
-    }
-
-    private fun setFailureAlarm (imageView: ImageView, textView: TextView, alarmText : String) {
-        imageView.setImageResource(R.drawable.img_danger)
-        textView.setTextColor(Color.parseColor("#fd3939"))
-        textView.text = alarmText
-
-        if (imageView.visibility == View.INVISIBLE) {
-            imageView.visibility = View.VISIBLE
-            textView.visibility = View.VISIBLE
-        }
-    }
-
     private fun sentFindPassword() {
         ServerClient.getApiService().sentFindPassword(FindPasswordRequestModel(viewModel.email.value!!))
             .enqueue(object : Callback<SuccessResponseModel> {
@@ -109,7 +86,7 @@ class FindPasswordFragment1 : Fragment() {
                     response: Response<SuccessResponseModel>
                 ) {
                     if(response.isSuccessful) {
-                        setSuccessAlarm(binding.findpasswordErrorIv1, binding.findpasswordErrorTv1
+                        AppUtil.setSuccessAlarm(binding.findpasswordErrorIv1, binding.findpasswordErrorTv1
                             , "인증번호를 전송하였습니다.")
                         visibleConfirmView()
                         binding.findpasswordEmailEtv.isClickable = false

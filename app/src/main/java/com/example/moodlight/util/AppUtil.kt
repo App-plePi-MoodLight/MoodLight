@@ -16,26 +16,21 @@ import java.util.*
 class AppUtil {
     companion object {
 
-        fun setSuccessAlarm (imageView: ImageView, textView: TextView, button : Button, alarmText : String) {
+        fun setSuccessAlarm (imageView: ImageView, textView: TextView, alarmText : String) {
             imageView.setImageResource(R.drawable.img_success)
             textView.setTextColor(Color.parseColor("#009900"))
             textView.text = alarmText
-            if (!button.isEnabled) {
-                button.isEnabled = true
-            }
             if (imageView.visibility == View.INVISIBLE) {
                 imageView.visibility = View.VISIBLE
                 textView.visibility = View.VISIBLE
             }
         }
 
-        fun setFailureAlarm (imageView: ImageView, textView: TextView, button : Button, alarmText : String) {
+        fun setFailureAlarm (imageView: ImageView, textView: TextView, alarmText : String) {
             imageView.setImageResource(R.drawable.img_danger)
             textView.setTextColor(Color.parseColor("#fd3939"))
             textView.text = alarmText
-            if (button.isEnabled) {
-                button.isEnabled = false
-            }
+
             if (imageView.visibility == View.INVISIBLE) {
                 imageView.visibility = View.VISIBLE
                 textView.visibility = View.VISIBLE

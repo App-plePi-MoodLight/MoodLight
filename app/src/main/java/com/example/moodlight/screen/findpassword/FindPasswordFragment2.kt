@@ -1,12 +1,9 @@
 package com.example.moodlight.screen.findpassword
 
-import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -17,6 +14,7 @@ import com.example.moodlight.api.ServerClient
 import com.example.moodlight.databinding.FragmentFindPassword2Binding
 import com.example.moodlight.model.ConfirmFindPasswordModel
 import com.example.moodlight.model.SuccessResponseModel
+import com.example.moodlight.util.AppUtil
 import com.example.moodlight.util.Expression
 import retrofit2.Call
 import retrofit2.Callback
@@ -47,11 +45,11 @@ class FindPasswordFragment2 : Fragment() {
         viewModel.password.observe(requireActivity(), Observer {
             if (!it.equals("")) {
                 if (Expression.isValidPw(it)) {
-                    setSuccessAlarm(binding.findpasswordFragment2ErrorIv1, binding.findpasswordFragment2ErrorTv1
+                    AppUtil.setSuccessAlarm(binding.findpasswordFragment2ErrorIv1, binding.findpasswordFragment2ErrorTv1
                         ,"사용 가능한 비밀번호입니다.")
                 }
                 else {
-                    setFailureAlarm(binding.findpasswordFragment2ErrorIv1, binding.findpasswordFragment2ErrorTv1
+                    AppUtil.setFailureAlarm(binding.findpasswordFragment2ErrorIv1, binding.findpasswordFragment2ErrorTv1
                     ,"6~24자, 영문+숫자 형식에 맞게 입력해주세요.")
                 }
             }
@@ -60,7 +58,7 @@ class FindPasswordFragment2 : Fragment() {
         viewModel.rePassword.observe(requireActivity(), Observer {
             if (!it.equals("")) {
                 if (viewModel.password.value == it) {
-                    setSuccessAlarm(binding.findpasswordFragment2ErrorIv2, binding.findpasswordFragment2ErrorTv2
+                    AppUtil.setSuccessAlarm(binding.findpasswordFragment2ErrorIv2, binding.findpasswordFragment2ErrorTv2
                         ,"비밀번호가 일치합니다.")
                     binding.findpasswordFragment2ChangeBtn.isEnabled = true
                     binding.findpasswordPasswordEtv.isClickable = false
@@ -69,7 +67,7 @@ class FindPasswordFragment2 : Fragment() {
                     binding.findpasswordPasswordReConfirmEtv.isFocusable = false
                 }
                 else {
-                    setFailureAlarm(binding.findpasswordFragment2ErrorIv2, binding.findpasswordFragment2ErrorTv2
+                    AppUtil.setFailureAlarm(binding.findpasswordFragment2ErrorIv2, binding.findpasswordFragment2ErrorTv2
                         ,"비밀번호가 일치하지 않습니다.")
                 }
             }
@@ -103,27 +101,6 @@ class FindPasswordFragment2 : Fragment() {
 
         // Inflate the layout for this fragment
         return binding.root
-    }
-
-    private fun setSuccessAlarm (imageView: ImageView, textView: TextView, alarmText : String) {
-        imageView.setImageResource(R.drawable.img_success)
-        textView.setTextColor(Color.parseColor("#009900"))
-        textView.text = alarmText
-        if (imageView.visibility == View.INVISIBLE) {
-            imageView.visibility = View.VISIBLE
-            textView.visibility = View.VISIBLE
-        }
-    }
-
-    private fun setFailureAlarm (imageView: ImageView, textView: TextView, alarmText : String) {
-        imageView.setImageResource(R.drawable.img_danger)
-        textView.setTextColor(Color.parseColor("#fd3939"))
-        textView.text = alarmText
-
-        if (imageView.visibility == View.INVISIBLE) {
-            imageView.visibility = View.VISIBLE
-            textView.visibility = View.VISIBLE
-        }
     }
 
 }

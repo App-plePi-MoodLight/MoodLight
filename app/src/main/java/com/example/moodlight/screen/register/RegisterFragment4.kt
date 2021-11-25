@@ -13,7 +13,6 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.moodlight.R
 import com.example.moodlight.api.ServerClient
 import com.example.moodlight.database.UserData
-import com.example.moodlight.database.UserDatabase
 import com.example.moodlight.databinding.FragmentRegister4Binding
 import com.example.moodlight.model.LoginModel
 import com.example.moodlight.model.RegisterConfirmModel
@@ -84,11 +83,16 @@ class RegisterFragment4 : Fragment() {
     }
 
     private fun saveLoginData() : Unit {
-        val db = UserDatabase.getInstance(requireContext())
+        CoroutineScope(Dispatchers.IO).launch {
+            val userData: UserData = UserData(viewModel.email.value!!, viewModel.password.value!!)
+            viewModel.insertLoginData(userData)
+        }
+
+    /*        val db = UserDatabase.getInstance(requireContext())
         CoroutineScope(Dispatchers.IO).launch {
             val userData: UserData = UserData(viewModel.email.value!!, viewModel.password.value!!)
             db!!.userDao().insert(userData)
-        }
+        }*/
     }
 
     private fun login() : Unit {

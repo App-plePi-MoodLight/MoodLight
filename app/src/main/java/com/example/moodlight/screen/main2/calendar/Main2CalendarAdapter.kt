@@ -69,12 +69,6 @@ class Main2CalendarAdapter (val viewModel : Main2CalendarViewModel) :
                 else -> {}
             }
 
-
-
-
-/*            if ( viewModel.dateList[position].day.equals(viewModel.today.toString()))
-                itemCalendarDateTv.setTextColor(Color.parseColor("#0078ff"))*/
-
         }
 
     }

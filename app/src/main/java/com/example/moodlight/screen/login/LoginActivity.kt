@@ -60,10 +60,11 @@ class LoginActivity : AppCompatActivity() {
                                 if (response.isSuccessful) {
                                     ServerClient.accessToken = response.body()!!.accessToken
                                     // Sign in success, update UI with the signed-in user's information
-                                    val userData = UserData(email, password)
 
                                     CoroutineScope(Dispatchers.IO).launch {
-                                        db!!.userDao().insert(userData)
+                                        val userData = UserData(email, password)
+                                        val loginViewModel : LoginViewModel = LoginViewModel(application)
+                                        loginViewModel.insertLoginData(userData)
 
                                     }
 

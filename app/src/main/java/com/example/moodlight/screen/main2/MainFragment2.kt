@@ -266,12 +266,10 @@ class MainFragment2 : Fragment() {
             }
             3 -> {
                 viewModel.month.value = "March"
-                if (calendarHelper.getYear() % 4 == 0 && calendarHelper.getYear() % 100 != 0
-                    || calendarHelper.getYear() % 400 == 0
-                ) {
-                    lastEndDay = 29
+                lastEndDay = if (AppUtil.isLeapYear(calendarHelper.getYear())) {
+                    29
                 } else
-                    lastEndDay = 28
+                    28
             }
             4 -> {
                 viewModel.month.value = "April"
@@ -396,8 +394,6 @@ class MainFragment2 : Fragment() {
                 calendarViewModel.dateList.add(main2CalendarData)
             }
         }
-
-
 
         for (m in 1..7 - calendarHelper.getEndDayOfWeek()) {
             calendarViewModel.dateList.add(

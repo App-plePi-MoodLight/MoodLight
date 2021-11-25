@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.moodlight.R
 import com.example.moodlight.api.ServerClient
 import com.example.moodlight.databinding.FragmentFindPassword1Binding
+import com.example.moodlight.dialog.LoadingDialog
 import com.example.moodlight.model.ConfirmCheckModel
 import com.example.moodlight.model.FindPasswordRequestModel
 import com.example.moodlight.model.SuccessResponseModel
@@ -31,6 +32,10 @@ class FindPasswordFragment1 : Fragment() {
     }
 
     lateinit var binding : FragmentFindPassword1Binding
+
+    private val loading : LoadingDialog by lazy {
+        LoadingDialog(requireContext())
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -78,6 +83,7 @@ class FindPasswordFragment1 : Fragment() {
     }
 
     private fun sentFindPassword() {
+        loading.show()
         ServerClient.getApiService().sentFindPassword(FindPasswordRequestModel(viewModel.email.value!!))
             .enqueue(object : Callback<SuccessResponseModel> {
 
@@ -86,6 +92,7 @@ class FindPasswordFragment1 : Fragment() {
                     response: Response<SuccessResponseModel>
                 ) {
                     if(response.isSuccessful) {
+                        loading.dismiss()
                         AppUtil.setSuccessAlarm(binding.findpasswordErrorIv1, binding.findpasswordErrorTv1
                             , "인증번호를 전송하였습니다.")
                         visibleConfirmView()

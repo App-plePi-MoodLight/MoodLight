@@ -19,6 +19,7 @@ import com.example.moodlight.databinding.FragmentRegister3Binding
 import com.example.moodlight.model.IsExistModel
 import com.example.moodlight.model.JoinBodyModel
 import com.example.moodlight.screen.initial.InitialActivity
+import com.example.moodlight.util.AppUtil
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -62,9 +63,11 @@ class RegisterFragment3 : Fragment() {
                                 val isExistNickname : Boolean = response.body()!!.exist
 
                                 if (isExistNickname)
-                                    setOverlapInActive()
+                                    AppUtil.setFailureAlarm(binding.register3Iv1,
+                                    binding.register3Tv2, binding.register3Btn1, "이미 사용중인 닉네임입니다.")
                                 else
-                                    setActive()
+                                    AppUtil.setSuccessAlarm(binding.register3Iv1,
+                                        binding.register3Tv2, binding.register3Btn1, "사용가능한 닉네임입니다.")
                             }
                         }
 
@@ -75,7 +78,8 @@ class RegisterFragment3 : Fragment() {
                     })
 
             } else
-                setFailureInActive()
+                AppUtil.setFailureAlarm(binding.register3Iv1,
+                    binding.register3Tv2, binding.register3Btn1, "닉네임을 입력해주세요.")
 
 
 
@@ -159,7 +163,7 @@ class RegisterFragment3 : Fragment() {
 
                 }
                 else
-                    Toast.makeText(requireContext(), "when : Join"+response.message()+"\n"+"ERRORCODE: "+response.code().toString(), Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "when : "+response.message()+"\n"+"ERRORCODE: "+response.code().toString(), Toast.LENGTH_SHORT).show()
             }
 
             override fun onFailure(call: Call<JoinBodyModel>, t: Throwable) {

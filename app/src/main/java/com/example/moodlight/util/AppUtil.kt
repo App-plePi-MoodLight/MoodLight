@@ -1,5 +1,11 @@
 package com.example.moodlight.util
 
+import android.graphics.Color
+import android.view.View
+import android.widget.Button
+import android.widget.ImageView
+import android.widget.TextView
+import com.example.moodlight.R
 import com.example.moodlight.screen.main2.calendar.CalendarHelper
 import com.example.moodlight.screen.main2.calendar.Main2CalendarData
 import com.example.moodlight.screen.main2.calendar.Main2CalendarViewModel
@@ -9,6 +15,41 @@ import java.util.*
 
 class AppUtil {
     companion object {
+
+        fun setSuccessAlarm (imageView: ImageView, textView: TextView, button : Button, alarmText : String) {
+            imageView.setImageResource(R.drawable.img_success)
+            textView.setTextColor(Color.parseColor("#009900"))
+            textView.text = alarmText
+            if (!button.isEnabled) {
+                button.isEnabled = true
+            }
+            if (imageView.visibility == View.INVISIBLE) {
+                imageView.visibility = View.VISIBLE
+                textView.visibility = View.VISIBLE
+            }
+        }
+
+        fun setFailureAlarm (imageView: ImageView, textView: TextView, button : Button, alarmText : String) {
+            imageView.setImageResource(R.drawable.img_danger)
+            textView.setTextColor(Color.parseColor("#fd3939"))
+            textView.text = alarmText
+            if (button.isEnabled) {
+                button.isEnabled = false
+            }
+            if (imageView.visibility == View.INVISIBLE) {
+                imageView.visibility = View.VISIBLE
+                textView.visibility = View.VISIBLE
+            }
+        }
+
+        fun setInitialAlarm (imageView: ImageView, textView: TextView, button : Button, alarmText : String) {
+            imageView.setImageResource(R.drawable.img_carbon_information)
+            textView.setTextColor(Color.parseColor("#acacac"))
+            textView.text = alarmText
+            if (button.isEnabled)
+                button.isEnabled = false
+        }
+
         fun getNowDate(): String {
             val calendar = Calendar.getInstance()
             val date = calendar.time

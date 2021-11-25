@@ -67,6 +67,8 @@ class FindPasswordFragment1 : Fragment() {
         binding.findpasswordReConfirmBtn.setOnClickListener {
             setSuccessAlarm(binding.findpasswordErrorIv2, binding.findpasswordErrorTv2
                 , "인증번호를 재전송하였습니다.")
+            viewModel.confirmNum.value = ""
+            sentFindPassword()
         }
 
         binding.findpasswordChangeBtn.setOnClickListener {

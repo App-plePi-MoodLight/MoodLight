@@ -12,6 +12,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.moodlight.R
 import com.example.moodlight.databinding.FragmentRegister2Binding
+import com.example.moodlight.util.AppUtil
 import com.example.moodlight.util.Expression
 
 class RegisterFragment2 : Fragment() {
@@ -34,12 +35,15 @@ class RegisterFragment2 : Fragment() {
 
             if (!it.equals("")) {
                 if (Expression.isValidPw(it))
-                    setActive()
+                    AppUtil.setSuccessAlarm(binding.register2Iv1, binding.register2Tv2,
+                        binding.register2Btn1, "사용가능한 비밀번호입니다.")
                 else
-                    setFailureInActive()
+                    AppUtil.setFailureAlarm(binding.register2Iv1, binding.register2Tv2,
+                        binding.register2Btn1, "6~24자, 영문+숫자 형식에 맞게 입력해주세요.")
             }
             else
-                setInitial()
+                AppUtil.setInitialAlarm(binding.register2Iv1, binding.register2Tv2,
+                    binding.register2Btn1, "영문, 숫자를 포함한 6~24자 비밀번호")
 
         })
 

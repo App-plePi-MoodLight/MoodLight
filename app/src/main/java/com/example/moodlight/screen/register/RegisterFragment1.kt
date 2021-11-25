@@ -15,6 +15,7 @@ import com.example.moodlight.R
 import com.example.moodlight.api.ServerClient
 import com.example.moodlight.databinding.FragmentRegister1Binding
 import com.example.moodlight.model.IsExistModel
+import com.example.moodlight.util.AppUtil
 import com.example.moodlight.util.Expression
 import retrofit2.Call
 import retrofit2.Callback
@@ -51,9 +52,11 @@ class RegisterFragment1 : Fragment() {
                                     val isExistEmail : Boolean = response.body()!!.exist
 
                                     if (isExistEmail)
-                                        setOverlapInActive()
+                                        AppUtil.setFailureAlarm(binding.register1Iv1,
+                                            binding.register1Tv2, binding.register1Btn1, "이미 사용중인 이메일입니다.")
                                     else
-                                        setActive()
+                                        AppUtil.setSuccessAlarm(binding.register1Iv1,
+                                        binding.register1Tv2, binding.register1Btn1, "사용가능한 이메일입니다.")
 
                                 }
                                 else
@@ -68,7 +71,8 @@ class RegisterFragment1 : Fragment() {
                 }
             }
             else
-                setFailureInActive()
+                AppUtil.setFailureAlarm(binding.register1Iv1,
+                    binding.register1Tv2, binding.register1Btn1, "이메일 형식에 맞게 입력해주세요.")
 
         })
 

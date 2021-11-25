@@ -61,11 +61,9 @@ class LoginActivity : AppCompatActivity() {
                                     ServerClient.accessToken = response.body()!!.accessToken
                                     // Sign in success, update UI with the signed-in user's information
                                     val userData = UserData(email, password)
-                                    Log.e("a",userData.id)
 
                                     CoroutineScope(Dispatchers.IO).launch {
                                         db!!.userDao().insert(userData)
-                                        Log.e("asdf", userData.toString())
 
                                     }
 

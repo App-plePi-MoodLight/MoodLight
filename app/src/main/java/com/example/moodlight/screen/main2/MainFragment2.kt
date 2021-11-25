@@ -232,6 +232,7 @@ class MainFragment2 : Fragment() {
     private fun setUi() {
 
         calendarViewModel.today = calendarHelper.getDate()
+        binding.year = calendarHelper.getYear().toString()
 
         setCalendar()
     }
@@ -403,6 +404,8 @@ class MainFragment2 : Fragment() {
 
             setCalendar()
         }
+
+        binding.year = calendarHelper.getYear().toString()
     }
 
     public fun minusMonth(view: View) {
@@ -410,6 +413,7 @@ class MainFragment2 : Fragment() {
 
         calendarViewModel.dateList.clear()
         setCalendar()
+        binding.year = calendarHelper.getYear().toString()
     }
 
     override fun onStop() {

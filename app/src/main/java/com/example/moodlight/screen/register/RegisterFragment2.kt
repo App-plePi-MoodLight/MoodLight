@@ -50,7 +50,9 @@ class RegisterFragment2 : Fragment() {
             }
             else {
                 AppUtil.setInitialAlarm(binding.register2Iv1, binding.register2Tv2,
-                    binding.register2Btn1, "영문, 숫자를 포함한 6~24자 비밀번호")
+                    "영문, 숫자를 포함한 6~24자 비밀번호")
+                if (binding.register2Btn1.isEnabled)
+                    binding.register2Btn1.isEnabled = false
             }
         })
 

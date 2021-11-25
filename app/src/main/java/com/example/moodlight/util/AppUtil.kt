@@ -2,7 +2,6 @@ package com.example.moodlight.util
 
 import android.graphics.Color
 import android.view.View
-import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import com.example.moodlight.R
@@ -37,12 +36,11 @@ class AppUtil {
             }
         }
 
-        fun setInitialAlarm (imageView: ImageView, textView: TextView, button : Button, alarmText : String) {
+        fun setInitialAlarm (imageView: ImageView, textView: TextView, alarmText : String) {
             imageView.setImageResource(R.drawable.img_carbon_information)
             textView.setTextColor(Color.parseColor("#acacac"))
             textView.text = alarmText
-            if (button.isEnabled)
-                button.isEnabled = false
+
         }
 
         fun getNowDate(): String {

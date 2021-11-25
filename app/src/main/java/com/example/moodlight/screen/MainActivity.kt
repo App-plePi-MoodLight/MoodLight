@@ -8,14 +8,9 @@ import androidx.fragment.app.Fragment
 import com.example.moodlight.R
 import com.example.moodlight.api.ServerClient
 import com.example.moodlight.database.UserDatabase
-import com.example.moodlight.dialog.CommonDialog
-import com.example.moodlight.dialog.CommonDialogInterface
-import com.example.moodlight.dialog.LogoutDialog
-import com.example.moodlight.dialog.LogoutDialogInterface
+import com.example.moodlight.dialog.*
 import com.example.moodlight.model.setting.DeleteUserModel
 import com.example.moodlight.screen.initial.InitialActivity
-import com.example.moodlight.screen.login.LoginActivity
-import com.example.moodlight.screen.main1.CommunityActivity
 import com.example.moodlight.screen.main1.PickMoodActivity
 import com.example.moodlight.screen.main2.MainFragment2
 import com.example.moodlight.screen.main3.MainFragment3
@@ -48,11 +43,6 @@ class MainActivity : AppCompatActivity(), CommonDialogInterface, LogoutDialogInt
         changeFragment(mainStatisticsFragment)
         findViewById<BottomNavigationView>(com.example.moodlight.R.id.bottomNavigation).selectedItemId =
             R.id.nullItem
-
-
-        if (networkStatus == NetworkStatus.TYPE_NOT_CONNECTED) {
-            Toast.makeText(baseContext, "무드등을 이용하시려면 인터넷 연결이 필요합니다.", Toast.LENGTH_SHORT).show()
-        }
 
         dialog = CommonDialog(
             this, this, "회원탈퇴", "정말로 탈퇴를 하시겠습니까?\n탈퇴 이후의 정보는 되돌릴 수 없습니다.", "탈퇴하기", "취소"

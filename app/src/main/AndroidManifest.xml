@@ -13,6 +13,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MoodLight">
         <activity
+            android:name=".dialog.TerminationDialog"
+            android:exported="false" />
+        <activity
+            android:name=".dialog.LoadingDialog"
+            android:exported="false" />
+        <activity
             android:name=".screen.findpassword.FindPasswordActivity"
             android:exported="true" />
         <activity android:name=".screen.main1.CommunityActivity" />

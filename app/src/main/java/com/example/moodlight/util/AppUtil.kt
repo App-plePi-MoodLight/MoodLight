@@ -1,5 +1,6 @@
 package com.example.moodlight.util
 
+import android.content.Context
 import android.graphics.Color
 import android.view.View
 import android.widget.ImageView
@@ -14,6 +15,15 @@ import java.util.*
 
 class AppUtil {
     companion object {
+
+        fun isNotConnectNetwork (context: Context) : Boolean {
+            val networkStatus: Int = NetworkStatus.getConnectivityStatus(context)
+
+            if (networkStatus == NetworkStatus.TYPE_NOT_CONNECTED) {
+                return true
+            }
+            return false
+        }
 
         fun setSuccessAlarm (imageView: ImageView, textView: TextView, alarmText : String) {
             imageView.setImageResource(R.drawable.img_success)

@@ -1,5 +1,6 @@
 package com.example.moodlight.screen.splash
 
+import android.app.Activity
 import android.content.ContentValues.TAG
 import android.content.Intent
 import android.os.Bundle
@@ -12,9 +13,11 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.moodlight.R
 import com.example.moodlight.api.ServerClient
 import com.example.moodlight.database.UserDatabase
+import com.example.moodlight.dialog.TerminationDialog
 import com.example.moodlight.model.LoginModel
 import com.example.moodlight.screen.MainActivity
 import com.example.moodlight.screen.onboarding.OnboardingActivity
+import com.example.moodlight.util.AppUtil
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -27,10 +30,18 @@ class SplashActivity : AppCompatActivity() {
     val fadeinAnim: Animation by lazy { AnimationUtils.loadAnimation(this, R.anim.fade_in) }
     val fadeinAnim2: Animation by lazy { AnimationUtils.loadAnimation(this, R.anim.fade_in_2000) }
 
+    private val dialog : TerminationDialog by lazy {
+        TerminationDialog(Activity(), SplashActivity@this)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
         lateinit var intent: Intent
+
+        if (AppUtil.isNotConnectNetwork(applicationContext)) {
+            dialog.show()
+        }
 
         val db = UserDatabase.getInstance(applicationContext)
 

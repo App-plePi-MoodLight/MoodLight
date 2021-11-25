@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="300dp"
+    android:layout_height="wrap_content"
+    android:background="@drawable/dialog_round"
+    tools:context=".dialog.TerminationDialog">
+
+    <TextView
+        android:id="@+id/mainTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="안내"
+        android:layout_marginTop="25dp"
+        android:fontFamily="sans-serif"
+        android:textStyle="bold"
+        android:textColor="#000"
+        android:textSize="17sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/subTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif"
+        android:text="무드등을 이용하시려면\n 네트워크 연결이 필요합니다.\n 무드등을 종료합니다."
+        android:gravity="center"
+        android:padding="10dp"
+        android:textColor="#000000"
+        android:textSize="12.5sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/mainTv" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/checkBtn"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="확인"
+                android:textColor="#000"
+                android:textSize="15sp"
+                android:gravity="center"
+                android:background="@color/fui_transparent"
+                android:fontFamily="@font/roboto_bold"
+                app:layout_constraintTop_toBottomOf="@id/subTv"
+                app:layout_constraintBottom_toBottomOf="parent"
+                />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

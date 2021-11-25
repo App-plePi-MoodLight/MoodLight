@@ -13,6 +13,7 @@ import androidx.core.view.isVisible
 import com.example.moodlight.R
 import com.example.moodlight.api.ServerClient
 import com.example.moodlight.database.UserData
+import com.example.moodlight.dialog.LoadingDialog
 import com.example.moodlight.model.LoginModel
 import com.example.moodlight.screen.MainActivity
 import com.example.moodlight.screen.findpassword.FindPasswordActivity
@@ -27,6 +28,10 @@ import retrofit2.Response
 class LoginActivity : AppCompatActivity() {
 
     private val initialActivity: InitialActivity = InitialActivity.initialActivity as InitialActivity
+
+    private val loading : LoadingDialog by lazy {
+        LoadingDialog(LoginActivity@this)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,6 +50,7 @@ class LoginActivity : AppCompatActivity() {
                     errorVisible("비밀번호를 입력해주세요.")
                 }
                 else -> {
+
                     val loginModel : LoginModel = LoginModel(email, password)
                     ServerClient.getApiService().login(loginModel)
                         .enqueue(object : Callback<LoginModel> {

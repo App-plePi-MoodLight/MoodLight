@@ -14,6 +14,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.moodlight.R
 import com.example.moodlight.api.ServerClient
 import com.example.moodlight.databinding.FragmentRegister3Binding
+import com.example.moodlight.dialog.LoadingDialog
 import com.example.moodlight.model.IsExistModel
 import com.example.moodlight.model.JoinBodyModel
 import com.example.moodlight.util.AppUtil
@@ -27,6 +28,10 @@ class RegisterFragment3 : Fragment() {
         ViewModelProvider(requireActivity()).get(RegisterViewModel::class.java)
     }
     private lateinit var binding: FragmentRegister3Binding
+
+    private val loading : LoadingDialog by lazy {
+        LoadingDialog(requireContext())
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -93,6 +98,7 @@ class RegisterFragment3 : Fragment() {
             val email = viewModel.email.value
             val password = viewModel.password.value
             val nickname = viewModel.nickname.value
+            loading.show()
             registerAndMoveNextPage(email!!, password!!, nickname!!)
         }
 
@@ -110,6 +116,7 @@ class RegisterFragment3 : Fragment() {
             override fun onResponse(call: Call<JoinBodyModel>, response: Response<JoinBodyModel>) {
                 if (response.isSuccessful) {
                     Log.w("register", "register success!")
+                    loading.dismiss()
                     requireActivity().supportFragmentManager.beginTransaction().replace(
                         R.id.registerFrame,
                         RegisterFragment4()

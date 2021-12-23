@@ -1,6 +1,7 @@
 package com.example.moodlight.screen.main3.setting
 
 import android.content.ContentValues.TAG
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.service.autofill.UserData
@@ -41,6 +42,9 @@ class ChangePasswordActivity : AppCompatActivity() {
 
         binding.checkBtn.setOnClickListener {
             checkIsRightPw()
+        }
+        binding.findPasswordText.setOnClickListener {
+            startActivity(Intent(this, FindPassWordActivity::class.java))
         }
     }
 

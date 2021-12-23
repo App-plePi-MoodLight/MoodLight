@@ -1,6 +1,10 @@
 package com.example.moodlight.api
 
 import com.example.moodlight.model.*
+import com.example.moodlight.model.findpassword.CheckCodeBodyModel
+import com.example.moodlight.model.findpassword.CheckCodeModel
+import com.example.moodlight.model.findpassword.FindPassWordBodyModel
+import com.example.moodlight.model.findpassword.FindPassWordModel
 import com.example.moodlight.model.moodcount.MoodCountModel
 import com.example.moodlight.model.my_answer.MyAnswerModel
 import com.example.moodlight.model.myanswermodel.MyAnswerListModel
@@ -99,4 +103,10 @@ interface ApiService {
 
     @GET("answer/my/all")
     fun getMyAnswerAll() : Call<MyAnswerModel>
+
+    @POST("auth/find-password")
+    fun findPassword(@Body email: FindPassWordBodyModel) : Call<FindPassWordModel>
+
+    @POST("auth/confirm-find-password")
+    fun confirmFindPassword(@Body bodymodel: CheckCodeBodyModel) : Call<CheckCodeModel>
 }

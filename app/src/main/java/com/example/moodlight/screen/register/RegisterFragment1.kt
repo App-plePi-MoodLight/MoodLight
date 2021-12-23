@@ -102,7 +102,7 @@ class RegisterFragment1 : Fragment() {
             ).commit()
         }
 
-        binding.register1Etv1.setOnKeyListener(View.OnKeyListener { v, keyCode, event -> keyCode == KeyEvent.KEYCODE_ENTER })
+        binding.register1layout1.setOnKeyListener(View.OnKeyListener { v, keyCode, event -> keyCode == KeyEvent.KEYCODE_ENTER })
 
         return binding.root
     }

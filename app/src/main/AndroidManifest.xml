@@ -12,11 +12,17 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MoodLight">
-        <activity android:name=".screen.main1.CommunityActivity"/>
-        <activity android:name=".screen.main1.PickMoodActivity"/>
-        <activity android:name=".screen.main1.CommentActivity"/>
+        <activity
+            android:name=".screen.main3.setting.NewPassWordActivity"
+            android:exported="false" />
+        <activity
+            android:name=".screen.main3.setting.FindPassWordActivity"
+            android:exported="false" />
+        <activity android:name=".screen.main1.CommunityActivity" />
+        <activity android:name=".screen.main1.PickMoodActivity" />
+        <activity android:name=".screen.main1.CommentActivity" />
         <activity android:name=".screen.main3.setting.SettingActivity" />
-        <activity android:name=".screen.main1.AnswerActivity"/>
+        <activity android:name=".screen.main1.AnswerActivity" />
         <activity
             android:name=".screen.main2.DetailAnswerActivity"
             android:exported="false" />

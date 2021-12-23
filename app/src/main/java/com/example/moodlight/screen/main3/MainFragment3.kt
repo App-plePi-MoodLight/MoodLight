@@ -172,6 +172,7 @@ class MainFragment3 : Fragment() {
                             viewModel.username.value = it!!.nickname
                             viewModel.email.value = it.email
                             viewModel.main3Tv1Text.value = "무드등을 시작한지 ${minus}지났어요."
+                            viewModel.subscription.value = GetTime.modifyJoinTime(date.time)
                         }
                     }
 

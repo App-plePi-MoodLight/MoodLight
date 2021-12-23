@@ -72,6 +72,11 @@ class MainFragment2 : Fragment() {
         binding.fragment = this
 
 
+        binding.recycler.adapter = DateAdapter(requireContext(), list){data ->
+            startActivity(Intent(requireActivity(), DetailAnswerActivity::class.java)
+                .putExtra("data", data))
+        }
+        binding.recycler.setHasFixedSize(true)
 
 //        binding.recycler.addOnScrollListener(object :  RecyclerView.OnScrollListener() {
 //            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
@@ -148,30 +153,19 @@ class MainFragment2 : Fragment() {
                             if(result!!.size != 0){
                                 if(list.isNotEmpty()){
                                     list.removeAt(list.lastIndex)
-                                    processingData(result)
-                                    requireActivity().runOnUiThread {
-                                        binding.recycler.adapter = DateAdapter(requireContext(), list){data ->
-                                            startActivity(Intent(requireActivity(), DetailAnswerActivity::class.java)
-                                                .putExtra("data", data))
-                                        }
-                                        binding.recycler.setHasFixedSize(true)
-                                    }
+//                                    requireActivity().runOnUiThread {
+//                                        binding.recycler.adapter!!.notifyDataSetChanged()
+//                                    }
                                 }
-                                else{
-                                    processingData(result)
-                                    requireActivity().runOnUiThread {
-                                        binding.recycler.adapter = DateAdapter(requireContext(), list){data ->
-                                            startActivity(Intent(requireActivity(), DetailAnswerActivity::class.java)
-                                                .putExtra("data", data))
-                                        }
-                                        binding.recycler.setHasFixedSize(true)
-                                    }
+                                processingData(result)
+                                requireActivity().runOnUiThread {
+                                    binding.recycler.adapter!!.notifyDataSetChanged()
                                 }
                             }
-                            else{
-                                list.removeAt(list.lastIndex)
-                                binding.recycler.adapter!!.notifyDataSetChanged()
-                            }
+//                            else{
+//                                list.removeAt(list.lastIndex)
+//                                binding.recycler.adapter!!.notifyDataSetChanged()
+//                            }
                         }
                         else{
                             Toast.makeText(requireContext(), "내 답변 리스트를 불러오는데에 실패하였습니다.", Toast.LENGTH_SHORT).show()

@@ -17,8 +17,6 @@
     @Update
     fun updateLoginTable(userData: UserData)
 
-    //@Query("DELETE from userLoginTable")
-
     @Query("DELETE from UserData")
     fun deleteUserLoginTable()
 

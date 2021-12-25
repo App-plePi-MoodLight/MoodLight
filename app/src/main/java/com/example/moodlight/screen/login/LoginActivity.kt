@@ -13,9 +13,10 @@ import androidx.core.view.isVisible
 import com.example.moodlight.R
 import com.example.moodlight.api.ServerClient
 import com.example.moodlight.database.UserData
-import com.example.moodlight.database.UserDatabase
+import com.example.moodlight.dialog.LoadingDialog
 import com.example.moodlight.model.LoginModel
 import com.example.moodlight.screen.MainActivity
+import com.example.moodlight.screen.findpassword.FindPasswordActivity
 import com.example.moodlight.screen.initial.InitialActivity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -28,12 +29,13 @@ class LoginActivity : AppCompatActivity() {
 
     private val initialActivity: InitialActivity = InitialActivity.initialActivity as InitialActivity
 
+    private val loading : LoadingDialog by lazy {
+        LoadingDialog(LoginActivity@this)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
-
-
-        val db = UserDatabase.getInstance(applicationContext)
 
         findViewById<AppCompatButton>(R.id.loginBtn).setOnClickListener {
 
@@ -48,6 +50,7 @@ class LoginActivity : AppCompatActivity() {
                     errorVisible("비밀번호를 입력해주세요.")
                 }
                 else -> {
+
                     val loginModel : LoginModel = LoginModel(email, password)
                     ServerClient.getApiService().login(loginModel)
                         .enqueue(object : Callback<LoginModel> {
@@ -58,19 +61,12 @@ class LoginActivity : AppCompatActivity() {
                             ) {
                                 if (response.isSuccessful) {
                                     ServerClient.accessToken = response.body()!!.accessToken
-                                    Log.e("zxbzfbsd",response.body()!!.accessToken)
                                     // Sign in success, update UI with the signed-in user's information
-                                    val userData = UserData(email, password)
-                                    Log.e("a",userData.id)
 
                                     CoroutineScope(Dispatchers.IO).launch {
-                                        if ( db!!.userDao().getUserFromUserLoginTable() != null)
-                                            db.userDao().update(userData)
-
-                                        else
-                                          db!!.userDao().insert(userData)
-
-                                        Log.e("asdf",userData.toString())
+                                        val userData = UserData(email, password)
+                                        val loginViewModel : LoginViewModel = LoginViewModel(application)
+                                        loginViewModel.insertLoginData(userData)
 
                                     }
 
@@ -93,6 +89,11 @@ class LoginActivity : AppCompatActivity() {
                         })
                 }
             }
+        }
+
+        findViewById<TextView>(R.id.loginFindpasswordTv).setOnClickListener {
+            val intent : Intent = Intent(applicationContext, FindPasswordActivity::class.java)
+            startActivity(intent)
         }
 
     }

@@ -21,7 +21,7 @@
         android:layout_width="0dp"
         android:layout_height="60sp"
         android:layout_margin="20sp"
-        android:background="@drawable/edittext_design_1"
+        android:background="@drawable/gray_background"
         android:fontFamily="@font/roboto_medium"
         android:hint="이메일 입력"
         android:textColorHint="#000"
@@ -40,7 +40,7 @@
         android:layout_marginLeft="20dp"
         android:layout_marginTop="10dp"
         android:layout_marginRight="20dp"
-        android:background="@drawable/edittext_design_1"
+        android:background="@drawable/gray_background"
         android:fontFamily="@font/roboto_medium"
         android:hint="비밀번호 입력"
         android:textColorHint="#000"
@@ -89,6 +89,20 @@
         app:layout_constraintEnd_toEndOf="@id/loginBtn"
         app:layout_constraintStart_toEndOf="@id/loginErrorIv"
         app:layout_constraintTop_toBottomOf="@id/loginPasswordEtv" />
+
+    <TextView
+        android:id="@+id/loginFindpasswordTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="비밀번호 찾기"
+        android:textColor="#b0b0b0"
+        android:fontFamily="@font/roboto_medium"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/loginBtn"
+        android:layout_marginTop="15sp"
+        android:padding="2sp"
+        />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

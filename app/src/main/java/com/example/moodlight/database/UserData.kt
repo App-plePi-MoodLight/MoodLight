@@ -2,6 +2,7 @@ package com.example.moodlight.database
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
+import androidx.room.Ignore
 import androidx.room.PrimaryKey
 
 @Entity
@@ -20,5 +21,13 @@ class UserData {
         this.id = id
         this.password = password
     }
+
+    @Ignore
+    constructor(loginID : Int,id : String, password : String) {
+        this.loginID = loginID
+        this.id = id
+        this.password = password
+    }
+
 
 }

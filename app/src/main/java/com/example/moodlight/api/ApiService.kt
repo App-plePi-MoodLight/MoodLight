@@ -104,9 +104,23 @@ interface ApiService {
     @GET("answer/my/all")
     fun getMyAnswerAll() : Call<MyAnswerModel>
 
+    @GET("/answer/my/exist/{activateDate}")
+    fun getMyAnswerExist(@Path("activateDate") activateDate: String) : Call<AnswerExistModel>
+
     @POST("auth/find-password")
-    fun findPassword(@Body email: FindPassWordBodyModel) : Call<FindPassWordModel>
+    fun findPassword(@Body findPasswordRequestModel: FindPassWordBodyModel) : Call<FindPassWordModel>
 
     @POST("auth/confirm-find-password")
-    fun confirmFindPassword(@Body bodymodel: CheckCodeBodyModel) : Call<CheckCodeModel>
+    fun confirmFindPassword(@Body confirmFindPasswordModel: CheckCodeBodyModel) : Call<CheckCodeModel>
+
+    @POST("auth/confirm-check")
+    fun checkConfirm(@Body confirmCheckModel: ConfirmCheckModel) : Call<SuccessResponseModel>
+
+
+    @POST("auth/find-password")
+    fun sentFindPassword(@Body findPasswordRequestModel: FindPasswordRequestModel) : Call<SuccessResponseModel>
+
+    @POST("auth/confirm-find-password")
+    fun confirmFindPassword(@Body confirmFindPasswordModel: ConfirmFindPasswordModel) : Call<SuccessResponseModel>
+
 }

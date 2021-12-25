@@ -16,18 +16,33 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <TextView
+            android:id="@+id/register3Tv1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="25sp"
+            android:fontFamily="@font/roboto_bold"
+            android:text="인증번호 입력"
+            android:textColor="#000000"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <EditText
             android:id="@+id/register4Etv1"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:hint="인증번호"
-            android:text="@={viewModel.confirmCode}"
-            android:theme="@style/editText"
-            android:inputType="number"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
             android:layout_margin="20sp"
-            />
+            android:theme="@style/editText"
+            android:fontFamily="@font/roboto_medium"
+            android:hint="인증번호를 입력해주세요"
+            android:inputType="number"
+            android:background="@drawable/gray_background"
+            android:padding="17sp"
+            android:text="@={viewModel.confirmCode}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/register3Tv1" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/register4Btn1"
@@ -37,7 +52,6 @@
             android:layout_marginEnd="20sp"
             android:layout_marginBottom="32sp"
             android:background="@drawable/btn_design_3"
-            android:enabled="false"
             android:fontFamily="@font/roboto_bold"
             android:text="가입하기"
             android:textColor="#ffffff"

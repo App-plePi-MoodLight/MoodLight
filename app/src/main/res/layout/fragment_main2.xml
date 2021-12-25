@@ -46,6 +46,19 @@
 
         </Toolbar>
 
+        <TextView
+            android:id="@+id/main2YearTv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@{year}"
+            tools:text="2021"
+            android:gravity="center"
+            android:fontFamily="@font/roboto_medium"
+            android:textSize="14sp"
+            android:textColor="#000000"
+            app:layout_constraintTop_toBottomOf="@id/main2Toolbar"
+            />
+
         <ImageButton
             android:id="@+id/main2LeftBtn"
             android:layout_width="wrap_content"
@@ -74,7 +87,7 @@
             android:textColor="#212121"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/main2Toolbar"
+            app:layout_constraintTop_toBottomOf="@id/main2YearTv"
             tools:text="May" />
 
         <ImageButton

@@ -13,14 +13,22 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MoodLight">
         <activity
-            android:name=".screen.main3.setting.NewPassWordActivity"
-            android:exported="false" />
-        <activity
-            android:name=".screen.main3.setting.FindPassWordActivity"
+            android:name=".screen.main3.HelpAcitvity"
             android:exported="false" />
         <activity android:name=".screen.main1.CommunityActivity" />
         <activity android:name=".screen.main1.PickMoodActivity" />
         <activity android:name=".screen.main1.CommentActivity" />
+        <activity
+            android:name=".dialog.TerminationDialog"
+            android:exported="false"
+            tools:ignore="Instantiatable" />
+        <activity
+            android:name=".dialog.LoadingDialog"
+            android:exported="false"
+            tools:ignore="Instantiatable" />
+        <activity
+            android:name=".screen.findpassword.FindPasswordActivity"
+            android:exported="true" />
         <activity android:name=".screen.main3.setting.SettingActivity" />
         <activity android:name=".screen.main1.AnswerActivity" />
         <activity
@@ -35,7 +43,9 @@
             tools:ignore="Instantiatable" />
         <activity android:name=".screen.initial.InitialActivity" />
         <activity android:name=".screen.register.RegisterActivity" />
-        <activity android:name=".screen.splash.SplashActivity">
+        <activity
+            android:name=".screen.splash.SplashActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

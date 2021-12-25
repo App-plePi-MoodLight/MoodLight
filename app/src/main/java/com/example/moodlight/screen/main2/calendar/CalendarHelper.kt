@@ -1,6 +1,5 @@
 package com.example.moodlight.screen.main2.calendar
 
-import android.util.Log
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -75,8 +74,9 @@ class CalendarHelper {
             // ex) str require :  2021-10-21T14:27:47.134Z
             val format = SimpleDateFormat("yyyy-MM-dd")
             val date: Date = format.parse(str)
-            Log.e("nn",date.day.toString())
-            return (date.day+17).toString()
+            val dayFormat = SimpleDateFormat("dd")
+
+            return dayFormat.format(date)
         }
 
     }

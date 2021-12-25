@@ -33,7 +33,6 @@ class CommunityViewModel(application: Application) : ViewModel() {
     val id: MutableLiveData<String?>
         get() = repository.questionId
 
-    private var lastId = 0
 
     init {
         id.value = null
@@ -59,7 +58,8 @@ class CommunityViewModel(application: Application) : ViewModel() {
     }
 
     fun refresh(){
-        answerList.value!!.clear()
+        answerList.value = arrayListOf()
         repository.refresh()
+        getAnswer()
     }
 }

@@ -115,6 +115,20 @@ class MainFragment3 : Fragment() {
                 .putExtra("userEmail", userEmail), 100)
         }
 
+        binding.main3Btn2.setOnClickListener {
+            startActivityForResult(Intent(requireActivity(), SettingActivity::class.java)
+                .putExtra("userId", userId)
+                .putExtra("userEmail", userEmail), 100)
+        }
+
+        binding.helpBtn1.setOnClickListener {
+            //intent
+        }
+
+        binding.main3Tv5.setOnClickListener {
+            //intent
+        }
+
         binding.main3WithdrawalTv.setOnClickListener {
             activity?.onClickBtnInFragment(1)
 
@@ -225,6 +239,9 @@ class MainFragment3 : Fragment() {
         binding.main3Btn1.postDelayed({
             binding.main3Btn1.isVisible = true
         }, 350L)
+        binding.main3Btn2.postDelayed({
+            binding.main3Btn1.isVisible = true
+        }, 350L)
         binding.main3Tv2.postDelayed({
             binding.main3Tv2.isVisible = true
         }, 400L)
@@ -243,8 +260,14 @@ class MainFragment3 : Fragment() {
         binding.main3Tv5.postDelayed({
             binding.main3Tv5.isVisible = true
         }, 650L)
+        binding.helpBtn1.postDelayed({
+            binding.main3Tv5.isVisible = true
+        }, 650L)
         binding.main3SubscriptionTv.postDelayed({
             binding.main3SubscriptionTv.isVisible = true
+        }, 700L)
+        binding.main3Tv6.postDelayed({
+            binding.main3Tv6.isVisible = true
         }, 700L)
         binding.main3LogoutBtn.postDelayed({
             binding.main3LogoutBtn.isVisible = true
@@ -253,6 +276,9 @@ class MainFragment3 : Fragment() {
             binding.main3WithdrawalTv.isVisible = true
         }, 800L)
 
+        binding.layout1.postDelayed({
+            binding.layout1.isVisible = true
+        }, 850L)
     }
 
     override fun onResume() {

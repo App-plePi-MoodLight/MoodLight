@@ -30,9 +30,7 @@ class AnswerAdapter() :
             fun onBind(item: AnswerItemModel){
                 binding.viewModel = item
                 binding.answerCommentButton.setOnClickListener {
-                    val intent = Intent(binding.root.context, CommentActivity::class.java)
-                    intent.putExtra("answerId", item.id)
-                    binding.root.context.startActivity(intent)
+                    intentComment(item)
                 }
                 binding.answerRecommendButton.apply {
                     setOnClickListener {
@@ -46,9 +44,17 @@ class AnswerAdapter() :
                         recommend(item.isLike, item)
                     }
                 }
+                binding.answerCommentImage.setOnClickListener {
+                    intentComment(item)
+                }
                 binding.answerRecommendButton.background = setRecommendButton()
 
             }
+        private fun intentComment(item: AnswerItemModel){
+            val intent = Intent(binding.root.context, CommentActivity::class.java)
+            intent.putExtra("answerId", item.id)
+            binding.root.context.startActivity(intent)
+        }
         private fun setRecommendButton(): Drawable {
             return when (DataType.MOOD) {
                 DataType.HAPPY_MOOD -> ContextCompat.getDrawable(

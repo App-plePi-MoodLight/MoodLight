@@ -50,6 +50,9 @@ class Main3Helper {
             binding.main3Btn1.postDelayed({
                 binding.main3Btn1.isVisible = true
             }, 350L)
+            binding.main3Btn2.postDelayed({
+                binding.main3Btn2.isVisible = true
+            }, 350L)
             binding.main3Tv2.postDelayed({
                 binding.main3Tv2.isVisible = true
             }, 400L)
@@ -68,6 +71,12 @@ class Main3Helper {
             binding.main3Tv5.postDelayed({
                 binding.main3Tv5.isVisible = true
             }, 650L)
+            binding.main3Tv6.postDelayed({
+                binding.main3Tv6.isVisible = true
+            }, 650L)
+            binding.helpBtn1.postDelayed({
+                binding.helpBtn1.isVisible = true
+            }, 650L)
             binding.main3SubscriptionTv.postDelayed({
                 binding.main3SubscriptionTv.isVisible = true
             }, 700L)
@@ -77,6 +86,9 @@ class Main3Helper {
             binding.main3WithdrawalTv.postDelayed({
                 binding.main3WithdrawalTv.isVisible = true
             }, 800L)
+            binding.layout1.postDelayed({
+                binding.layout1.isVisible = true
+            }, 850L)
         }
 
         fun setVisible(binding : FragmentMain3Binding) : Unit {
@@ -94,6 +106,11 @@ class Main3Helper {
             binding.main3SubscriptionTv.isVisible = true
             binding.main3LogoutBtn.isVisible = true
             binding.main3WithdrawalTv.isVisible = true
+            binding.layout1.isVisible = true
+            binding.helpBtn1.isVisible = true
+            binding.main3Btn2.isVisible = true
+            binding.main3Tv6.isVisible = true
+            binding.helpBtn1.isVisible = true
         }
 
     }

@@ -13,12 +13,14 @@ import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import com.example.moodlight.R
 import com.example.moodlight.api.ServerClient
 import com.example.moodlight.databinding.FragmentMainStatisticsBinding
 import com.example.moodlight.model.moodcount.MoodCountModel
 import com.example.moodlight.model.moodcount.MoodCountModelItem
 import com.example.moodlight.model.question_response.QuestionResponseModel
+import com.example.moodlight.screen.main2.calendar.Main2CalendarViewModel
 import com.example.moodlight.util.AppUtil
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -26,6 +28,7 @@ import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.util.*
 
 class MainStatisticsFragment : Fragment() {
 
@@ -51,46 +54,7 @@ class MainStatisticsFragment : Fragment() {
         setLastQuestion()
         setLastDate()
 
-
-/*        FirebaseUtil.getFireStoreInstance().collection("post")
-            .document("information")
-            .get()
-            .addOnCompleteListener {
-                val lastHappyCount = it.result!!.get("lastHappyCount").toString().toInt()
-                val lastMadCount = it.result!!.get("lastMadCount").toString().toInt()
-                val lastSadCount = it.result!!.get("lastSadCount").toString().toInt()
-
-                CoroutineScope(Dispatchers.Main).launch {
-                    val counts = setOf(lastHappyCount, lastMadCount, lastSadCount)
-                    when(counts.maxOrNull()) {
-                        lastHappyCount -> {
-                            binding.mainStatsLastHappyIv.layoutParams = LinearLayout.LayoutParams(getSize(), getSize())
-                            binding.lastStatsText1 = getString(R.string.happy_topic1)
-                            binding.lastStatsText2 = getRandomTopic(R.array.happy_topic)
-                        }
-                        lastMadCount -> {
-                            binding.mainStatsLastMadIv.layoutParams = LinearLayout.LayoutParams(getSize(), getSize())
-                            binding.lastStatsText1 = getString(R.string.mad_topic1)
-                            binding.lastStatsText2 = getRandomTopic(R.array.mad_topic)
-                        }
-                        lastSadCount -> {
-                            binding.mainStatsLastSadIv.layoutParams = LinearLayout.LayoutParams(getSize(), getSize())
-                            binding.lastStatsText1 = getString(R.string.sad_topic1)
-                            binding.lastStatsText2 = getRandomTopic(R.array.sad_topic)
-                        }
-                    }
-                }
-
-                binding.todayQuestion = it.result!!.get("todayQuestion") as String
-                binding.lastQuestion = it.result!!.get("lastQuestion") as String
-                binding.happySum = it.result!!.get("todayHappyCount").toString()
-                binding.madSum = it.result!!.get("todayMadCount").toString()
-                binding.sadSum = it.result!!.get("todaySadCount").toString()
-                binding.lastHappySum = it.result!!.get("lastHappyCount").toString()
-                binding.lastMadSum = it.result!!.get("lastMadCount").toString()
-                binding.lastSadSum = it.result!!.get("lastSadCount").toString()
-
-            }*/
+        AppUtil.setBaseCalendarList(ViewModelProvider(requireActivity()).get(Main2CalendarViewModel::class.java))
 
         setAnimation()
 
@@ -123,6 +87,7 @@ class MainStatisticsFragment : Fragment() {
     }
 
     private fun setLastQuestion() {
+        Log.e("xx",AppUtil.getLastDate())
         ServerClient.getApiService().getQuestion(AppUtil.getLastDate())
             .enqueue(object : Callback<QuestionResponseModel> {
 
@@ -160,6 +125,8 @@ class MainStatisticsFragment : Fragment() {
                     var todaySadCount = 0
                     if (response.isSuccessful) {
                         val moodCountList : ArrayList<MoodCountModelItem> = response.body()!!
+                        Log.e("nowdate", moodCountList.toString())
+
                         if (moodCountList.size > 0 && moodCountList[0].mood != null) {
                             for (i in 0..2) {
                                 when(moodCountList[i].mood) {
@@ -221,30 +188,40 @@ class MainStatisticsFragment : Fragment() {
                             }
 
                             CoroutineScope(Dispatchers.Main).launch {
-                                val counts = setOf(lastHappyCount, lastMadCount, lastSadCount)
-                                when (counts.maxOrNull()) {
-                                    lastHappyCount -> {
-                                        binding.mainStatsLastHappyIv.layoutParams =
-                                            LinearLayout.LayoutParams(getSize(), getSize())
-                                        binding.lastStatsText1 = getString(R.string.happy_topic1)
-                                        binding.lastStatsText2 = getRandomTopic(R.array.happy_topic)
-                                    }
-                                    lastMadCount -> {
-                                        binding.mainStatsLastMadIv.layoutParams =
-                                            LinearLayout.LayoutParams(getSize(), getSize())
-                                        binding.lastStatsText1 = getString(R.string.mad_topic1)
-                                        binding.lastStatsText2 = getRandomTopic(R.array.mad_topic)
-                                    }
-                                    lastSadCount -> {
-                                        binding.mainStatsLastSadIv.layoutParams =
-                                            LinearLayout.LayoutParams(getSize(), getSize())
-                                        binding.lastStatsText1 = getString(R.string.sad_topic1)
-                                        binding.lastStatsText2 = getRandomTopic(R.array.sad_topic)
+                                if (lastHappyCount <= 0 && lastMadCount <= 0 && lastSadCount <= 0) {
+                                    binding.lastStatsText1 = ""
+                                    binding.lastStatsText2 = ""
+                                }
+                                else {
+                                    val counts = setOf(lastHappyCount, lastMadCount, lastSadCount)
+                                    when (counts.maxOrNull()) {
+                                        lastHappyCount -> {
+                                            binding.mainStatsLastHappyIv.layoutParams =
+                                                LinearLayout.LayoutParams(getSize(), getSize())
+                                            binding.lastStatsText1 =
+                                                getString(R.string.happy_topic1)
+                                            binding.lastStatsText2 =
+                                                getRandomTopic(R.array.happy_topic)
+                                        }
+                                        lastMadCount -> {
+                                            binding.mainStatsLastMadIv.layoutParams =
+                                                LinearLayout.LayoutParams(getSize(), getSize())
+                                            binding.lastStatsText1 = getString(R.string.mad_topic1)
+                                            binding.lastStatsText2 =
+                                                getRandomTopic(R.array.mad_topic)
+                                        }
+                                        lastSadCount -> {
+                                            binding.mainStatsLastSadIv.layoutParams =
+                                                LinearLayout.LayoutParams(getSize(), getSize())
+                                            binding.lastStatsText1 = getString(R.string.sad_topic1)
+                                            binding.lastStatsText2 =
+                                                getRandomTopic(R.array.sad_topic)
+                                        }
                                     }
                                 }
                             }
                         } else {
-                            binding.lastStatsText1 = "어제는 아무 게시물이 올라오지 않았어요."
+                            binding.lastStatsText1 = "어제는 아무 게시물도 올라오지 않았어요."
                             binding.lastStatsText2 = ""
                         }
 

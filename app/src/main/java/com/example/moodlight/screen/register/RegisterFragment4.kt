@@ -1,24 +1,24 @@
 package com.example.moodlight.screen.register
 
+import android.content.ContentValues
 import android.content.Intent
-import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.moodlight.R
 import com.example.moodlight.api.ServerClient
 import com.example.moodlight.database.UserData
-import com.example.moodlight.database.UserDatabase
 import com.example.moodlight.databinding.FragmentRegister4Binding
+import com.example.moodlight.model.LoginModel
 import com.example.moodlight.model.RegisterConfirmModel
 import com.example.moodlight.screen.MainActivity
 import com.example.moodlight.screen.initial.InitialActivity
+import com.example.moodlight.util.AppUtil
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -46,13 +46,8 @@ class RegisterFragment4 : Fragment() {
         )
         binding.viewModel = viewModel
 
-        viewModel.confirmCode.observe(requireActivity(), Observer {
-            if(it != null && !it.equals("")) {
-                setActive()
-            } else {
-                setFailureInActive()
-            }
-        })
+        AppUtil.setSuccessAlarm(binding.register4Iv1, binding.register4Tv2,
+        "입력하신 이메일로 인증번호를 발송하였습니다.")
 
         binding.register4Btn1.setOnClickListener {
             if (binding.register4Etv1.text != null && binding.register4Etv1.text.toString() != "") {
@@ -67,12 +62,10 @@ class RegisterFragment4 : Fragment() {
                         ) {
                             if (response.isSuccessful) {
                                 saveLoginData()
-                                val intent : Intent = Intent(requireContext(), MainActivity::class.java)
-                                startActivity(intent)
-                                initialActivity.finish()
-                                requireActivity().finish()
+                                login()
                             } else {
-                                Toast.makeText(requireContext(), response.code().toString(), Toast.LENGTH_SHORT).show()
+                                AppUtil.setFailureAlarm(binding.register4Iv1, binding.register4Tv2,
+                                    "인증번호가 일치하지 않습니다.")
                             }
                         }
 
@@ -86,38 +79,44 @@ class RegisterFragment4 : Fragment() {
         }
 
 
-
         return binding.root
     }
 
-    private fun setActive() {
-        binding.register4Btn1.isEnabled = true
-        if (binding.register4Tv2.visibility == View.VISIBLE) {
-            binding.register4Tv2.visibility = View.INVISIBLE
-            binding.register4Iv1.visibility = View.INVISIBLE
-
-        }
-    }
-
-    private fun setFailureInActive() {
-        binding.register4Iv1.setImageResource(R.drawable.img_danger)
-        binding.register4Tv2.setTextColor(Color.parseColor("#fd3939"))
-        binding.register4Tv2.text = "인증번호를 입력해주세요."
-
-        if (binding.register4Tv2.visibility == View.INVISIBLE) {
-            binding.register4Tv2.visibility = View.VISIBLE
-            binding.register4Iv1.visibility = View.VISIBLE
-        }
-        if (binding.register4Btn1.isEnabled)
-            binding.register4Btn1.isEnabled = false
-    }
-
     private fun saveLoginData() : Unit {
-        val userDataBase : UserDatabase = UserDatabase.getInstance(requireContext())!!
         CoroutineScope(Dispatchers.IO).launch {
             val userData: UserData = UserData(viewModel.email.value!!, viewModel.password.value!!)
-            userDataBase.userDao().insert(userData)
+            viewModel.insertLoginData(userData)
         }
+    }
+
+    private fun login() : Unit {
+        val loginModel : LoginModel = LoginModel(viewModel.email.value!!, viewModel.password.value!!)
+        ServerClient.getApiService().login(loginModel)
+            .enqueue(object : Callback<LoginModel> {
+
+                override fun onResponse(
+                    call: Call<LoginModel>,
+                    response: Response<LoginModel>
+                ) {
+                    if (response.isSuccessful) {
+                        ServerClient.accessToken = response.body()!!.accessToken
+                        // Sign in success, update UI with the signed-in user's information
+
+                        Log.d("Login", "signInWithEmail:success")
+                        val intent : Intent = Intent(requireContext(), MainActivity::class.java)
+                        startActivity(intent)
+                        initialActivity.finish()
+                        requireActivity().finish()
+
+                    } else {
+                        Log.d(ContentValues.TAG, "onResponse: respone : ${response}")
+                    }
+                }
+
+                override fun onFailure(call: Call<LoginModel>, t: Throwable) {
+                    t.printStackTrace()
+                }
+            })
     }
 
 }

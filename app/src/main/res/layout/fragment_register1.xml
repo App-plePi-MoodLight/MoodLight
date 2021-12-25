@@ -36,6 +36,8 @@
             android:fontFamily="@font/roboto_medium"
             android:hint="사용하실 이메일을 입력해 주세요"
             android:inputType="textEmailAddress"
+            android:background="@drawable/gray_background"
+            android:padding="17sp"
             android:text="@={viewModel.email}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

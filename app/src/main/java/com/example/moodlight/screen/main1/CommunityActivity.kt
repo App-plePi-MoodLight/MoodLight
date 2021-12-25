@@ -15,12 +15,22 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.moodlight.R
+import com.example.moodlight.api.ServerClient
 import com.example.moodlight.databinding.ActivityCommunityBinding
+import com.example.moodlight.model.AnswerExistModel
+import com.example.moodlight.model.my_answer.MyAnswerModel
 import com.example.moodlight.screen.main1.viewmodel.CommunityFactory
 import com.example.moodlight.screen.main1.viewmodel.CommunityViewModel
 import com.example.moodlight.screen.main1.viewmodel.PickMoodFactory
 import com.example.moodlight.screen.main1.viewmodel.PickMoodViewModel
 import com.example.moodlight.util.DataType
+import com.example.moodlight.util.MoodUtilCode
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 class CommunityActivity : AppCompatActivity() {
 
@@ -35,7 +45,7 @@ class CommunityActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        refresh()
+        initRecycler()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -50,7 +60,7 @@ class CommunityActivity : AppCompatActivity() {
         viewModel.answerList.observe(this) {
             adapter.setItem(it)
             adapter.notifyDataSetChanged()
-            if (it.size in 1..14) {
+            if (it.size in 0..14) {
                 isNext = false
                 adapter.removeLoading()
             }
@@ -65,7 +75,6 @@ class CommunityActivity : AppCompatActivity() {
         onScroll()
         refresh()
     }
-
     private fun onScroll() {
         binding.communityAnswerRecycler.addOnScrollListener(object :
             RecyclerView.OnScrollListener() {
@@ -87,20 +96,43 @@ class CommunityActivity : AppCompatActivity() {
     }
 
     fun access(view: View) {
-        val intent = Intent(this, AnswerActivity::class.java)
-        intent.putExtra("id", viewModel.id.value)
-        intent.putExtra("todayQuestion", viewModel.todayQuestion.value)
-        startActivity(intent)
+        var currentTime = System.currentTimeMillis()
+        val format = SimpleDateFormat("yyyy-MM-dd", Locale("ko", "KR"))
+
+        ServerClient.getApiService().getMyAnswerExist(format.format(currentTime)).enqueue(object : Callback<AnswerExistModel>{
+            override fun onResponse(
+                call: Call<AnswerExistModel>,
+                response: Response<AnswerExistModel>
+            ) {
+                if(response.isSuccessful){
+                    if (!response.body()!!.exist){
+                        val intent = Intent(applicationContext, AnswerActivity::class.java)
+                        intent.putExtra("id", viewModel.id.value)
+                        intent.putExtra("todayQuestion", viewModel.todayQuestion.value)
+                        startActivity(intent)
+                    }else{
+                        Toast.makeText(applicationContext, "이미 답변을 했어요", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<AnswerExistModel>, t: Throwable) {
+            }
+
+        })
     }
 
     private fun refresh() {
         binding.swipeLayout.setOnRefreshListener {
-            isNext = true
-            adapter.removeAll()
-            viewModel.refresh()
+            initRecycler()
             binding.swipeLayout.isRefreshing = false
         }
     }
 
+    private fun initRecycler(){
+        isNext = true
+        adapter.removeAll()
+        viewModel.refresh()
+    }
 
 }

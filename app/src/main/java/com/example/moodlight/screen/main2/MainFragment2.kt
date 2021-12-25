@@ -43,11 +43,11 @@ class MainFragment2 : Fragment() {
     private lateinit var myAnswerList : MyAnswerModel
 
     private val viewModel: Main2ViewModel by lazy {
-        ViewModelProvider(this).get(Main2ViewModel::class.java)
+        ViewModelProvider(requireActivity()).get(Main2ViewModel::class.java)
     }
 
     private val calendarViewModel: Main2CalendarViewModel by lazy {
-        ViewModelProvider(this).get(Main2CalendarViewModel::class.java)
+        ViewModelProvider(requireActivity()).get(Main2CalendarViewModel::class.java)
     }
 
     private var isLoding : Boolean = false
@@ -72,11 +72,6 @@ class MainFragment2 : Fragment() {
         binding.fragment = this
 
 
-        binding.recycler.adapter = DateAdapter(requireContext(), list){data ->
-            startActivity(Intent(requireActivity(), DetailAnswerActivity::class.java)
-                .putExtra("data", data))
-        }
-        binding.recycler.setHasFixedSize(true)
 
 //        binding.recycler.addOnScrollListener(object :  RecyclerView.OnScrollListener() {
 //            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
@@ -104,6 +99,9 @@ class MainFragment2 : Fragment() {
                 }
         }*/
 
+        val adapter: Main2CalendarAdapter = Main2CalendarAdapter(calendarViewModel)
+        binding.main2CalendarRecyclerView.adapter = adapter
+        binding.main2CalendarRecyclerView.adapter!!.notifyDataSetChanged()
 
         ServerClient.getApiService().getMyAnswerAll()
             .enqueue(object : Callback<MyAnswerModel> {
@@ -113,7 +111,12 @@ class MainFragment2 : Fragment() {
                     response: Response<MyAnswerModel>
                 ) {
                     if (response.isSuccessful) {
-                        myAnswerList = response.body()!!
+                        if (response.body() == null) {
+                            myAnswerList = MyAnswerModel()
+                        }
+                        else {
+                            myAnswerList = response.body()!!
+                        }
                         setUi()
                     }
                     else {
@@ -130,6 +133,9 @@ class MainFragment2 : Fragment() {
 
         if(list.isEmpty()){
             dataLoding()
+        }
+        else{
+            setAdapter()
         }
 
 
@@ -188,6 +194,14 @@ class MainFragment2 : Fragment() {
 //        }
     }
 
+    private fun setAdapter() {
+        binding.recycler.adapter = DateAdapter(requireContext(), list){data ->
+            startActivity(Intent(requireActivity(), DetailAnswerActivity::class.java)
+                .putExtra("data", data))
+        }
+        binding.recycler.setHasFixedSize(true)
+    }
+
     private fun processingData(result: MyAnswerListModel?){
 
         for( i in 0 until result!!.size){
@@ -235,11 +249,14 @@ class MainFragment2 : Fragment() {
         val adapter: Main2CalendarAdapter = Main2CalendarAdapter(calendarViewModel)
         binding.main2CalendarRecyclerView.adapter = adapter
         calendarViewModel.today = calendarHelper.getDate()
+        binding.year = calendarHelper.getYear().toString()
 
         setCalendar()
     }
 
     private fun setCalendar() {
+
+        calendarViewModel.dateList.clear()
 
         val lastEndDay: Int
         when (calendarHelper.getMonth() + 1) {
@@ -253,12 +270,10 @@ class MainFragment2 : Fragment() {
             }
             3 -> {
                 viewModel.month.value = "March"
-                if (calendarHelper.getYear() % 4 == 0 && calendarHelper.getYear() % 100 != 0
-                    || calendarHelper.getYear() % 400 == 0
-                ) {
-                    lastEndDay = 29
+                lastEndDay = if (AppUtil.isLeapYear(calendarHelper.getYear())) {
+                    29
                 } else
-                    lastEndDay = 28
+                    28
             }
             4 -> {
                 viewModel.month.value = "April"
@@ -339,8 +354,9 @@ class MainFragment2 : Fragment() {
         else {
 
             // 사용자가 작성한 게시글이 존재할 시
-            for (k in 0 until calendarHelper.getEndDay()) {
+            for (k in 1 .. calendarHelper.getEndDay()) {
                 var main2CalendarData : Main2CalendarData? = null
+
                 for (l in 0 until targetAnswerList.size) {
 
 /*                    try {*/
@@ -355,32 +371,29 @@ class MainFragment2 : Fragment() {
                                     "sad" -> moodType = DataType.SAD_MOOD
                                     "mad" -> moodType = DataType.MAD_MOOD
                                 }
+
                                 main2CalendarData = Main2CalendarData(
-                                    (k + 1).toString(),
+                                    (k).toString(),
                                     moodType,
-                                    DataType.CURRENT_DAY
-                                )
+                                    DataType.CURRENT_DAY)
+
+
+
                             } catch (e : NullPointerException) {
                                 main2CalendarData = Main2CalendarData(
-                                    (k + 1).toString(),
+                                    (k).toString(),
                                     DataType.NONE_MOOD,
-                                    DataType.CURRENT_DAY
-                                )
+                                    DataType.CURRENT_DAY)
+
                             }
+
                         }
-/*                    } catch (e : NullPointerException) {
-                        // 사용자가 작성한 게시글이 존재하지만 이번달에 작성한 게시물이 없을시
-                        main2CalendarData = Main2CalendarData(
-                        (k+1).toString(),
-                        DataType.NONE_MOOD,
-                        DataType.CURRENT_DAY)
-                    }*/
 
                 }
 
                 if (main2CalendarData == null) {
                     main2CalendarData = Main2CalendarData(
-                        (k+1).toString(),
+                        (k).toString(),
                         DataType.NONE_MOOD,
                         DataType.CURRENT_DAY
                     )
@@ -414,6 +427,8 @@ class MainFragment2 : Fragment() {
 
             setCalendar()
         }
+
+        binding.year = calendarHelper.getYear().toString()
     }
 
     public fun minusMonth(view: View) {
@@ -421,7 +436,12 @@ class MainFragment2 : Fragment() {
 
         calendarViewModel.dateList.clear()
         setCalendar()
+        binding.year = calendarHelper.getYear().toString()
     }
 
-
+    override fun onStop() {
+        super.onStop()
+        calendarViewModel.dateList.clear()
+        AppUtil.setBaseCalendarList(calendarViewModel)
+    }
 }

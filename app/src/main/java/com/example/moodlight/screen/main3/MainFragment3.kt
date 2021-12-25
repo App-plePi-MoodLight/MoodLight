@@ -6,12 +6,8 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.ContentValues.TAG
 import android.content.Context
-import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.graphics.drawable.ShapeDrawable
-import android.graphics.drawable.shapes.OvalShape
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -19,40 +15,27 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.core.net.toFile
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
-import com.bumptech.glide.Glide
 import com.example.moodlight.R
 import com.example.moodlight.api.ServerClient
-import com.example.moodlight.database.UserData
 import com.example.moodlight.database.UserDatabase
 import com.example.moodlight.databinding.FragmentMain3Binding
 import com.example.moodlight.screen.initial.InitialActivity
-import com.example.moodlight.dialog.CommonDialog
 import com.example.moodlight.model.setting.UserModel
 import com.example.moodlight.screen.MainActivity
+import com.example.moodlight.screen.main3.qna.HelpAcitvity
 import com.example.moodlight.screen.main3.setting.SettingActivity
 import com.example.moodlight.util.FirebaseUtil
 import com.example.moodlight.util.GetTime
-import com.google.android.gms.common.internal.service.Common
-import com.google.firebase.ktx.Firebase
-import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Response
-import java.io.ByteArrayInputStream
-import java.io.ByteArrayOutputStream
-import java.io.File
 import java.text.SimpleDateFormat
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
-import java.time.temporal.ChronoField
 import java.util.*
-import javax.security.auth.callback.Callback
 
 class MainFragment3 : Fragment() {
     private var activity : MainActivity? = MainActivity()
@@ -123,10 +106,12 @@ class MainFragment3 : Fragment() {
 
         binding.helpBtn1.setOnClickListener {
             //intent
+            startActivity(Intent(requireActivity(), HelpAcitvity::class.java))
         }
 
         binding.main3Tv5.setOnClickListener {
             //intent
+            startActivity(Intent(requireActivity(), HelpAcitvity::class.java))
         }
 
         binding.main3WithdrawalTv.setOnClickListener {

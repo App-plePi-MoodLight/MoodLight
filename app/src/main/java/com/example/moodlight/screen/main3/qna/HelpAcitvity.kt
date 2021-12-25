@@ -36,7 +36,7 @@ class HelpAcitvity : AppCompatActivity() {
         for(i in 0 until jsonArray.length()){
             val jsonObject = jsonArray.getJSONObject(i)
             when(i){
-                0->qnaList.add(QnAModelItem(jsonObject.getString("answer"), jsonObject.getBoolean("isExpand"),jsonObject.getString("question"), R.drawable.ic_group))
+                0->qnaList.add(QnAModelItem(jsonObject.getString("answer"), jsonObject.getBoolean("isExpand"),jsonObject.getString("question"), R.drawable.ic_group_256))
                 1->qnaList.add(QnAModelItem(jsonObject.getString("answer"), jsonObject.getBoolean("isExpand"),jsonObject.getString("question"), R.drawable.ic_group))
                 else->{
                     qnaList.add(QnAModelItem(jsonObject.getString("answer"), jsonObject.getBoolean("isExpand"),jsonObject.getString("question"), R.drawable.img_danger))

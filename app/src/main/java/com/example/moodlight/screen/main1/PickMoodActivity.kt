@@ -8,23 +8,16 @@ import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.ViewAnimator
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.ViewModelProvider
 import com.example.moodlight.R
 import com.example.moodlight.databinding.ActivityPcikMoodBinding
-import com.example.moodlight.screen.main1.viewmodel.PickMoodFactory
-import com.example.moodlight.screen.main1.viewmodel.PickMoodViewModel
 import com.example.moodlight.util.DataType
 
 class PickMoodActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityPcikMoodBinding
-    private val viewModel: PickMoodViewModel by lazy {
-        ViewModelProvider(this, PickMoodFactory(this.application))[PickMoodViewModel::class.java]
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

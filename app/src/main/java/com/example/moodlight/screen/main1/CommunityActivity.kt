@@ -2,35 +2,27 @@ package com.example.moodlight.screen.main1
 
 import android.content.ContentValues.TAG
 import android.content.Intent
-import android.database.Observable
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.moodlight.R
 import com.example.moodlight.api.ServerClient
 import com.example.moodlight.databinding.ActivityCommunityBinding
+import com.example.moodlight.dialog.LoadingDialog
 import com.example.moodlight.model.AnswerExistModel
-import com.example.moodlight.model.my_answer.MyAnswerModel
 import com.example.moodlight.screen.main1.viewmodel.CommunityFactory
 import com.example.moodlight.screen.main1.viewmodel.CommunityViewModel
-import com.example.moodlight.screen.main1.viewmodel.PickMoodFactory
-import com.example.moodlight.screen.main1.viewmodel.PickMoodViewModel
-import com.example.moodlight.util.DataType
-import com.example.moodlight.util.MoodUtilCode
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.ArrayList
 
 class CommunityActivity : AppCompatActivity() {
 
@@ -57,6 +49,9 @@ class CommunityActivity : AppCompatActivity() {
 
         binding.communityAnswerRecycler.adapter = adapter
 
+        val loadingDialog = LoadingDialog(this)
+        loadingDialog.show()
+
         viewModel.answerList.observe(this) {
             adapter.setItem(it)
             adapter.notifyDataSetChanged()
@@ -66,12 +61,12 @@ class CommunityActivity : AppCompatActivity() {
             }
         }
         viewModel.todayQuestion.observe(this) {
+            loadingDialog.dismiss()
             if (it == null) {
                 finish()
                 Toast.makeText(this, "아직 주제가 정해지지 않았어요", Toast.LENGTH_SHORT).show()
             }
         }
-
         onScroll()
         refresh()
     }
@@ -85,12 +80,10 @@ class CommunityActivity : AppCompatActivity() {
                 val itemCount = recyclerView.adapter!!.itemCount - 1
                 if (!binding.communityAnswerRecycler.canScrollVertically(1) && lastPosition == itemCount) {
                     if (isNext) {
-                        Log.d(TAG, "onScrolled: $lastPosition $itemCount")
                         adapter.removeLoading()
                         viewModel.getAnswer()
                     }
                 }
-
             }
         })
     }
@@ -99,29 +92,26 @@ class CommunityActivity : AppCompatActivity() {
         var currentTime = System.currentTimeMillis()
         val format = SimpleDateFormat("yyyy-MM-dd", Locale("ko", "KR"))
 
-        ServerClient.getApiService().getMyAnswerExist(format.format(currentTime)).enqueue(object : Callback<AnswerExistModel>{
+        ServerClient.getApiService().getMyAnswerExist(format.format(currentTime)).enqueue(object : Callback<AnswerExistModel> {
             override fun onResponse(
-                call: Call<AnswerExistModel>,
-                response: Response<AnswerExistModel>
+                    call: Call<AnswerExistModel>,
+                    response: Response<AnswerExistModel>
             ) {
-                if(response.isSuccessful){
-                    if (!response.body()!!.exist){
+                if (response.isSuccessful) {
+                    if (!response.body()!!.exist) {
                         val intent = Intent(applicationContext, AnswerActivity::class.java)
                         intent.putExtra("id", viewModel.id.value)
                         intent.putExtra("todayQuestion", viewModel.todayQuestion.value)
                         startActivity(intent)
-                    }else{
-                        Toast.makeText(applicationContext, "이미 답변을 했어요", Toast.LENGTH_SHORT).show()
+                    }else {
+                        Toast.makeText(view.context, "이미 답변을 했어요",Toast.LENGTH_SHORT).show()
                     }
                 }
             }
-
             override fun onFailure(call: Call<AnswerExistModel>, t: Throwable) {
             }
-
         })
     }
-
     private fun refresh() {
         binding.swipeLayout.setOnRefreshListener {
             initRecycler()

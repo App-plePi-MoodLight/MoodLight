@@ -12,7 +12,6 @@ import com.example.moodlight.model.CommentModel
 import com.example.moodlight.util.DataType
 
 class CommentAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-
     private var list = ArrayList<CommentModel?>()
 
     inner class LoadingViewHolder(itemView: View) :
@@ -23,7 +22,6 @@ class CommentAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         RecyclerView.ViewHolder(binding.root) {
         fun onBind(item: CommentModel) {
             binding.comment.text = item.contents
-            Log.d(TAG, "onBind: ${binding.comment.text}")
         }
     }
 
@@ -47,7 +45,6 @@ class CommentAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             holder.onBind(list[position]!!)
         }
     }
-
     override fun getItemCount(): Int = list.size
 
     fun setItem(list: ArrayList<CommentModel?>) {
@@ -65,7 +62,6 @@ class CommentAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             list.removeAt(list.lastIndex)
         }
     }
-
 
     override fun getItemViewType(position: Int): Int {
         return if (list[position] == null) {

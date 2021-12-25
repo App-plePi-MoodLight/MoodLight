@@ -4,6 +4,7 @@ import android.graphics.drawable.Drawable
 
 data class AnswerItemModel(
     val id: Int,
+    val moodLevel: Int,
     val contents: String,
     val private: Boolean,
     var likes: Int,

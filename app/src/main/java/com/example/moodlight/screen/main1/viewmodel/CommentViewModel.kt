@@ -34,7 +34,7 @@ class CommentViewModel(application: Application,private val answerId: Int) : Vie
 
     fun refresh(){
         commentList.value = arrayListOf()
-        commentRepository.refresh()
+        commentRepository.refresh("-1")
         getComment()
     }
 }

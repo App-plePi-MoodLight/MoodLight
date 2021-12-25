@@ -33,7 +33,6 @@ class CommunityRepository {
                 }
             }
         }
-
     }
 
     fun getAnswer() {
@@ -56,7 +55,7 @@ class CommunityRepository {
             })
     }
 
-    fun refresh(){
-        lastId = "-1"
+    fun refresh(id : String){
+        lastId = id
     }
 }

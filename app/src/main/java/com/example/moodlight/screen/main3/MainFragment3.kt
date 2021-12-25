@@ -73,7 +73,7 @@ class MainFragment3 : Fragment() {
         }
 
 
-        if (viewModel.email.value.equals(""))
+        if (viewModel.email.value.equals("Loading"))
             Main3Helper.setAnimation(binding)
         else
             Main3Helper.setVisible(binding)

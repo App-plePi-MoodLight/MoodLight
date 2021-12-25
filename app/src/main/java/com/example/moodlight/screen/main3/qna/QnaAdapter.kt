@@ -20,8 +20,11 @@ class QnaAdapter(val data : QnAModel) : RecyclerView.Adapter<QnaAdapter.ViewHold
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val data = data[position]
 
-        holder.binding.data = data
 
+        if(position == 0 || position == 1){
+            data
+        }
+        holder.binding.data = data
         val isExpand = data.isExpand
         holder.binding.childLayout.visibility = if(isExpand) View.VISIBLE else View.GONE
         holder.binding.expandBtn.rotation = if(isExpand) 90F else 270F

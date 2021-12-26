@@ -53,6 +53,27 @@ class AnswerAdapter() :
             intent.putExtra("answerId", item.id)
             binding.root.context.startActivity(intent)
         }
+        private fun setMoodFace(): Drawable {
+            return when (DataType.MOOD){
+                DataType.HAPPY_MOOD -> ContextCompat.getDrawable(
+                    binding.root.context,
+                    R.drawable.icon_happy
+                )!!
+                DataType.MAD_MOOD -> ContextCompat.getDrawable(
+                    binding.root.context,
+                    R.drawable.icon_mad
+                )!!
+                DataType.SAD_MOOD -> ContextCompat.getDrawable(
+                    binding.root.context,
+                    R.drawable.icon_sad
+                )!!
+                else ->ContextCompat.getDrawable(
+                    binding.root.context,
+                    R.drawable.icon_sad
+                )!!
+
+            }
+        }
         private fun setRecommendButton(): Drawable {
             return when (DataType.MOOD) {
                 DataType.HAPPY_MOOD -> ContextCompat.getDrawable(

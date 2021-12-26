@@ -49,6 +49,7 @@ class CommunityActivity : AppCompatActivity() {
 
         binding.communityAnswerRecycler.adapter = adapter
 
+
         val loadingDialog = LoadingDialog(this)
         loadingDialog.show()
 
@@ -61,10 +62,13 @@ class CommunityActivity : AppCompatActivity() {
             }
         }
         viewModel.todayQuestion.observe(this) {
-            loadingDialog.dismiss()
             if (it == null) {
+                loadingDialog.dismiss()
                 finish()
                 Toast.makeText(this, "아직 주제가 정해지지 않았어요", Toast.LENGTH_SHORT).show()
+            }
+            if(it?.isNotEmpty() == true){
+                loadingDialog.dismiss()
             }
         }
         onScroll()

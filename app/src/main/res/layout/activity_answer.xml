@@ -75,34 +75,83 @@
             android:textColorHint="#949494"
             android:textSize="15sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHeight_percent="0.5"
+            app:layout_constraintHeight_percent="0.45"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/answerTodayQuestion" />
+
+        <TextView
+            android:id="@+id/moodLevelText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="25dp"
+            android:layout_marginLeft="30dp"
+            android:text="@{viewModel.levelText}"
+            android:textSize="15sp"
+            android:textColor="#000000"
+            android:fontFamily="@font/roboto_bold"
+            app:layout_constraintTop_toBottomOf="@id/answerEditText"
+            app:layout_constraintLeft_toLeftOf="parent" />
+
+
+            <ImageButton
+                android:id="@+id/answerMinusButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="60dp"
+                android:src="@drawable/level_minus"
+                android:background="#00000000"
+                android:onClick="@{viewModel::moodLevelDown}"
+                app:layout_constraintTop_toTopOf="@id/moodLevelText"
+                app:layout_constraintRight_toLeftOf="@id/answerPlusButton"
+                app:layout_constraintBottom_toBottomOf="@id/moodLevelText"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{Integer.toString(viewModel.moodLevel)}"
+                android:textSize="15sp"
+                android:textColor="#000000"
+                android:fontFamily="@font/roboto_bold"
+                app:layout_constraintTop_toTopOf="@id/moodLevelText"
+                app:layout_constraintRight_toLeftOf="@id/answerPlusButton"
+                app:layout_constraintBottom_toBottomOf="@id/moodLevelText"
+                app:layout_constraintLeft_toRightOf="@id/answerMinusButton"/>
+
+            <ImageButton
+                android:id="@+id/answerPlusButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="30dp"
+                android:src="@drawable/level_plus"
+                android:background="#00000000"
+                android:onClick="@{viewModel::moodLevelUp}"
+                app:layout_constraintTop_toTopOf="@id/moodLevelText"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintBottom_toBottomOf="@id/moodLevelText"/>
 
         <TextView
             android:id="@+id/privateText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginBottom="25dp"
             android:layout_marginLeft="30dp"
             android:fontFamily="@font/roboto_medium"
             android:text="나만보기"
             android:textColor="#000000"
             android:textSize="16sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/answerEditText" />
+            app:layout_constraintBottom_toTopOf="@id/answerButton"/>
 
         <Switch
             android:id="@+id/answerPrivateSwitch"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="45dp"
-            android:layout_marginTop="20dp"
             android:checked="@{viewModel.privateChecked}"
             android:theme="@style/switchStyle"
             app:layout_constraintBottom_toBottomOf="@+id/privateText"
             app:layout_constraintStart_toEndOf="@id/privateText"
-            app:layout_constraintTop_toBottomOf="@id/answerEditText"
+            app:layout_constraintTop_toTopOf="@id/privateText"
             app:switchPadding="40dp" />
 
         <androidx.appcompat.widget.AppCompatButton

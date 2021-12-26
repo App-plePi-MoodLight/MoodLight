@@ -41,6 +41,14 @@ class MoodUtilCode {
                 )
             }
         }
+        fun setLevelText(): String {
+            return when (DataType.MOOD){
+                DataType.HAPPY_MOOD -> "오늘 나의 행복의 정도는?"
+                DataType.SAD_MOOD -> "오늘 나의 슬픔의 정도는?"
+                DataType.HAPPY_MOOD -> "오늘 나의 분노의 정도는?"
+                else -> "오늘 나의 행복의 정도는?"
+            }
+        }
 
     }
 }

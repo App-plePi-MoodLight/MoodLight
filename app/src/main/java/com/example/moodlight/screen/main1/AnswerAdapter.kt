@@ -8,12 +8,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
-import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.moodlight.R
 import com.example.moodlight.api.ServerClient
 import com.example.moodlight.databinding.ItemAnswerBinding
-import com.example.moodlight.databinding.ItemCommentBinding
 import com.example.moodlight.model.AnswerItemModel
 import com.example.moodlight.model.AnswerRecommendModel
 import com.example.moodlight.util.DataType
@@ -30,7 +28,7 @@ class AnswerAdapter() :
             fun onBind(item: AnswerItemModel){
                 binding.viewModel = item
                 binding.answerCommentButton.setOnClickListener {
-                    intentComment(item)
+                    accessComment(item)
                 }
                 binding.answerRecommendButton.apply {
                     setOnClickListener {
@@ -45,15 +43,36 @@ class AnswerAdapter() :
                     }
                 }
                 binding.answerCommentImage.setOnClickListener {
-                    intentComment(item)
+                    accessComment(item)
                 }
                 binding.answerRecommendButton.background = setRecommendButton()
 
             }
-        private fun intentComment(item: AnswerItemModel){
+        private fun accessComment(item: AnswerItemModel){
             val intent = Intent(binding.root.context, CommentActivity::class.java)
             intent.putExtra("answerId", item.id)
             binding.root.context.startActivity(intent)
+        }
+        private fun setMoodFace(): Drawable {
+            return when (DataType.MOOD){
+                DataType.HAPPY_MOOD -> ContextCompat.getDrawable(
+                    binding.root.context,
+                    R.drawable.icon_happy
+                )!!
+                DataType.MAD_MOOD -> ContextCompat.getDrawable(
+                    binding.root.context,
+                    R.drawable.icon_mad
+                )!!
+                DataType.SAD_MOOD -> ContextCompat.getDrawable(
+                    binding.root.context,
+                    R.drawable.icon_sad
+                )!!
+                else ->ContextCompat.getDrawable(
+                    binding.root.context,
+                    R.drawable.icon_sad
+                )!!
+
+            }
         }
         private fun setRecommendButton(): Drawable {
             return when (DataType.MOOD) {

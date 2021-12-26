@@ -10,11 +10,6 @@
         <variable
             name="activity"
             type="com.example.moodlight.screen.main1.PickMoodActivity" />
-
-        <variable
-            name="viewModel"
-            type="com.example.moodlight.screen.main1.viewmodel.PickMoodViewModel" />
-
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

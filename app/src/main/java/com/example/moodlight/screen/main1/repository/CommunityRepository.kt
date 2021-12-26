@@ -5,11 +5,6 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.example.moodlight.api.ServerClient
 import com.example.moodlight.model.AnswerItemModel
-import com.example.moodlight.model.QuestionModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -33,7 +28,6 @@ class CommunityRepository {
                 }
             }
         }
-
     }
 
     fun getAnswer() {
@@ -56,7 +50,7 @@ class CommunityRepository {
             })
     }
 
-    fun refresh(){
-        lastId = "-1"
+    fun refresh(id : String){
+        lastId = id
     }
 }

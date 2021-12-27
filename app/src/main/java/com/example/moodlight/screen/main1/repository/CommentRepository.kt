@@ -29,13 +29,12 @@ class CommentRepository {
                         }
                     }
                 }
-
                 override fun onFailure(call: Call<List<CommentModel?>>, t: Throwable) {
                 }
             })
     }
 
-    fun refresh() {
-        lastId = "-1"
+    fun refresh(id: String) {
+        lastId = id
     }
 }

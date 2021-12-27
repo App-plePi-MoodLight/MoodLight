@@ -36,6 +36,7 @@ class AnswerActivity : AppCompatActivity() {
 
     fun postAnswer(view: View) {
         val model = AnswerPostModel(
+            viewModel.moodLevel.value!!,
             viewModel.answer.value!!,
             viewModel.privateChecked.value!!,
             intent.getStringExtra("id")!!
@@ -59,5 +60,4 @@ class AnswerActivity : AppCompatActivity() {
             }
         })
     }
-
 }

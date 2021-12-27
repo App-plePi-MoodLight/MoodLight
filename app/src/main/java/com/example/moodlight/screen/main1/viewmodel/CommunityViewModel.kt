@@ -32,15 +32,12 @@ class CommunityViewModel(application: Application) : ViewModel() {
         get() = repository._answerList
     val id: MutableLiveData<String?>
         get() = repository.questionId
-
-
     init {
         id.value = null
         todayQuestion.value = ""
         buttonMood.value = MoodUtilCode.setButtonMood(application.applicationContext)
         getQuestion()
     }
-
     private fun getQuestion() {
         var currentTime = System.currentTimeMillis()
         val format = SimpleDateFormat("yyyy-MM-dd", Locale("ko", "KR"))
@@ -52,14 +49,12 @@ class CommunityViewModel(application: Application) : ViewModel() {
             repository.getAnswer()
         }
     }
-
     fun getAnswer() {
         repository.getAnswer()
     }
-
     fun refresh(){
         answerList.value = arrayListOf()
-        repository.refresh()
+        repository.refresh("-1")
         getAnswer()
     }
 }

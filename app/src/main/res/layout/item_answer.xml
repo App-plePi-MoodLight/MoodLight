@@ -48,6 +48,29 @@
                 app:layout_constraintStart_toEndOf="@id/answerItemProfileImage"
                 app:layout_constraintTop_toTopOf="@id/answerItemProfileImage" />
 
+            <ImageView
+                android:id="@+id/answerLevelIcon"
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:layout_marginRight="15dp"
+                android:src="@drawable/icon_happy"
+                app:layout_constraintTop_toTopOf="@id/answerItemTodayQuestion"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintBottom_toBottomOf="@id/answerItemTodayQuestion"/>
+
+            <TextView
+                android:id="@+id/answerLevelText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="15dp"
+                android:text="@{Integer.toString(viewModel.moodLevel)}"
+                android:textColor="#000000"
+                android:textSize="15sp"
+                android:fontFamily="@font/roboto_bold"
+                app:layout_constraintTop_toTopOf="@id/answerItemTodayQuestion"
+                app:layout_constraintRight_toLeftOf="@id/answerLevelIcon"
+                app:layout_constraintBottom_toBottomOf="@id/answerItemTodayQuestion"/>
+
             <TextView
                 android:id="@+id/answer"
                 android:layout_width="match_parent"

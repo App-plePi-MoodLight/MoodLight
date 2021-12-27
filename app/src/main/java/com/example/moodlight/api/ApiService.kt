@@ -20,7 +20,7 @@ interface ApiService {
     fun joinRequest(@Body joinBodyModel: JoinBodyModel): Call<JoinBodyModel>
 
     @POST("auth/login")
-    fun login(@Body loginModel: LoginModel): Call<LoginModel>
+    fun login(@Body loginModel: LoginBodyModel): Call<LoginModel>
 
     // if exist, true. if NotExist, false
     @GET("user/exist")

@@ -22,8 +22,8 @@ import com.example.moodlight.R
 import com.example.moodlight.api.ServerClient
 import com.example.moodlight.database.UserDatabase
 import com.example.moodlight.databinding.FragmentMain3Binding
-import com.example.moodlight.screen.initial.InitialActivity
 import com.example.moodlight.model.setting.UserModel
+import com.example.moodlight.screen.initial.InitialActivity
 import com.example.moodlight.screen.MainActivity
 import com.example.moodlight.screen.main3.qna.HelpAcitvity
 import com.example.moodlight.screen.main3.setting.SettingActivity

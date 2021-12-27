@@ -74,6 +74,8 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
     implementation 'me.relex:circleindicator:2.1.6'
 
+    implementation 'com.google.firebase:firebase-messaging'
+
     kapt("org.xerial:sqlite-jdbc:3.34.0")
 
     implementation 'com.google.dagger:dagger:2.37'

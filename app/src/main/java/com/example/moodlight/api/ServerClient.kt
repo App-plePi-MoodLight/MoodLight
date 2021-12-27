@@ -1,5 +1,8 @@
 package com.example.moodlight.api
 
+import android.content.ContentValues.TAG
+import android.util.Log
+import com.google.firebase.messaging.FirebaseMessaging
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -9,6 +12,8 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
 object ServerClient {
+
+    // use : ServerClient.getApiService().(FunctionToUse)
 
     // use : ServerClient.getApiService().(FunctionToUse)
 

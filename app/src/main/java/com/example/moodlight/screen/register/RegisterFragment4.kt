@@ -1,6 +1,7 @@
 package com.example.moodlight.screen.register
 
 import android.content.ContentValues
+import android.content.ContentValues.TAG
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -14,6 +15,7 @@ import com.example.moodlight.R
 import com.example.moodlight.api.ServerClient
 import com.example.moodlight.database.UserData
 import com.example.moodlight.databinding.FragmentRegister4Binding
+import com.example.moodlight.model.LoginBodyModel
 import com.example.moodlight.model.LoginModel
 import com.example.moodlight.model.RegisterConfirmModel
 import com.example.moodlight.screen.MainActivity
@@ -62,7 +64,10 @@ class RegisterFragment4 : Fragment() {
                         ) {
                             if (response.isSuccessful) {
                                 saveLoginData()
-                                login()
+                                AppUtil.getToken().addOnCompleteListener {
+                                    Log.d(TAG, "onResponse: tokenm : ${it.result}")
+                                    login(it.result!!)
+                                }
                             } else {
                                 AppUtil.setFailureAlarm(binding.register4Iv1, binding.register4Tv2,
                                     "인증번호가 일치하지 않습니다.")
@@ -89,34 +94,35 @@ class RegisterFragment4 : Fragment() {
         }
     }
 
-    private fun login() : Unit {
-        val loginModel : LoginModel = LoginModel(viewModel.email.value!!, viewModel.password.value!!)
-        ServerClient.getApiService().login(loginModel)
-            .enqueue(object : Callback<LoginModel> {
+    private fun login(result: String): Unit {
+        val loginModel : LoginBodyModel? = LoginBodyModel(viewModel.email.value!!, viewModel.password.value!!, result)
+        if (loginModel != null) {
+            ServerClient.getApiService().login(loginModel)
+                .enqueue(object : Callback<LoginModel> {
 
-                override fun onResponse(
-                    call: Call<LoginModel>,
-                    response: Response<LoginModel>
-                ) {
-                    if (response.isSuccessful) {
-                        ServerClient.accessToken = response.body()!!.accessToken
-                        // Sign in success, update UI with the signed-in user's information
+                    override fun onResponse(
+                        call: Call<LoginModel>,
+                        response: Response<LoginModel>
+                    ) {
+                        if (response.isSuccessful) {
+                            // Sign in success, update UI with the signed-in user's information
+                                ServerClient.accessToken = response.body()!!.accessToken
+                            Log.d("Login", "signInWithEmail:success")
+                            val intent : Intent = Intent(requireContext(), MainActivity::class.java)
+                            startActivity(intent)
+                            initialActivity.finish()
+                            requireActivity().finish()
 
-                        Log.d("Login", "signInWithEmail:success")
-                        val intent : Intent = Intent(requireContext(), MainActivity::class.java)
-                        startActivity(intent)
-                        initialActivity.finish()
-                        requireActivity().finish()
-
-                    } else {
-                        Log.d(ContentValues.TAG, "onResponse: respone : ${response}")
+                        } else {
+                            Log.d(ContentValues.TAG, "onResponse: respone : ${response}")
+                        }
                     }
-                }
 
-                override fun onFailure(call: Call<LoginModel>, t: Throwable) {
-                    t.printStackTrace()
-                }
-            })
+                    override fun onFailure(call: Call<LoginModel>, t: Throwable) {
+                        t.printStackTrace()
+                    }
+                })
+        }
     }
 
 }

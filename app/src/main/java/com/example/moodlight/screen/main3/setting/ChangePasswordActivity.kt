@@ -1,9 +1,9 @@
 package com.example.moodlight.screen.main3.setting
 
 import android.content.ContentValues.TAG
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.service.autofill.UserData
 import android.util.Log
 import android.view.MenuItem
 import android.view.View
@@ -11,10 +11,13 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import com.example.moodlight.R
 import com.example.moodlight.api.ServerClient
+import com.example.moodlight.database.UserData
 import com.example.moodlight.database.UserDatabase
 import com.example.moodlight.databinding.ActivityChangePasswordBinding
+import com.example.moodlight.dialog.LoadingDialog
 import com.example.moodlight.model.setting.ChangePasswordModel
 import com.example.moodlight.model.setting.SuccussChangePasswordModel
+import com.example.moodlight.screen.findpassword.FindPasswordActivity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -25,6 +28,9 @@ import retrofit2.Response
 class ChangePasswordActivity : AppCompatActivity() {
     private lateinit var binding : ActivityChangePasswordBinding
     private lateinit var db : UserDatabase
+    private val loadingDialog : LoadingDialog by lazy {
+        LoadingDialog(this)
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_change_password)
@@ -41,6 +47,9 @@ class ChangePasswordActivity : AppCompatActivity() {
 
         binding.checkBtn.setOnClickListener {
             checkIsRightPw()
+        }
+        binding.findPasswordText.setOnClickListener {
+            startActivity(Intent(this, FindPasswordActivity::class.java))
         }
     }
 
@@ -86,6 +95,7 @@ class ChangePasswordActivity : AppCompatActivity() {
 
     private fun changePw() {
         if(binding.newPwAgainEt.text.toString() == binding.newPwEt.text.toString()){
+            loadingDialog.show()
             CoroutineScope(Dispatchers.IO).launch {
                 
                 ServerClient.getApiService().changePassword(
@@ -98,8 +108,10 @@ class ChangePasswordActivity : AppCompatActivity() {
                         val result = response.body()!!
                         if(result.success){
                             CoroutineScope(Dispatchers.IO).launch {
-                                val userDb = db.userDao().getUserFromUserLoginTable()!!
-                                db.userDao().update(com.example.moodlight.database.UserData(userDb[0].id, binding.newPwEt.text.toString()))
+                                val user = UserDatabase.getInstance(this@ChangePasswordActivity)!!.userDao().getUserFromUserLoginTable()
+                                UserDatabase.getInstance(this@ChangePasswordActivity)!!.userDao().updateLoginTable(UserData(user[0].loginID ,user[0].id, binding.newPwEt.text.toString(), user[0].likeAlarm, user[0].commentAlarm))
+                                val user1 = UserDatabase.getInstance(this@ChangePasswordActivity)!!.userDao().getPassword()
+                                Log.d(TAG, "onResponse: $user1")
                             }
                             Toast.makeText(this@ChangePasswordActivity, "비밀번호 변경에 성공하였습니다.", Toast.LENGTH_SHORT)
                                 .show()
@@ -108,6 +120,9 @@ class ChangePasswordActivity : AppCompatActivity() {
                         else{
                             Toast.makeText(this@ChangePasswordActivity, "비밀번호 변경에 실패하셨습니다. 다시 시도해주세요.", Toast.LENGTH_SHORT)
                                 .show()
+                        }
+                        runOnUiThread {
+                            loadingDialog.dismiss()
                         }
                     }
 

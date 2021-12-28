@@ -6,12 +6,8 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.ContentValues.TAG
 import android.content.Context
-import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.graphics.drawable.ShapeDrawable
-import android.graphics.drawable.shapes.OvalShape
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -19,40 +15,28 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.core.net.toFile
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
-import com.bumptech.glide.Glide
 import com.example.moodlight.R
 import com.example.moodlight.api.ServerClient
 import com.example.moodlight.database.UserData
 import com.example.moodlight.database.UserDatabase
 import com.example.moodlight.databinding.FragmentMain3Binding
-import com.example.moodlight.screen.initial.InitialActivity
-import com.example.moodlight.dialog.CommonDialog
 import com.example.moodlight.model.setting.UserModel
+import com.example.moodlight.screen.initial.InitialActivity
 import com.example.moodlight.screen.MainActivity
+import com.example.moodlight.screen.main3.qna.HelpAcitvity
 import com.example.moodlight.screen.main3.setting.SettingActivity
 import com.example.moodlight.util.FirebaseUtil
 import com.example.moodlight.util.GetTime
-import com.google.android.gms.common.internal.service.Common
-import com.google.firebase.ktx.Firebase
-import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Response
-import java.io.ByteArrayInputStream
-import java.io.ByteArrayOutputStream
-import java.io.File
 import java.text.SimpleDateFormat
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
-import java.time.temporal.ChronoField
 import java.util.*
-import javax.security.auth.callback.Callback
 
 class MainFragment3 : Fragment() {
     private var activity : MainActivity? = MainActivity()
@@ -61,6 +45,7 @@ class MainFragment3 : Fragment() {
     private lateinit var bitmap : Bitmap
     private lateinit var userId : String
     private lateinit var userEmail : String
+    private lateinit var user : UserData
     private val viewModel: Main3ViewModel by lazy {
         ViewModelProvider(this).get(Main3ViewModel::class.java)
     }
@@ -79,7 +64,6 @@ class MainFragment3 : Fragment() {
         binding.viewModel = viewModel
         binding.fragment = this
 
-
         (binding.wholeLayout as ViewGroup).layoutTransition.apply {
             val appearingAnimator = ObjectAnimator.ofFloat(view, "translationX", -1000f, 0f)
             val disappearingAnimator = ObjectAnimator.ofFloat(view, "translationX", 0f, 1000f)
@@ -90,22 +74,20 @@ class MainFragment3 : Fragment() {
         }
 
 
-        if (viewModel.email.value.equals(""))
+        if (viewModel.email.value.equals("Loading"))
             Main3Helper.setAnimation(binding)
         else
             Main3Helper.setVisible(binding)
         loadProFileImage()
-
-
         binding.main3CommentSwitch.setOnCheckedChangeListener { buttonView, isChecked ->
 
-            Main3Helper.setCommentAlarm(isChecked)
+            Main3Helper.setCommentAlarm(isChecked, requireContext())
             viewModel.commentIsChecked.value = isChecked
         }
 
         binding.main3LikeSwitch.setOnCheckedChangeListener { buttonView, isChecked ->
 
-            Main3Helper.setLikeAlarm(isChecked)
+            Main3Helper.setLikeAlarm(isChecked, requireContext())
             viewModel.likeIsChecked.value = isChecked
         }
 
@@ -113,6 +95,22 @@ class MainFragment3 : Fragment() {
             startActivityForResult(Intent(requireActivity(), SettingActivity::class.java)
                 .putExtra("userId", userId)
                 .putExtra("userEmail", userEmail), 100)
+        }
+
+        binding.main3Btn2.setOnClickListener {
+            startActivityForResult(Intent(requireActivity(), SettingActivity::class.java)
+                .putExtra("userId", userId)
+                .putExtra("userEmail", userEmail), 100)
+        }
+
+        binding.helpBtn1.setOnClickListener {
+            //intent
+            startActivity(Intent(requireActivity(), HelpAcitvity::class.java))
+        }
+
+        binding.main3Tv5.setOnClickListener {
+            //intent
+            startActivity(Intent(requireActivity(), HelpAcitvity::class.java))
         }
 
         binding.main3WithdrawalTv.setOnClickListener {
@@ -156,6 +154,13 @@ class MainFragment3 : Fragment() {
     private fun setUi() {
         val db = UserDatabase.getInstance(requireContext())
         CoroutineScope(Dispatchers.IO).launch {
+
+            user = UserDatabase.getInstance(requireContext())!!.userDao().getUserFromUserLoginTable()[0]
+            requireActivity().runOnUiThread {
+                binding.main3CommentSwitch.isChecked = user.commentAlarm
+                binding.main3LikeSwitch.isChecked = user.likeAlarm
+            }
+
             ServerClient.getApiService().getUserInfo()
                 .enqueue(object : retrofit2.Callback<UserModel>{
                     override fun onResponse(call: Call<UserModel>, response: Response<UserModel>) {
@@ -172,6 +177,7 @@ class MainFragment3 : Fragment() {
                             viewModel.username.value = it!!.nickname
                             viewModel.email.value = it.email
                             viewModel.main3Tv1Text.value = "무드등을 시작한지 ${minus}지났어요."
+                            viewModel.subscription.value = GetTime.modifyJoinTime(date.time)
                         }
                     }
 
@@ -197,15 +203,6 @@ class MainFragment3 : Fragment() {
 //                }
 //        }
     }
-    public fun signOut(view: View): Unit {
-        CoroutineScope(Dispatchers.IO).launch {
-            UserDatabase.getInstance(requireContext())!!.userDao().deleteUserLoginTable()
-        }
-        FirebaseUtil.getAuth().signOut()
-        val intent = Intent(requireContext(), InitialActivity::class.java)
-        requireActivity().startActivity(intent)
-        requireActivity().finish()
-    }
 
     private fun setAnimation(): Unit {
         binding.main3ProfileIv.postDelayed({
@@ -222,6 +219,9 @@ class MainFragment3 : Fragment() {
             binding.main3Tv1.isVisible = true
         }, 300L)
         binding.main3Btn1.postDelayed({
+            binding.main3Btn1.isVisible = true
+        }, 350L)
+        binding.main3Btn2.postDelayed({
             binding.main3Btn1.isVisible = true
         }, 350L)
         binding.main3Tv2.postDelayed({
@@ -242,8 +242,14 @@ class MainFragment3 : Fragment() {
         binding.main3Tv5.postDelayed({
             binding.main3Tv5.isVisible = true
         }, 650L)
+        binding.helpBtn1.postDelayed({
+            binding.main3Tv5.isVisible = true
+        }, 650L)
         binding.main3SubscriptionTv.postDelayed({
             binding.main3SubscriptionTv.isVisible = true
+        }, 700L)
+        binding.main3Tv6.postDelayed({
+            binding.main3Tv6.isVisible = true
         }, 700L)
         binding.main3LogoutBtn.postDelayed({
             binding.main3LogoutBtn.isVisible = true
@@ -252,6 +258,9 @@ class MainFragment3 : Fragment() {
             binding.main3WithdrawalTv.isVisible = true
         }, 800L)
 
+        binding.layout1.postDelayed({
+            binding.layout1.isVisible = true
+        }, 850L)
     }
 
     override fun onResume() {

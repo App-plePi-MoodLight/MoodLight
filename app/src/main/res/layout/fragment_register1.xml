@@ -28,7 +28,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <EditText
-            android:id="@+id/register1Etv1"
+            android:id="@+id/register1layout1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="20sp"
@@ -64,7 +64,7 @@
             android:fontFamily="@font/roboto_medium"
             android:visibility="invisible"
             app:layout_constraintStart_toEndOf="@id/register1Iv1"
-            app:layout_constraintTop_toBottomOf="@id/register1Etv1"
+            app:layout_constraintTop_toBottomOf="@id/register1layout1"
             tools:text="사용 가능한 아이디입니다." />
 
         <androidx.appcompat.widget.AppCompatButton

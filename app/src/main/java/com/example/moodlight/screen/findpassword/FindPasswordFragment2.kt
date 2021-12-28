@@ -1,6 +1,8 @@
 package com.example.moodlight.screen.findpassword
 
+import android.content.ContentValues.TAG
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,11 +13,16 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.moodlight.R
 import com.example.moodlight.api.ServerClient
+import com.example.moodlight.database.UserData
+import com.example.moodlight.database.UserDatabase
 import com.example.moodlight.databinding.FragmentFindPassword2Binding
 import com.example.moodlight.model.ConfirmFindPasswordModel
 import com.example.moodlight.model.SuccessResponseModel
 import com.example.moodlight.util.AppUtil
 import com.example.moodlight.util.Expression
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -84,6 +91,12 @@ class FindPasswordFragment2 : Fragment() {
                         response: Response<SuccessResponseModel>
                     ) {
                         if (response.isSuccessful) {
+                            CoroutineScope(Dispatchers.IO).launch {
+                                val user = UserDatabase.getInstance(requireContext())!!.userDao().getUserFromUserLoginTable()
+                                UserDatabase.getInstance(requireContext())!!.userDao().updateLoginTable(UserData(user[0].loginID ,user[0].id, viewModel.rePassword.value.toString(), user[0].likeAlarm, user[0].commentAlarm))
+                                val user1 = UserDatabase.getInstance(requireContext())!!.userDao().getPassword()
+                                Log.d(TAG, "onResponse: $user1")
+                            }
                             Toast.makeText(requireContext(), "비밀번호가 성공적으로 변경되었습니다.", Toast.LENGTH_SHORT).show()
                             requireActivity().finish()
                         }
@@ -93,7 +106,7 @@ class FindPasswordFragment2 : Fragment() {
                     }
 
                     override fun onFailure(call: Call<SuccessResponseModel>, t: Throwable) {
-                        TODO("Not yet implemented")
+                        Toast.makeText(requireActivity(), "에러가 발생하였습니다. 다시 시도해주세요.", Toast.LENGTH_SHORT).show()
                     }
 
                 })

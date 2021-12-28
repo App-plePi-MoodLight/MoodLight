@@ -5,9 +5,10 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 
-@Database(entities = [UserData::class], version = 3, exportSchema = false)
+@Database(entities = [UserData::class, UserNotificationData::class], version = 5, exportSchema = false)
 abstract class UserDatabase : RoomDatabase() {
     abstract fun userDao() : UserDao
+    abstract fun userNotificationDao() : UserNotificationDao
 
     companion object {
         private var instance: UserDatabase? = null

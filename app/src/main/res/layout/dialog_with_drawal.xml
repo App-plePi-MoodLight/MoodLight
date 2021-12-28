@@ -58,7 +58,7 @@
                 android:layout_height="match_parent"
                 android:text="탈퇴하기"
                 android:layout_weight="1"
-                android:textColor="#000"
+                android:textColor="#b5b5b5"
                 android:textSize="15sp"
                 android:gravity="center"/>
 

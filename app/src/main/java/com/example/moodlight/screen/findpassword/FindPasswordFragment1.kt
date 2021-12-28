@@ -37,11 +37,6 @@ class FindPasswordFragment1 : Fragment() {
         LoadingDialog(requireContext())
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -125,7 +120,7 @@ class FindPasswordFragment1 : Fragment() {
     }
 
     private fun checkAndIntent() {
-        val confirmCheckModel: ConfirmCheckModel =
+        val confirmCheckModel =
             ConfirmCheckModel(viewModel.confirmNum.value!!, viewModel.email.value!!)
         ServerClient.getApiService().checkConfirm(confirmCheckModel)
             .enqueue(object : Callback<SuccessResponseModel> {
@@ -136,7 +131,7 @@ class FindPasswordFragment1 : Fragment() {
                 ) {
                     if (response.isSuccessful) {
                         requireActivity().supportFragmentManager.beginTransaction()
-                            .replace(com.example.moodlight.R.id.findpasswordFrame, findPasswordFragment2).commit()
+                            .replace(R.id.findpasswordFrame, findPasswordFragment2).commit()
                     }
                     else {
                         Toast.makeText(requireContext(), "error : ${response.code()}", Toast.LENGTH_SHORT).show()

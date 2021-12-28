@@ -1,6 +1,10 @@
 package com.example.moodlight.api
 
 import com.example.moodlight.model.*
+import com.example.moodlight.model.findpassword.CheckCodeBodyModel
+import com.example.moodlight.model.findpassword.CheckCodeModel
+import com.example.moodlight.model.findpassword.FindPassWordBodyModel
+import com.example.moodlight.model.findpassword.FindPassWordModel
 import com.example.moodlight.model.moodcount.MoodCountModel
 import com.example.moodlight.model.my_answer.MyAnswerModel
 import com.example.moodlight.model.myanswermodel.MyAnswerListModel
@@ -16,7 +20,7 @@ interface ApiService {
     fun joinRequest(@Body joinBodyModel: JoinBodyModel): Call<JoinBodyModel>
 
     @POST("auth/login")
-    fun login(@Body loginModel: LoginModel): Call<LoginModel>
+    fun login(@Body loginModel: LoginBodyModel): Call<LoginModel>
 
     // if exist, true. if NotExist, false
     @GET("user/exist")
@@ -104,13 +108,19 @@ interface ApiService {
     fun getMyAnswerExist(@Path("activateDate") activateDate: String) : Call<AnswerExistModel>
 
     @POST("auth/find-password")
-    fun sentFindPassword(@Body findPasswordRequestModel: FindPasswordRequestModel) : Call<SuccessResponseModel>
+    fun findPassword(@Body findPasswordRequestModel: FindPassWordBodyModel) : Call<FindPassWordModel>
 
     @POST("auth/confirm-find-password")
-    fun confirmFindPassword(@Body confirmFindPasswordModel: ConfirmFindPasswordModel) : Call<SuccessResponseModel>
+    fun confirmFindPassword(@Body confirmFindPasswordModel: CheckCodeBodyModel) : Call<CheckCodeModel>
 
     @POST("auth/confirm-check")
     fun checkConfirm(@Body confirmCheckModel: ConfirmCheckModel) : Call<SuccessResponseModel>
 
+
+    @POST("auth/find-password")
+    fun sentFindPassword(@Body findPasswordRequestModel: FindPasswordRequestModel) : Call<SuccessResponseModel>
+
+    @POST("auth/confirm-find-password")
+    fun confirmFindPassword(@Body confirmFindPasswordModel: ConfirmFindPasswordModel) : Call<SuccessResponseModel>
 
 }

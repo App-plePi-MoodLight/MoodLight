@@ -1,7 +1,9 @@
 package com.example.moodlight.screen
 
+import android.content.ContentValues.TAG
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -17,8 +19,10 @@ import com.example.moodlight.screen.main3.MainFragment3
 import com.example.moodlight.screen.main3.setting.SettingActivity
 import com.example.moodlight.screen.mainstatics.MainStatisticsFragment
 import com.example.moodlight.util.NetworkStatus
+import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.firebase.messaging.FirebaseMessaging
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -50,6 +54,20 @@ class MainActivity : AppCompatActivity(), CommonDialogInterface, LogoutDialogInt
         logoutDialog = LogoutDialog(this, this, "로그아웃", "로그아웃을 하시겠습니까?", "로그아웃", "취소")
 
 
+        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
+            if (!task.isSuccessful) {
+                Log.w(TAG, "Fetching FCM registration token failed", task.exception)
+                return@OnCompleteListener
+            }
+
+            // Get new FCM registration token
+            val token = task.result
+
+            // Log and toast
+            val msg = token!!
+            Log.d(TAG, msg)
+            Toast.makeText(applicationContext, msg, Toast.LENGTH_SHORT).show()
+        })
 
 
         findViewById<BottomNavigationView>(com.example.moodlight.R.id.bottomNavigation).setOnItemSelectedListener { item ->

@@ -38,6 +38,7 @@ import java.text.SimpleDateFormat
 class MainFragment2 : Fragment() {
 
     private val calendarHelper by lazy { CalendarHelper() }
+    private var writePostMap: Map<String, *>? = null
 
     private lateinit var myAnswerList : MyAnswerModel
 
@@ -54,7 +55,6 @@ class MainFragment2 : Fragment() {
     private var startPage : Int = 0
 
     private lateinit var binding: FragmentMain2Binding
-    var list: ArrayList<DateClass> = ArrayList()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -72,6 +72,7 @@ class MainFragment2 : Fragment() {
 
 
 
+        setAdapter()
 //        binding.recycler.addOnScrollListener(object :  RecyclerView.OnScrollListener() {
 //            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
 //                super.onScrolled(recyclerView, dx, dy)
@@ -87,6 +88,16 @@ class MainFragment2 : Fragment() {
 //                }
 //            }
 //        })
+      
+/*        CoroutineScope(Dispatchers.IO).launch {
+            FirebaseUtil.getFireStoreInstance().collection("users")
+                .document(FirebaseUtil.getUid())
+                .get()
+                .addOnCompleteListener {
+                    writePostMap = it.result!!.get("writePostMap") as Map<String, *>?
+                    setUi()
+                }
+        }*/
 
         val adapter: Main2CalendarAdapter = Main2CalendarAdapter(calendarViewModel)
         binding.main2CalendarRecyclerView.adapter = adapter
@@ -108,6 +119,9 @@ class MainFragment2 : Fragment() {
                         }
                         setUi()
                     }
+                    else {
+                        Log.e("cc",response.code().toString())
+                    }
                 }
 
                 override fun onFailure(call: Call<MyAnswerModel>, t: Throwable) {
@@ -117,7 +131,7 @@ class MainFragment2 : Fragment() {
             })
 
 
-        if(list.isEmpty()){
+        if(viewModel.list.value!!.isEmpty()){
             dataLoding()
         }
         else{
@@ -143,20 +157,21 @@ class MainFragment2 : Fragment() {
                         if(response.code() == 200){
                             Log.d(TAG, "onResponse: data : $result")
                             if(result!!.size != 0){
-                                if(list.isNotEmpty()){
-                                    list.removeAt(list.lastIndex)
-                                    processingData(result)
-                                    requireActivity().runOnUiThread {
-                                        setAdapter()
-                                    }
+                                if(viewModel.list.value!!.isNotEmpty()){
+                                    viewModel.list.value!!.removeAt(viewModel.list.value!!.lastIndex)
+//                                    requireActivity().runOnUiThread {
+//                                        binding.recycler.adapter!!.notifyDataSetChanged()
+//                                    }
                                 }
-                                else{
-                                    processingData(result)
-                                    requireActivity().runOnUiThread {
-                                        setAdapter()
-                                    }
+                                processingData(result)
+                                requireActivity().runOnUiThread {
+                                    binding.recycler.adapter!!.notifyDataSetChanged()
                                 }
                             }
+//                            else{
+//                                list.removeAt(list.lastIndex)
+//                                binding.recycler.adapter!!.notifyDataSetChanged()
+//                            }
                         }
                         else{
                             Toast.makeText(requireContext(), "내 답변 리스트를 불러오는데에 실패하였습니다.", Toast.LENGTH_SHORT).show()
@@ -180,7 +195,9 @@ class MainFragment2 : Fragment() {
     }
 
     private fun setAdapter() {
-        binding.recycler.adapter = DateAdapter(requireContext(), list){data ->
+        binding.recycler.adapter = DateAdapter(requireContext(),
+            viewModel.list.value!!
+        ){data ->
             startActivity(Intent(requireActivity(), DetailAnswerActivity::class.java)
                 .putExtra("data", data))
         }
@@ -190,31 +207,30 @@ class MainFragment2 : Fragment() {
     private fun processingData(result: MyAnswerListModel?){
 
         for( i in 0 until result!!.size){
-            result[i].createdDate = changeCreateDate(result[i].createdDate)
+            result[i].createdDate = changeCreateDate(result[i].question.activatedDate)
             Log.d(TAG, "processingData: date : ${result[i].createdDate}")
         }
 
         var i = 0
-        while(result.size-1 >i){
+        while(result.size >i){
             val data: ArrayList<MyAnswerListModelItem> = ArrayList()
-            data.add(result[i])
             var plusI = 0
-            for(j in i+1 until result.size){
+            for(j in i until result.size){
                 if(result[j].createdDate == result[i].createdDate){
                     data.add(result[j])
                     plusI++
                     if(j == result.size-1){
-                        list.add(DateClass(result[i].createdDate,data))
+                        viewModel.list.value!!.add(DateClass(result[i].createdDate,data))
                     }
                 }
                 else{
-                    list.add(DateClass(result[i].createdDate,data))
+                    viewModel.list.value!!.add(DateClass(result[i].createdDate,data))
                     break
                 }
             }
-            i += plusI+1
+            i += plusI
         }
-        Log.d(TAG, "processingData: list : ${list}")
+        Log.d(TAG, "processingData: list : ${viewModel.list.value}")
         val progressList : ArrayList<MyAnswerListModelItem> = ArrayList()
         //progressList.add(MyAnswerListModelItem(" ", " ", 21, false, Question(true," "," ", " ", " ")))
         //list.add(DateClass(" ", progressList))
@@ -222,7 +238,7 @@ class MainFragment2 : Fragment() {
 
     @SuppressLint("SimpleDateFormat")
     private fun changeCreateDate(createdDate: String) : String {
-        var createSf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.ss'Z'")
+        var createSf = SimpleDateFormat("yyyy-MM-dd")
         var changeSf = SimpleDateFormat("MM'월' dd일")
         var date = createSf.parse(createdDate)
         
@@ -231,6 +247,8 @@ class MainFragment2 : Fragment() {
 
     private fun setUi() {
 
+        val adapter: Main2CalendarAdapter = Main2CalendarAdapter(calendarViewModel)
+        binding.main2CalendarRecyclerView.adapter = adapter
         calendarViewModel.today = calendarHelper.getDate()
         binding.year = calendarHelper.getYear().toString()
 
@@ -341,9 +359,12 @@ class MainFragment2 : Fragment() {
                 var main2CalendarData : Main2CalendarData? = null
 
                 for (l in 0 until targetAnswerList.size) {
+
+/*                    try {*/
                         if (CalendarHelper.dateTransformationToDay(targetAnswerList[l].createdDate)
                                 .toInt() == k
                         ) {
+                            Log.e("zbs",targetAnswerList[l].createdDate)
                             var moodType: Int = 0
                             try {
                                 when (targetAnswerList[l].question.mood) {
@@ -379,8 +400,11 @@ class MainFragment2 : Fragment() {
                     )
                 }
                 calendarViewModel.dateList.add(main2CalendarData)
+                main2CalendarData = null
             }
         }
+
+
 
         for (m in 1..7 - calendarHelper.getEndDayOfWeek()) {
             calendarViewModel.dateList.add(

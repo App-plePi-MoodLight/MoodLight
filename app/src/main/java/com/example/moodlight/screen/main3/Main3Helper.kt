@@ -1,6 +1,9 @@
 package com.example.moodlight.screen.main3
 
+import android.content.Context
 import androidx.core.view.isVisible
+import com.example.moodlight.database.UserData
+import com.example.moodlight.database.UserDatabase
 import com.example.moodlight.databinding.FragmentMain3Binding
 import com.example.moodlight.util.FirebaseUtil
 import kotlinx.coroutines.CoroutineScope
@@ -9,27 +12,35 @@ import kotlinx.coroutines.launch
 
 class Main3Helper {
     companion object {
-        fun setCommentAlarm(comment: Boolean): Unit {
+        fun setCommentAlarm(comment: Boolean, context: Context): Unit {
+//            CoroutineScope(Dispatchers.IO).launch {
+//                FirebaseUtil.getFireStoreInstance().collection("users")
+//                    .document(FirebaseUtil.getUid())
+//                    .update(
+//                        hashMapOf(
+//                            "commentAlarm" to comment
+//                        ) as Map<String, Any>
+//                    )
+//            }
             CoroutineScope(Dispatchers.IO).launch {
-                FirebaseUtil.getFireStoreInstance().collection("users")
-                    .document(FirebaseUtil.getUid())
-                    .update(
-                        hashMapOf(
-                            "commentAlarm" to comment
-                        ) as Map<String, Any>
-                    )
+                val userId = UserDatabase.getInstance(context)!!.userDao().getUserFromUserLoginTable()[0]
+                UserDatabase.getInstance(context)!!.userDao().update(UserData(userId.loginID, userId.id, userId.password, userId.likeAlarm, comment))
             }
         }
 
-        fun setLikeAlarm(like: Boolean): Unit {
+        fun setLikeAlarm(like: Boolean, context : Context): Unit {
+//            CoroutineScope(Dispatchers.IO).launch {
+//                FirebaseUtil.getFireStoreInstance().collection("users")
+//                    .document(FirebaseUtil.getUid())
+//                    .update(
+//                        hashMapOf(
+//                            "likeAlarm" to like
+//                        ) as Map<String, Any>
+//                    )
+//            }
             CoroutineScope(Dispatchers.IO).launch {
-                FirebaseUtil.getFireStoreInstance().collection("users")
-                    .document(FirebaseUtil.getUid())
-                    .update(
-                        hashMapOf(
-                            "likeAlarm" to like
-                        ) as Map<String, Any>
-                    )
+                val userId = UserDatabase.getInstance(context)!!.userDao().getUserFromUserLoginTable()[0]
+                UserDatabase.getInstance(context)!!.userDao().update(UserData(userId.loginID, userId.id, userId.password, like, userId.commentAlarm))
             }
         }
 
@@ -50,6 +61,9 @@ class Main3Helper {
             binding.main3Btn1.postDelayed({
                 binding.main3Btn1.isVisible = true
             }, 350L)
+            binding.main3Btn2.postDelayed({
+                binding.main3Btn2.isVisible = true
+            }, 350L)
             binding.main3Tv2.postDelayed({
                 binding.main3Tv2.isVisible = true
             }, 400L)
@@ -68,6 +82,12 @@ class Main3Helper {
             binding.main3Tv5.postDelayed({
                 binding.main3Tv5.isVisible = true
             }, 650L)
+            binding.main3Tv6.postDelayed({
+                binding.main3Tv6.isVisible = true
+            }, 650L)
+            binding.helpBtn1.postDelayed({
+                binding.helpBtn1.isVisible = true
+            }, 650L)
             binding.main3SubscriptionTv.postDelayed({
                 binding.main3SubscriptionTv.isVisible = true
             }, 700L)
@@ -77,6 +97,9 @@ class Main3Helper {
             binding.main3WithdrawalTv.postDelayed({
                 binding.main3WithdrawalTv.isVisible = true
             }, 800L)
+            binding.layout1.postDelayed({
+                binding.layout1.isVisible = true
+            }, 850L)
         }
 
         fun setVisible(binding : FragmentMain3Binding) : Unit {
@@ -94,6 +117,11 @@ class Main3Helper {
             binding.main3SubscriptionTv.isVisible = true
             binding.main3LogoutBtn.isVisible = true
             binding.main3WithdrawalTv.isVisible = true
+            binding.layout1.isVisible = true
+            binding.helpBtn1.isVisible = true
+            binding.main3Btn2.isVisible = true
+            binding.main3Tv6.isVisible = true
+            binding.helpBtn1.isVisible = true
         }
 
     }

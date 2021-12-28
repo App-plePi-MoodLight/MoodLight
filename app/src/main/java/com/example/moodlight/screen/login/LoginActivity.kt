@@ -14,10 +14,12 @@ import com.example.moodlight.R
 import com.example.moodlight.api.ServerClient
 import com.example.moodlight.database.UserData
 import com.example.moodlight.dialog.LoadingDialog
+import com.example.moodlight.model.LoginBodyModel
 import com.example.moodlight.model.LoginModel
 import com.example.moodlight.screen.MainActivity
 import com.example.moodlight.screen.findpassword.FindPasswordActivity
 import com.example.moodlight.screen.initial.InitialActivity
+import com.example.moodlight.util.AppUtil
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -38,55 +40,9 @@ class LoginActivity : AppCompatActivity() {
         setContentView(R.layout.activity_login)
 
         findViewById<AppCompatButton>(R.id.loginBtn).setOnClickListener {
-
-            val email: String = findViewById<EditText>(R.id.loginIdEtv).text.toString()
-            val password: String = findViewById<EditText>(R.id.loginPasswordEtv).text.toString()
-
-            when {
-                email.equals("") -> {
-                    errorVisible("이메일을 입력해주세요.")
-                }
-                password.equals("") -> {
-                    errorVisible("비밀번호를 입력해주세요.")
-                }
-                else -> {
-
-                    val loginModel : LoginModel = LoginModel(email, password)
-                    ServerClient.getApiService().login(loginModel)
-                        .enqueue(object : Callback<LoginModel> {
-
-                            override fun onResponse(
-                                call: Call<LoginModel>,
-                                response: Response<LoginModel>
-                            ) {
-                                if (response.isSuccessful) {
-                                    ServerClient.accessToken = response.body()!!.accessToken
-                                    // Sign in success, update UI with the signed-in user's information
-
-                                    CoroutineScope(Dispatchers.IO).launch {
-                                        val userData = UserData(email, password)
-                                        val loginViewModel : LoginViewModel = LoginViewModel(application)
-                                        loginViewModel.insertLoginData(userData)
-
-                                    }
-
-                                    Log.d("Login", "signInWithEmail:success")
-                                    val intent: Intent =
-                                        Intent(applicationContext, MainActivity::class.java)
-                                    startActivity(intent)
-                                    initialActivity.finish()
-                                    finish()
-                                } else {
-                                    Log.d(TAG, "onResponse: respone : ${response}")
-                                    errorVisible("가입하지 않은 아이디이거나, 잘못된 비밀번호입니다.")
-                                }
-                            }
-
-                            override fun onFailure(call: Call<LoginModel>, t: Throwable) {
-                                t.printStackTrace()
-                            }
-
-                        })
+            AppUtil.getToken().addOnCompleteListener {
+                if(it.isSuccessful){
+                    login(it.result!!)
                 }
             }
         }
@@ -96,6 +52,56 @@ class LoginActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
+    }
+
+    private fun login(result: String) {
+        val email: String = findViewById<EditText>(R.id.loginIdEtv).text.toString()
+        val password: String = findViewById<EditText>(R.id.loginPasswordEtv).text.toString()
+
+        when {
+            email.equals("") -> {
+                errorVisible("이메일을 입력해주세요.")
+            }
+            password.equals("") -> {
+                errorVisible("비밀번호를 입력해주세요.")
+            }
+            else -> {
+                val loginModel = LoginBodyModel(email, password, result)
+                ServerClient.getApiService().login(loginModel)
+                    .enqueue(object : Callback<LoginModel> {
+                        override fun onResponse(
+                            call: Call<LoginModel>,
+                            response: Response<LoginModel>
+                        ) {
+                            if (response.isSuccessful) {
+                                // Sign in success, update UI with the signed-in user's information
+                                ServerClient.accessToken = response.body()!!.accessToken
+                                CoroutineScope(Dispatchers.IO).launch {
+                                    val userData = UserData(email, password)
+                                    val loginViewModel : LoginViewModel = LoginViewModel(application)
+                                    loginViewModel.insertLoginData(userData)
+
+                                }
+
+                                Log.d("Login", "signInWithEmail:success")
+                                val intent: Intent =
+                                    Intent(applicationContext, MainActivity::class.java)
+                                startActivity(intent)
+                                initialActivity.finish()
+                                finish()
+                            } else {
+                                Log.d(TAG, "onResponse: respone : ${response}")
+                                errorVisible("가입하지 않은 아이디이거나, 잘못된 비밀번호입니다.")
+                            }
+                        }
+
+                        override fun onFailure(call: Call<LoginModel>, t: Throwable) {
+                            t.printStackTrace()
+                        }
+
+                    })
+            }
+        }
     }
 
     private fun errorVisible(errorText : String) : Unit {

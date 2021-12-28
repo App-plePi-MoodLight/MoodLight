@@ -22,6 +22,7 @@ import com.example.moodlight.R
 import com.example.moodlight.api.ServerClient
 import com.example.moodlight.database.UserDatabase
 import com.example.moodlight.databinding.ActivitySettingBinding
+import com.example.moodlight.dialog.LoadingDialog
 import com.example.moodlight.model.setting.SuccussChangePasswordModel
 import com.example.moodlight.model.setting.UserExistModel
 import com.example.moodlight.model.setting.UserUpdateModel
@@ -44,6 +45,9 @@ class SettingActivity : AppCompatActivity() {
     private lateinit var bitmap : Bitmap
     private lateinit var userId : String
     private lateinit var userEmail : String
+    private val loadingDialog : LoadingDialog by lazy {
+        LoadingDialog(this@SettingActivity)
+    }
     private var distinctCheckName = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -75,6 +79,7 @@ class SettingActivity : AppCompatActivity() {
     }
 
     private fun isDistinctNickName() {
+        loadingDialog.show()
         CoroutineScope(Dispatchers.IO).launch {
             ServerClient.getApiService().distinctNickName(binding.nickNameEt.text.toString()).enqueue(
                 object : Callback<UserExistModel> {
@@ -82,10 +87,10 @@ class SettingActivity : AppCompatActivity() {
                         call: Call<UserExistModel>,
                         response: Response<UserExistModel>
                     ) {
-                        val it = response.body()!!
-                        Log.d(TAG, "onResponse: ${it}")
-                        if(response.isSuccessful){
-                            if(!it.exist){
+                        loadingDialog.cancel()
+                        if(response.code() == 200){
+                            val it = response.body()
+                            if(!it!!.exist){
                                 binding.imageView2.setImageResource(R.drawable.img_success)
                                 binding.dangerTv.setTextColor(Color.parseColor("#FF009900"))
                                 binding.dangerTv.text = "사용가능한 닉네임입니다."
@@ -96,12 +101,14 @@ class SettingActivity : AppCompatActivity() {
                                 setDangerResult("이미 존재하는 닉네임입니다.")
                             }
                         }
+                        else if(response.code() == 400){
+                            setDangerResult("닉네임 글자 수는 3글자 이상 13글자 이하여야합니다.")
+                        }
                     }
 
                     override fun onFailure(call: Call<UserExistModel>, t: Throwable) {
                         setDangerResult("네트워크 오류가 발생하였습니다.")
                     }
-
                 })
         }
     }
@@ -114,6 +121,7 @@ class SettingActivity : AppCompatActivity() {
     }
 
     private fun updateUserInfo() {
+        loadingDialog.show()
         if(binding.nickNameEt.text.isEmpty()){
             setDangerResult("필수 입력 사항입니다.")
         }
@@ -128,6 +136,7 @@ class SettingActivity : AppCompatActivity() {
                             call: Call<SuccussChangePasswordModel>,
                             response: Response<SuccussChangePasswordModel>
                         ) {
+                            loadingDialog.cancel()
                             Toast.makeText(this@SettingActivity, "사용자변경에 성공하였습니다.", Toast.LENGTH_SHORT).show()
                             setResult(Activity.RESULT_OK)
                             finish()

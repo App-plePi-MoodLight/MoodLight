@@ -47,6 +47,7 @@ class AnswerAdapter() :
                 }
                 binding.answerRecommendButton.background = setRecommendButton()
 
+                binding.answerLevelIcon.setImageDrawable(setMoodFace())
             }
         private fun accessComment(item: AnswerItemModel){
             val intent = Intent(binding.root.context, CommentActivity::class.java)

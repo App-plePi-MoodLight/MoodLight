@@ -7,5 +7,7 @@ data class UserModel(
     val id: String,
     val is_admin: Boolean,
     val nickname: String,
-    val password: String
+    val password: String,
+    val usePushMessageOnComment : Boolean,
+    val usePushMessageOnLike : Boolean
 )

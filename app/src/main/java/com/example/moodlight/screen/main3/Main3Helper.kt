@@ -1,47 +1,42 @@
 package com.example.moodlight.screen.main3
 
 import android.content.Context
+import android.widget.Toast
 import androidx.core.view.isVisible
-import com.example.moodlight.database.UserData
-import com.example.moodlight.database.UserDatabase
+import com.example.moodlight.api.ServerClient
 import com.example.moodlight.databinding.FragmentMain3Binding
-import com.example.moodlight.util.FirebaseUtil
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import com.example.moodlight.model.setting.SuccussChangePasswordModel
+import com.example.moodlight.model.setting.UserUpdateModel
+import retrofit2.Call
+import retrofit2.Response
 
 class Main3Helper {
     companion object {
-        fun setCommentAlarm(comment: Boolean, context: Context): Unit {
-//            CoroutineScope(Dispatchers.IO).launch {
-//                FirebaseUtil.getFireStoreInstance().collection("users")
-//                    .document(FirebaseUtil.getUid())
-//                    .update(
-//                        hashMapOf(
-//                            "commentAlarm" to comment
-//                        ) as Map<String, Any>
-//                    )
-//            }
-            CoroutineScope(Dispatchers.IO).launch {
-                val userId = UserDatabase.getInstance(context)!!.userDao().getUserFromUserLoginTable()[0]
-                UserDatabase.getInstance(context)!!.userDao().update(UserData(userId.loginID, userId.id, userId.password, userId.likeAlarm, comment))
-            }
-        }
+        fun setAlarm(viewModel : Main3ViewModel, updateModel: UserUpdateModel, context: Context, likeOrComment : Int): Unit {
+            ServerClient.getApiService().updateUser(updateModel)
+                .enqueue(object : retrofit2.Callback<SuccussChangePasswordModel> {
+                    override fun onResponse(
+                        call: Call<SuccussChangePasswordModel>,
+                        response: Response<SuccussChangePasswordModel>
+                    ) {
+                        if(!response.isSuccessful){
+                            when(likeOrComment){
+                                0-> viewModel.commentIsChecked.value = !updateModel.usePushMessageOnComment
+                                1-> viewModel.likeIsChecked.value = !updateModel.usePushMessageOnLike
+                            }
+                            Toast.makeText(context, "오류가 발생하였습니다. 다시 시도해주세요", Toast.LENGTH_SHORT).show()
+                        }
+                    }
 
-        fun setLikeAlarm(like: Boolean, context : Context): Unit {
-//            CoroutineScope(Dispatchers.IO).launch {
-//                FirebaseUtil.getFireStoreInstance().collection("users")
-//                    .document(FirebaseUtil.getUid())
-//                    .update(
-//                        hashMapOf(
-//                            "likeAlarm" to like
-//                        ) as Map<String, Any>
-//                    )
-//            }
-            CoroutineScope(Dispatchers.IO).launch {
-                val userId = UserDatabase.getInstance(context)!!.userDao().getUserFromUserLoginTable()[0]
-                UserDatabase.getInstance(context)!!.userDao().update(UserData(userId.loginID, userId.id, userId.password, like, userId.commentAlarm))
-            }
+                    override fun onFailure(call: Call<SuccussChangePasswordModel>, t: Throwable) {
+                        when(likeOrComment){
+                            0-> viewModel.commentIsChecked.value = !updateModel.usePushMessageOnComment
+                            1-> viewModel.likeIsChecked.value = !updateModel.usePushMessageOnLike
+                        }
+                        Toast.makeText(context, "오류가 발생하였습니다. 다시 시도해주세요", Toast.LENGTH_SHORT).show()
+                    }
+
+                })
         }
 
         fun setAnimation(binding : FragmentMain3Binding) : Unit {
@@ -123,6 +118,7 @@ class Main3Helper {
             binding.main3Tv6.isVisible = true
             binding.helpBtn1.isVisible = true
         }
+
 
     }
 }

@@ -25,7 +25,7 @@ class HelpAcitvity : AppCompatActivity() {
         setSupportActionBar(binding.main2Toolbar)
         supportActionBar!!.setDisplayShowTitleEnabled(false)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.setHomeAsUpIndicator(R.drawable.left_btn)
+        supportActionBar?.setHomeAsUpIndicator(R.drawable.back_btn)
     }
 
     private fun getData() {

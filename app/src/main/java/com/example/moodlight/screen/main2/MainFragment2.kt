@@ -49,11 +49,6 @@ class MainFragment2 : Fragment() {
     private val calendarViewModel: Main2CalendarViewModel by lazy {
         ViewModelProvider(requireActivity()).get(Main2CalendarViewModel::class.java)
     }
-
-    private var isLoding : Boolean = false
-    private var limitPage : Int = 1
-    private var startPage : Int = 0
-
     private lateinit var binding: FragmentMain2Binding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -73,31 +68,6 @@ class MainFragment2 : Fragment() {
 
 
         setAdapter()
-//        binding.recycler.addOnScrollListener(object :  RecyclerView.OnScrollListener() {
-//            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-//                super.onScrolled(recyclerView, dx, dy)
-//
-//
-//                if(!isLoding){
-//                    if((recyclerView.layoutManager as LinearLayoutManager?)!!.findLastVisibleItemPosition() == list.size-1){
-//                        limitPage+=3
-//                        startPage+=3
-//                        dataLoding()
-//                        this@MainFragment2.isLoding = true
-//                    }
-//                }
-//            }
-//        })
-      
-/*        CoroutineScope(Dispatchers.IO).launch {
-            FirebaseUtil.getFireStoreInstance().collection("users")
-                .document(FirebaseUtil.getUid())
-                .get()
-                .addOnCompleteListener {
-                    writePostMap = it.result!!.get("writePostMap") as Map<String, *>?
-                    setUi()
-                }
-        }*/
 
         val adapter: Main2CalendarAdapter = Main2CalendarAdapter(calendarViewModel)
         binding.main2CalendarRecyclerView.adapter = adapter
@@ -159,19 +129,12 @@ class MainFragment2 : Fragment() {
                             if(result!!.size != 0){
                                 if(viewModel.list.value!!.isNotEmpty()){
                                     viewModel.list.value!!.removeAt(viewModel.list.value!!.lastIndex)
-//                                    requireActivity().runOnUiThread {
-//                                        binding.recycler.adapter!!.notifyDataSetChanged()
-//                                    }
                                 }
                                 processingData(result)
                                 requireActivity().runOnUiThread {
                                     binding.recycler.adapter!!.notifyDataSetChanged()
                                 }
                             }
-//                            else{
-//                                list.removeAt(list.lastIndex)
-//                                binding.recycler.adapter!!.notifyDataSetChanged()
-//                            }
                         }
                         else{
                             Toast.makeText(requireContext(), "내 답변 리스트를 불러오는데에 실패하였습니다.", Toast.LENGTH_SHORT).show()
@@ -184,14 +147,6 @@ class MainFragment2 : Fragment() {
 
                 })
         }
-//        val data: ArrayList<QnAData> = ArrayList()
-//        if(list.isEmpty()){
-//            data.add(QnAData("오늘 점심은 뭐 먹죠?", "점심을 먹죠 ㅎㅎ 아 점심을 먹는다니 참 감미로운 일이네요."))
-//            data.add(QnAData("오늘 저녁은 뭐 먹죠?", "저녁을 먹죠 ㅎㅎ"))
-//            list.add(DateClass("3월 16일", data))
-//            list.add(DateClass("4월 16일", data))
-//            Log.d(TAG, "onActivityCreated: 내 리스트 data$data $list")
-//        }
     }
 
     private fun setAdapter() {
@@ -231,9 +186,6 @@ class MainFragment2 : Fragment() {
             i += plusI
         }
         Log.d(TAG, "processingData: list : ${viewModel.list.value}")
-        val progressList : ArrayList<MyAnswerListModelItem> = ArrayList()
-        //progressList.add(MyAnswerListModelItem(" ", " ", 21, false, Question(true," "," ", " ", " ")))
-        //list.add(DateClass(" ", progressList))
     }
 
     @SuppressLint("SimpleDateFormat")

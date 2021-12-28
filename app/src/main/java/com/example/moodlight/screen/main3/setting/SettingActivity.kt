@@ -1,10 +1,8 @@
 package com.example.moodlight.screen.main3.setting
 
 import android.app.Activity
-import android.content.ContentValues.TAG
 import android.content.Intent
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.drawable.ShapeDrawable
 import android.graphics.drawable.shapes.OvalShape
@@ -12,12 +10,10 @@ import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
-import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
-import com.example.moodlight.hash.sha
 import com.example.moodlight.R
 import com.example.moodlight.api.ServerClient
 import com.example.moodlight.database.UserDatabase
@@ -26,16 +22,13 @@ import com.example.moodlight.dialog.LoadingDialog
 import com.example.moodlight.model.setting.SuccussChangePasswordModel
 import com.example.moodlight.model.setting.UserExistModel
 import com.example.moodlight.model.setting.UserUpdateModel
-import com.example.moodlight.util.FirebaseUtil
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.io.File
+import kotlin.properties.Delegates
 
 class SettingActivity : AppCompatActivity() {
     private lateinit var binding : ActivitySettingBinding
@@ -45,6 +38,8 @@ class SettingActivity : AppCompatActivity() {
     private lateinit var bitmap : Bitmap
     private lateinit var userId : String
     private lateinit var userEmail : String
+    private var isPushCommentAlarm by Delegates.notNull<Boolean>()
+    private var isPushLikeAlarm by Delegates.notNull<Boolean>()
     private val loadingDialog : LoadingDialog by lazy {
         LoadingDialog(this@SettingActivity)
     }
@@ -54,7 +49,8 @@ class SettingActivity : AppCompatActivity() {
         setContentView(R.layout.activity_setting)
         userId = intent.getStringExtra("userId").toString()
         userEmail = intent.getStringExtra("userEmail").toString()
-        
+        isPushCommentAlarm = intent.getBooleanExtra("isPushCommentAlarm", true)
+        isPushLikeAlarm = intent.getBooleanExtra("isPushLikeAlarm", true)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_setting)
 
 
@@ -70,12 +66,11 @@ class SettingActivity : AppCompatActivity() {
             updateUserInfo()
         }
 
-        loadProFileImage()
         setSupportActionBar(binding.main2Toolbar)
 
         supportActionBar!!.setDisplayShowTitleEnabled(false)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.setHomeAsUpIndicator(R.drawable.left_btn)
+        supportActionBar?.setHomeAsUpIndicator(R.drawable.back_btn)
     }
 
     private fun isDistinctNickName() {
@@ -130,7 +125,7 @@ class SettingActivity : AppCompatActivity() {
         }
         else{
             CoroutineScope(Dispatchers.IO).launch {
-                ServerClient.getApiService().updateNickName(UserUpdateModel(binding.nickNameEt.text.toString(), userId)).enqueue(
+                ServerClient.getApiService().updateUser(UserUpdateModel(binding.nickNameEt.text.toString(), userId, isPushCommentAlarm, isPushLikeAlarm)).enqueue(
                     object : Callback<SuccussChangePasswordModel> {
                         override fun onResponse(
                             call: Call<SuccussChangePasswordModel>,
@@ -168,19 +163,6 @@ class SettingActivity : AppCompatActivity() {
             binding.imageView.setBackground(ShapeDrawable(OvalShape()));
             binding.imageView.setClipToOutline(true);
         }
-    }
-
-    private fun loadProFileImage() {
-//        val storageRef = FirebaseStorage.getInstance().getReference().child("image/${FirebaseUtil.getAuth().currentUser!!.uid}.jpg")
-//        val localfile = File.createTempFile("tempImage", "jpg")
-//        storageRef.getFile(localfile).addOnSuccessListener {
-//            bitmap = BitmapFactory.decodeFile(localfile.absolutePath)
-//            binding.imageView.setImageBitmap(bitmap)
-//        }.addOnFailureListener{
-//            binding.imageView.setImageResource(R.drawable.basic_profile)
-//        }
-//        binding.imageView.setBackground(ShapeDrawable(OvalShape()));
-//        binding.imageView.setClipToOutline(true);
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

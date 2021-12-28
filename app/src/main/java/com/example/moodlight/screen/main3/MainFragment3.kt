@@ -20,6 +20,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import com.example.moodlight.R
 import com.example.moodlight.api.ServerClient
+import com.example.moodlight.database.UserData
 import com.example.moodlight.database.UserDatabase
 import com.example.moodlight.databinding.FragmentMain3Binding
 import com.example.moodlight.model.setting.UserModel
@@ -44,6 +45,7 @@ class MainFragment3 : Fragment() {
     private lateinit var bitmap : Bitmap
     private lateinit var userId : String
     private lateinit var userEmail : String
+    private lateinit var user : UserData
     private val viewModel: Main3ViewModel by lazy {
         ViewModelProvider(this).get(Main3ViewModel::class.java)
     }
@@ -62,7 +64,6 @@ class MainFragment3 : Fragment() {
         binding.viewModel = viewModel
         binding.fragment = this
 
-
         (binding.wholeLayout as ViewGroup).layoutTransition.apply {
             val appearingAnimator = ObjectAnimator.ofFloat(view, "translationX", -1000f, 0f)
             val disappearingAnimator = ObjectAnimator.ofFloat(view, "translationX", 0f, 1000f)
@@ -78,17 +79,15 @@ class MainFragment3 : Fragment() {
         else
             Main3Helper.setVisible(binding)
         loadProFileImage()
-
-
         binding.main3CommentSwitch.setOnCheckedChangeListener { buttonView, isChecked ->
 
-            Main3Helper.setCommentAlarm(isChecked)
+            Main3Helper.setCommentAlarm(isChecked, requireContext())
             viewModel.commentIsChecked.value = isChecked
         }
 
         binding.main3LikeSwitch.setOnCheckedChangeListener { buttonView, isChecked ->
 
-            Main3Helper.setLikeAlarm(isChecked)
+            Main3Helper.setLikeAlarm(isChecked, requireContext())
             viewModel.likeIsChecked.value = isChecked
         }
 
@@ -155,6 +154,13 @@ class MainFragment3 : Fragment() {
     private fun setUi() {
         val db = UserDatabase.getInstance(requireContext())
         CoroutineScope(Dispatchers.IO).launch {
+
+            user = UserDatabase.getInstance(requireContext())!!.userDao().getUserFromUserLoginTable()[0]
+            requireActivity().runOnUiThread {
+                binding.main3CommentSwitch.isChecked = user.commentAlarm
+                binding.main3LikeSwitch.isChecked = user.likeAlarm
+            }
+
             ServerClient.getApiService().getUserInfo()
                 .enqueue(object : retrofit2.Callback<UserModel>{
                     override fun onResponse(call: Call<UserModel>, response: Response<UserModel>) {
@@ -196,15 +202,6 @@ class MainFragment3 : Fragment() {
 //                    viewModel.likeIsChecked.value = it.result!!.get("likeAlarm") as Boolean
 //                }
 //        }
-    }
-    public fun signOut(view: View): Unit {
-        CoroutineScope(Dispatchers.IO).launch {
-            UserDatabase.getInstance(requireContext())!!.userDao().deleteUserLoginTable()
-        }
-        FirebaseUtil.getAuth().signOut()
-        val intent = Intent(requireContext(), InitialActivity::class.java)
-        requireActivity().startActivity(intent)
-        requireActivity().finish()
     }
 
     private fun setAnimation(): Unit {

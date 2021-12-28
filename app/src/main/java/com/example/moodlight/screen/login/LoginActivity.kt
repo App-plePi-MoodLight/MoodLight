@@ -10,7 +10,6 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
 import androidx.core.view.isVisible
-import com.example.moodlight.MyFirebaseMessagingService
 import com.example.moodlight.R
 import com.example.moodlight.api.ServerClient
 import com.example.moodlight.database.UserData
@@ -20,6 +19,7 @@ import com.example.moodlight.model.LoginModel
 import com.example.moodlight.screen.MainActivity
 import com.example.moodlight.screen.findpassword.FindPasswordActivity
 import com.example.moodlight.screen.initial.InitialActivity
+import com.example.moodlight.util.AppUtil
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -40,7 +40,11 @@ class LoginActivity : AppCompatActivity() {
         setContentView(R.layout.activity_login)
 
         findViewById<AppCompatButton>(R.id.loginBtn).setOnClickListener {
-            login()
+            AppUtil.getToken().addOnCompleteListener {
+                if(it.isSuccessful){
+                    login(it.result!!)
+                }
+            }
         }
 
         findViewById<TextView>(R.id.loginFindpasswordTv).setOnClickListener {
@@ -50,7 +54,7 @@ class LoginActivity : AppCompatActivity() {
 
     }
 
-    private fun login() {
+    private fun login(result: String) {
         val email: String = findViewById<EditText>(R.id.loginIdEtv).text.toString()
         val password: String = findViewById<EditText>(R.id.loginPasswordEtv).text.toString()
 
@@ -62,8 +66,7 @@ class LoginActivity : AppCompatActivity() {
                 errorVisible("비밀번호를 입력해주세요.")
             }
             else -> {
-                val firebaseToken = MyFirebaseMessagingService().getToken(this)
-                val loginModel = LoginBodyModel(email, password, firebaseToken)
+                val loginModel = LoginBodyModel(email, password, result)
                 ServerClient.getApiService().login(loginModel)
                     .enqueue(object : Callback<LoginModel> {
                         override fun onResponse(

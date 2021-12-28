@@ -20,7 +20,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
     override fun onMessageReceived(p0: RemoteMessage) {
         super.onMessageReceived(p0)
-
+        Log.d(TAG, "onMessageReceived: messgaerk dhlktdam dkan message")
     }
 
     fun getToken(context : Context) : String{

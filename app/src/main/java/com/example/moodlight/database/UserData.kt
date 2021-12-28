@@ -17,16 +17,21 @@ class UserData {
     @ColumnInfo(name = "password")
     public var password : String
 
+    var likeAlarm : Boolean = true
+    var commentAlarm : Boolean = true
+
     constructor(id : String, password : String) {
         this.id = id
         this.password = password
     }
 
     @Ignore
-    constructor(loginID : Int,id : String, password : String) {
+    constructor(loginID : Int,id : String, password : String, postLikeAlarm : Boolean, commentAlarm : Boolean) {
         this.loginID = loginID
         this.id = id
         this.password = password
+        this.likeAlarm = postLikeAlarm
+        this.commentAlarm = commentAlarm
     }
 
 

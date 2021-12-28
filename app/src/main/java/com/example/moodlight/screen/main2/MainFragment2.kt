@@ -55,7 +55,6 @@ class MainFragment2 : Fragment() {
     private var startPage : Int = 0
 
     private lateinit var binding: FragmentMain2Binding
-    var list: ArrayList<DateClass> = ArrayList()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -73,6 +72,7 @@ class MainFragment2 : Fragment() {
 
 
 
+        setAdapter()
 //        binding.recycler.addOnScrollListener(object :  RecyclerView.OnScrollListener() {
 //            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
 //                super.onScrolled(recyclerView, dx, dy)
@@ -131,7 +131,7 @@ class MainFragment2 : Fragment() {
             })
 
 
-        if(list.isEmpty()){
+        if(viewModel.list.value!!.isEmpty()){
             dataLoding()
         }
         else{
@@ -157,8 +157,8 @@ class MainFragment2 : Fragment() {
                         if(response.code() == 200){
                             Log.d(TAG, "onResponse: data : $result")
                             if(result!!.size != 0){
-                                if(list.isNotEmpty()){
-                                    list.removeAt(list.lastIndex)
+                                if(viewModel.list.value!!.isNotEmpty()){
+                                    viewModel.list.value!!.removeAt(viewModel.list.value!!.lastIndex)
 //                                    requireActivity().runOnUiThread {
 //                                        binding.recycler.adapter!!.notifyDataSetChanged()
 //                                    }
@@ -195,7 +195,9 @@ class MainFragment2 : Fragment() {
     }
 
     private fun setAdapter() {
-        binding.recycler.adapter = DateAdapter(requireContext(), list){data ->
+        binding.recycler.adapter = DateAdapter(requireContext(),
+            viewModel.list.value!!
+        ){data ->
             startActivity(Intent(requireActivity(), DetailAnswerActivity::class.java)
                 .putExtra("data", data))
         }
@@ -205,31 +207,30 @@ class MainFragment2 : Fragment() {
     private fun processingData(result: MyAnswerListModel?){
 
         for( i in 0 until result!!.size){
-            result[i].createdDate = changeCreateDate(result[i].createdDate)
+            result[i].createdDate = changeCreateDate(result[i].question.activatedDate)
             Log.d(TAG, "processingData: date : ${result[i].createdDate}")
         }
 
         var i = 0
-        while(result.size-1 >i){
+        while(result.size >i){
             val data: ArrayList<MyAnswerListModelItem> = ArrayList()
-            data.add(result[i])
             var plusI = 0
-            for(j in i+1 until result.size){
+            for(j in i until result.size){
                 if(result[j].createdDate == result[i].createdDate){
                     data.add(result[j])
                     plusI++
                     if(j == result.size-1){
-                        list.add(DateClass(result[i].createdDate,data))
+                        viewModel.list.value!!.add(DateClass(result[i].createdDate,data))
                     }
                 }
                 else{
-                    list.add(DateClass(result[i].createdDate,data))
+                    viewModel.list.value!!.add(DateClass(result[i].createdDate,data))
                     break
                 }
             }
-            i += plusI+1
+            i += plusI
         }
-        Log.d(TAG, "processingData: list : ${list}")
+        Log.d(TAG, "processingData: list : ${viewModel.list.value}")
         val progressList : ArrayList<MyAnswerListModelItem> = ArrayList()
         //progressList.add(MyAnswerListModelItem(" ", " ", 21, false, Question(true," "," ", " ", " ")))
         //list.add(DateClass(" ", progressList))
@@ -237,7 +238,7 @@ class MainFragment2 : Fragment() {
 
     @SuppressLint("SimpleDateFormat")
     private fun changeCreateDate(createdDate: String) : String {
-        var createSf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.ss'Z'")
+        var createSf = SimpleDateFormat("yyyy-MM-dd")
         var changeSf = SimpleDateFormat("MM'월' dd일")
         var date = createSf.parse(createdDate)
         

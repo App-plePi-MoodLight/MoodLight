@@ -1,6 +1,9 @@
 package com.example.moodlight.screen.main3
 
+import android.content.Context
 import androidx.core.view.isVisible
+import com.example.moodlight.database.UserData
+import com.example.moodlight.database.UserDatabase
 import com.example.moodlight.databinding.FragmentMain3Binding
 import com.example.moodlight.util.FirebaseUtil
 import kotlinx.coroutines.CoroutineScope
@@ -9,27 +12,35 @@ import kotlinx.coroutines.launch
 
 class Main3Helper {
     companion object {
-        fun setCommentAlarm(comment: Boolean): Unit {
+        fun setCommentAlarm(comment: Boolean, context: Context): Unit {
+//            CoroutineScope(Dispatchers.IO).launch {
+//                FirebaseUtil.getFireStoreInstance().collection("users")
+//                    .document(FirebaseUtil.getUid())
+//                    .update(
+//                        hashMapOf(
+//                            "commentAlarm" to comment
+//                        ) as Map<String, Any>
+//                    )
+//            }
             CoroutineScope(Dispatchers.IO).launch {
-                FirebaseUtil.getFireStoreInstance().collection("users")
-                    .document(FirebaseUtil.getUid())
-                    .update(
-                        hashMapOf(
-                            "commentAlarm" to comment
-                        ) as Map<String, Any>
-                    )
+                val userId = UserDatabase.getInstance(context)!!.userDao().getUserFromUserLoginTable()[0]
+                UserDatabase.getInstance(context)!!.userDao().update(UserData(userId.loginID, userId.id, userId.password, userId.likeAlarm, comment))
             }
         }
 
-        fun setLikeAlarm(like: Boolean): Unit {
+        fun setLikeAlarm(like: Boolean, context : Context): Unit {
+//            CoroutineScope(Dispatchers.IO).launch {
+//                FirebaseUtil.getFireStoreInstance().collection("users")
+//                    .document(FirebaseUtil.getUid())
+//                    .update(
+//                        hashMapOf(
+//                            "likeAlarm" to like
+//                        ) as Map<String, Any>
+//                    )
+//            }
             CoroutineScope(Dispatchers.IO).launch {
-                FirebaseUtil.getFireStoreInstance().collection("users")
-                    .document(FirebaseUtil.getUid())
-                    .update(
-                        hashMapOf(
-                            "likeAlarm" to like
-                        ) as Map<String, Any>
-                    )
+                val userId = UserDatabase.getInstance(context)!!.userDao().getUserFromUserLoginTable()[0]
+                UserDatabase.getInstance(context)!!.userDao().update(UserData(userId.loginID, userId.id, userId.password, like, userId.commentAlarm))
             }
         }
 

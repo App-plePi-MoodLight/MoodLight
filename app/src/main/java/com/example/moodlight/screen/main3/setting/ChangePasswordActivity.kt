@@ -109,7 +109,7 @@ class ChangePasswordActivity : AppCompatActivity() {
                         if(result.success){
                             CoroutineScope(Dispatchers.IO).launch {
                                 val user = UserDatabase.getInstance(this@ChangePasswordActivity)!!.userDao().getUserFromUserLoginTable()
-                                UserDatabase.getInstance(this@ChangePasswordActivity)!!.userDao().updateLoginTable(UserData(user[0].loginID ,user[0].id, binding.newPwEt.text.toString()))
+                                UserDatabase.getInstance(this@ChangePasswordActivity)!!.userDao().updateLoginTable(UserData(user[0].loginID ,user[0].id, binding.newPwEt.text.toString(), user[0].likeAlarm, user[0].commentAlarm))
                                 val user1 = UserDatabase.getInstance(this@ChangePasswordActivity)!!.userDao().getPassword()
                                 Log.d(TAG, "onResponse: $user1")
                             }

@@ -8,6 +8,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import com.example.moodlight.R
 import com.example.moodlight.api.ServerClient
 import com.example.moodlight.database.UserDatabase
@@ -16,6 +17,7 @@ import com.example.moodlight.model.setting.DeleteUserModel
 import com.example.moodlight.screen.initial.InitialActivity
 import com.example.moodlight.screen.main1.PickMoodActivity
 import com.example.moodlight.screen.main2.MainFragment2
+import com.example.moodlight.screen.main2.calendar.Main2CalendarViewModel
 import com.example.moodlight.screen.main3.MainFragment3
 import com.example.moodlight.screen.main3.setting.SettingActivity
 import com.example.moodlight.screen.mainstatics.MainStatisticsFragment
@@ -37,6 +39,9 @@ class MainActivity : AppCompatActivity(), CommonDialogInterface, LogoutDialogInt
     private val mainFragment2 by lazy { MainFragment2() }
     private val mainFragment3 by lazy { MainFragment3() }
     private val mainStatisticsFragment by lazy { MainStatisticsFragment() }
+    private val calendarViewModel: Main2CalendarViewModel by lazy {
+        ViewModelProvider(this).get(Main2CalendarViewModel::class.java)
+    }
     private val networkStatus: Int by lazy { NetworkStatus.getConnectivityStatus(applicationContext) }
     private val exitDialog : ExitDialog by lazy {
         ExitDialog(this, this, "앱 종료", "무드등을 정말로 종료하시겠습니까?", "종료", "취소")
@@ -170,5 +175,12 @@ class MainActivity : AppCompatActivity(), CommonDialogInterface, LogoutDialogInt
 
     override fun onCancleExitBtnClick() {
         exitDialog.dismiss()
+    }
+
+    override fun onRestart() {
+        super.onRestart()
+
+        calendarViewModel.dateList.clear()
+
     }
 }

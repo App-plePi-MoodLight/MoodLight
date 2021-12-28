@@ -13,11 +13,6 @@ class DataType {
         const val MAD_MOOD : Int = 103
         var MOOD = NONE_MOOD
 
-        const val NONE_COLOR : String = "#212121"
-        const val HAPPY_COLOR : String = "#f5cf66"
-        const val SAD_COLOR : String = "#1b4d6b"
-        const val MAD_COLOR : String = "#ed5d4c"
-
         const val NORMAL_VIEW_TYPE = 1
         const val LOADING_VIEW_TYPE = 0
     }

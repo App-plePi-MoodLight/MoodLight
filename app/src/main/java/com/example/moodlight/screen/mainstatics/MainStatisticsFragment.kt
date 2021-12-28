@@ -3,7 +3,6 @@ package com.example.moodlight.screen.mainstatics
 import android.animation.LayoutTransition
 import android.animation.ObjectAnimator
 import android.os.Bundle
-import android.util.Log
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
@@ -62,7 +61,6 @@ class MainStatisticsFragment : Fragment() {
     }
 
     private fun setNowQuestion() {
-        Log.e("test",AppUtil.getNowDate())
         ServerClient.getApiService().getQuestion(AppUtil.getNowDate())
             .enqueue(object : Callback<QuestionResponseModel> {
 
@@ -87,7 +85,6 @@ class MainStatisticsFragment : Fragment() {
     }
 
     private fun setLastQuestion() {
-        Log.e("xx",AppUtil.getLastDate())
         ServerClient.getApiService().getQuestion(AppUtil.getLastDate())
             .enqueue(object : Callback<QuestionResponseModel> {
 
@@ -125,7 +122,6 @@ class MainStatisticsFragment : Fragment() {
                     var todaySadCount = 0
                     if (response.isSuccessful) {
                         val moodCountList : ArrayList<MoodCountModelItem> = response.body()!!
-                        Log.e("nowdate", moodCountList.toString())
 
                         if (moodCountList.size > 0 && moodCountList[0].mood != null) {
                             for (i in 0..2) {

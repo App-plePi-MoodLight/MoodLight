@@ -38,7 +38,6 @@ import java.text.SimpleDateFormat
 class MainFragment2 : Fragment() {
 
     private val calendarHelper by lazy { CalendarHelper() }
-    private var writePostMap: Map<String, *>? = null
 
     private lateinit var myAnswerList : MyAnswerModel
 
@@ -352,7 +351,6 @@ class MainFragment2 : Fragment() {
                     )
                 }
                 calendarViewModel.dateList.add(main2CalendarData)
-                main2CalendarData = null
             }
         }
 

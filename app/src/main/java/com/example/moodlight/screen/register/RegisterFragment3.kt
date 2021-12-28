@@ -86,7 +86,7 @@ class RegisterFragment3 : Fragment() {
 
             } else {
                 AppUtil.setFailureAlarm(binding.register3Iv1,
-                    binding.register3Tv2, "닉네임을 입력해주세요.")
+                    binding.register3Tv2, "세글자 이상의 닉네임을 입력해주세요.")
                 if (!binding.register3Btn1.isEnabled) {
                     binding.register3Btn1.isEnabled = true
                 }

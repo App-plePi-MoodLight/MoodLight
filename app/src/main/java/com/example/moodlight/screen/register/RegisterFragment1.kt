@@ -65,11 +65,6 @@ class RegisterFragment1 : Fragment() {
                                             binding.register1Btn1.isEnabled = true
                                         }
                                     }
-                                } else {
-                                    Toast.makeText(requireContext(),
-                                        response.message() + "\n" + "ERRORCODE: " + response.code()
-                                            .toString(),
-                                        Toast.LENGTH_SHORT).show()
                                 }
                             }
 

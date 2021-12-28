@@ -79,7 +79,6 @@ class SplashActivity : AppCompatActivity() {
                 val loginModel: LoginBodyModel = LoginBodyModel(id!!, password!!, token)
                 ServerClient.getApiService().login(loginModel)
                     .enqueue(object : Callback<LoginModel> {
-
                         override fun onResponse(
                             call: Call<LoginModel>,
                             response: Response<LoginModel>

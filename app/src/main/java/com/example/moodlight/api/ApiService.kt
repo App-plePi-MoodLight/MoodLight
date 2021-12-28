@@ -80,7 +80,7 @@ interface ApiService {
     fun deleteUser() : Call<DeleteUserModel>
 
     @PUT("user/")
-    fun updateNickName(@Body userUpdateModel: UserUpdateModel) : Call<SuccussChangePasswordModel>
+    fun updateUser(@Body userUpdateModel: UserUpdateModel) : Call<SuccussChangePasswordModel>
 
     @GET("user/exist")
     fun distinctNickName(@Query("nickname") nickname: String) : Call<UserExistModel>

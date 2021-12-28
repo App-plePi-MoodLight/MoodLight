@@ -21,14 +21,13 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.moodlight.R
 import com.example.moodlight.api.ServerClient
 import com.example.moodlight.database.UserData
-import com.example.moodlight.database.UserDatabase
 import com.example.moodlight.databinding.FragmentMain3Binding
+import com.example.moodlight.model.setting.SuccussChangePasswordModel
 import com.example.moodlight.model.setting.UserModel
-import com.example.moodlight.screen.initial.InitialActivity
+import com.example.moodlight.model.setting.UserUpdateModel
 import com.example.moodlight.screen.MainActivity
 import com.example.moodlight.screen.main3.qna.HelpAcitvity
 import com.example.moodlight.screen.main3.setting.SettingActivity
-import com.example.moodlight.util.FirebaseUtil
 import com.example.moodlight.util.GetTime
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -36,7 +35,6 @@ import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Response
 import java.text.SimpleDateFormat
-import java.util.*
 
 class MainFragment3 : Fragment() {
     private var activity : MainActivity? = MainActivity()
@@ -46,6 +44,7 @@ class MainFragment3 : Fragment() {
     private lateinit var userId : String
     private lateinit var userEmail : String
     private lateinit var user : UserData
+    private lateinit var userNickName : String
     private val viewModel: Main3ViewModel by lazy {
         ViewModelProvider(this).get(Main3ViewModel::class.java)
     }
@@ -78,29 +77,31 @@ class MainFragment3 : Fragment() {
             Main3Helper.setAnimation(binding)
         else
             Main3Helper.setVisible(binding)
-        loadProFileImage()
         binding.main3CommentSwitch.setOnCheckedChangeListener { buttonView, isChecked ->
-
-            Main3Helper.setCommentAlarm(isChecked, requireContext())
+            val updateModel = UserUpdateModel(userNickName, userId, isChecked, viewModel.likeIsChecked.value!!)
+            Main3Helper.setAlarm(viewModel, updateModel, requireActivity(), 0)
             viewModel.commentIsChecked.value = isChecked
         }
 
         binding.main3LikeSwitch.setOnCheckedChangeListener { buttonView, isChecked ->
-
-            Main3Helper.setLikeAlarm(isChecked, requireContext())
+            val updateModel = UserUpdateModel(userNickName, userId, viewModel.commentIsChecked.value!!, isChecked)
+            Main3Helper.setAlarm(viewModel, updateModel, requireActivity(), 1)
             viewModel.likeIsChecked.value = isChecked
         }
 
         binding.main3Btn1.setOnClickListener {
             startActivityForResult(Intent(requireActivity(), SettingActivity::class.java)
                 .putExtra("userId", userId)
-                .putExtra("userEmail", userEmail), 100)
+                .putExtra("userEmail", userEmail)
+                .putExtra("isPushCommentAlarm", viewModel.likeIsChecked.value)
+                .putExtra("isPushLikeAlarm", viewModel.likeIsChecked.value), 100)
         }
 
         binding.main3Btn2.setOnClickListener {
             startActivityForResult(Intent(requireActivity(), SettingActivity::class.java)
                 .putExtra("userId", userId)
-                .putExtra("userEmail", userEmail), 100)
+                .putExtra("userEmail", userEmail)
+                .putExtra("isPushAlarm", viewModel.likeIsChecked.value), 100)
         }
 
         binding.helpBtn1.setOnClickListener {
@@ -136,31 +137,11 @@ class MainFragment3 : Fragment() {
             setUi()
         }
     }
-    private fun loadProFileImage() {
-//        val storageRef = FirebaseStorage.getInstance().getReference().child("image/${FirebaseUtil.getAuth().currentUser!!.uid}.jpg")
-//        val localfile = File.createTempFile("tempImage", "jpg")
-//        storageRef.getFile(localfile).addOnSuccessListener {
-//            bitmap = BitmapFactory.decodeFile(localfile.absolutePath)
-//            binding.main3ProfileIv.setImageBitmap(bitmap)
-//        }.addOnFailureListener{
-//            binding.main3ProfileIv.setImageResource(R.drawable.basic_profile)
-//        }
-//        binding.main3ProfileIv.setBackground(ShapeDrawable(OvalShape()));
-//        binding.main3ProfileIv.setClipToOutline(true);
-    }
 
 
     @SuppressLint("SetTextI18n")
     private fun setUi() {
-        val db = UserDatabase.getInstance(requireContext())
         CoroutineScope(Dispatchers.IO).launch {
-
-            user = UserDatabase.getInstance(requireContext())!!.userDao().getUserFromUserLoginTable()[0]
-            requireActivity().runOnUiThread {
-                binding.main3CommentSwitch.isChecked = user.commentAlarm
-                binding.main3LikeSwitch.isChecked = user.likeAlarm
-            }
-
             ServerClient.getApiService().getUserInfo()
                 .enqueue(object : retrofit2.Callback<UserModel>{
                     override fun onResponse(call: Call<UserModel>, response: Response<UserModel>) {
@@ -174,10 +155,13 @@ class MainFragment3 : Fragment() {
                             var minus = GetTime.getTime(date.time)
                             userId = it.id
                             userEmail = it.email
+                            userNickName = it.nickname
                             viewModel.username.value = it!!.nickname
                             viewModel.email.value = it.email
                             viewModel.main3Tv1Text.value = "무드등을 시작한지 ${minus}지났어요."
                             viewModel.subscription.value = GetTime.modifyJoinTime(date.time)
+                            viewModel.likeIsChecked.value = it.usePushMessageOnLike
+                            viewModel.commentIsChecked.value = it.usePushMessageOnComment
                         }
                     }
 
@@ -187,21 +171,6 @@ class MainFragment3 : Fragment() {
 
                 })
         }
-//        CoroutineScope(Dispatchers.IO).launch {
-//            FirebaseUtil.getFireStoreInstance().collection("users")
-//                .document(FirebaseUtil.getUid())
-//                .get()
-//                .addOnCompleteListener {
-//                    val millisTime = it.result!!.get("joinTime") as Long
-//                    val time = GetTime.getTime(millisTime)
-//                    viewModel.username.value = it.result!!.get("nickname") as String
-//                    viewModel.email.value = FirebaseUtil.getAuth().currentUser!!.email
-//                    viewModel.main3Tv1Text.value = "무드등을 시작한지 $time 지났어요!"
-//                    viewModel.subscription.value = GetTime.modifyJoinTime(millisTime).toString()
-//                    viewModel.commentIsChecked.value = it.result!!.get("commentAlarm") as Boolean
-//                    viewModel.likeIsChecked.value = it.result!!.get("likeAlarm") as Boolean
-//                }
-//        }
     }
 
     private fun setAnimation(): Unit {
@@ -265,7 +234,6 @@ class MainFragment3 : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        loadProFileImage()
     }
 
     override fun onAttach(context: Context) {

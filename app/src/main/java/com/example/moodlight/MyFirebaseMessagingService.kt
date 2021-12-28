@@ -22,8 +22,4 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         super.onMessageReceived(p0)
         Log.d(TAG, "onMessageReceived: messgaerk dhlktdam dkan message")
     }
-
-    fun getToken(context : Context) : String{
-        return UserDatabase.getInstance(context)!!.userNotificationDao().getAllNotificationData().token
-    }
 }

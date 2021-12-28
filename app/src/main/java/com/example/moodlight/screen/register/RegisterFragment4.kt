@@ -15,6 +15,7 @@ import com.example.moodlight.R
 import com.example.moodlight.api.ServerClient
 import com.example.moodlight.database.UserData
 import com.example.moodlight.databinding.FragmentRegister4Binding
+import com.example.moodlight.dialog.LoadingDialog
 import com.example.moodlight.model.LoginBodyModel
 import com.example.moodlight.model.LoginModel
 import com.example.moodlight.model.RegisterConfirmModel
@@ -37,6 +38,9 @@ class RegisterFragment4 : Fragment() {
         InitialActivity.initialActivity as InitialActivity
 
     private lateinit var binding : FragmentRegister4Binding
+    private val loadingDialog : LoadingDialog by lazy {
+        LoadingDialog(requireContext())
+    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -52,6 +56,7 @@ class RegisterFragment4 : Fragment() {
         "입력하신 이메일로 인증번호를 발송하였습니다.")
 
         binding.register4Btn1.setOnClickListener {
+            loadingDialog.show()
             if (binding.register4Etv1.text != null && binding.register4Etv1.text.toString() != "") {
                 val email = viewModel.email.value!!
                 val confirmCode = binding.register4Etv1.text.toString()
@@ -71,6 +76,7 @@ class RegisterFragment4 : Fragment() {
                             } else {
                                 AppUtil.setFailureAlarm(binding.register4Iv1, binding.register4Tv2,
                                     "인증번호가 일치하지 않습니다.")
+                                loadingDialog.dismiss()
                             }
                         }
 
@@ -105,6 +111,7 @@ class RegisterFragment4 : Fragment() {
                         response: Response<LoginModel>
                     ) {
                         if (response.isSuccessful) {
+                            loadingDialog.dismiss()
                             // Sign in success, update UI with the signed-in user's information
                                 ServerClient.accessToken = response.body()!!.accessToken
                             Log.d("Login", "signInWithEmail:success")
@@ -114,11 +121,13 @@ class RegisterFragment4 : Fragment() {
                             requireActivity().finish()
 
                         } else {
+                            loadingDialog.dismiss()
                             Log.d(ContentValues.TAG, "onResponse: respone : ${response}")
                         }
                     }
 
                     override fun onFailure(call: Call<LoginModel>, t: Throwable) {
+                        loadingDialog.dismiss()
                         t.printStackTrace()
                     }
                 })

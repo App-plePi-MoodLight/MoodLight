@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import com.example.moodlight.R
 import com.example.moodlight.api.ServerClient
@@ -32,14 +33,26 @@ import retrofit2.Response
 
 
 @Suppress("DEPRECATION")
-class MainActivity : AppCompatActivity(), CommonDialogInterface, LogoutDialogInterface {
+class MainActivity : AppCompatActivity(), CommonDialogInterface, LogoutDialogInterface, ExitDialogInterface {
     private val mainFragment2 by lazy { MainFragment2() }
     private val mainFragment3 by lazy { MainFragment3() }
     private val mainStatisticsFragment by lazy { MainStatisticsFragment() }
     private val networkStatus: Int by lazy { NetworkStatus.getConnectivityStatus(applicationContext) }
+    private val exitDialog : ExitDialog by lazy {
+        ExitDialog(this, this, "앱 종료", "무드등을 정말로 종료하시겠습니까?", "종료", "취소")
+    }
+    private val resignDialog: CommonDialog by lazy {
+        CommonDialog(
+            this, this, "회원탈퇴", "정말로 탈퇴를 하시겠습니까?\n탈퇴 이후의 정보는 되돌릴 수 없습니다.", "탈퇴하기", "취소"
+        )
+    }
+    private val logoutDialog: LogoutDialog by lazy {
+        LogoutDialog(this, this, "로그아웃", "로그아웃을 하시겠습니까?", "로그아웃", "취소")
+    }
 
-    private lateinit var dialog: CommonDialog
-    private lateinit var logoutDialog: LogoutDialog
+    private val loadingDialog : LoadingDialog by lazy {
+        LoadingDialog(this)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,27 +60,6 @@ class MainActivity : AppCompatActivity(), CommonDialogInterface, LogoutDialogInt
         changeFragment(mainStatisticsFragment)
         findViewById<BottomNavigationView>(com.example.moodlight.R.id.bottomNavigation).selectedItemId =
             R.id.nullItem
-
-        dialog = CommonDialog(
-            this, this, "회원탈퇴", "정말로 탈퇴를 하시겠습니까?\n탈퇴 이후의 정보는 되돌릴 수 없습니다.", "탈퇴하기", "취소"
-        )
-        logoutDialog = LogoutDialog(this, this, "로그아웃", "로그아웃을 하시겠습니까?", "로그아웃", "취소")
-
-
-        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
-            if (!task.isSuccessful) {
-                Log.w(TAG, "Fetching FCM registration token failed", task.exception)
-                return@OnCompleteListener
-            }
-
-            // Get new FCM registration token
-            val token = task.result
-
-            // Log and toast
-            val msg = token!!
-            Log.d(TAG, msg)
-            Toast.makeText(applicationContext, msg, Toast.LENGTH_SHORT).show()
-        })
 
 
         findViewById<BottomNavigationView>(com.example.moodlight.R.id.bottomNavigation).setOnItemSelectedListener { item ->
@@ -112,10 +104,12 @@ class MainActivity : AppCompatActivity(), CommonDialogInterface, LogoutDialogInt
         }
 
         private fun dialogShow() {
-            dialog.show()
+            resignDialog.show()
         }
 
         override fun onCheckBtnClick() {
+            loadingDialog.show()
+            resignDialog.dismiss()
             CoroutineScope(Dispatchers.IO).launch {
                 ServerClient.getApiService().deleteUser().enqueue(object : Callback<DeleteUserModel> {
                     override fun onResponse(
@@ -126,14 +120,15 @@ class MainActivity : AppCompatActivity(), CommonDialogInterface, LogoutDialogInt
                         if(response.code() == 200){
                             if(!result!!.success){
                                 Toast.makeText(this@MainActivity, "회원탈퇴에 실패하였습니다.", Toast.LENGTH_SHORT).show()
+                                loadingDialog.dismiss()
                             }
                             else{
                                 CoroutineScope(Dispatchers.IO).launch{
                                     UserDatabase.getInstance(this@MainActivity)!!.userDao().deleteUserLoginTable()
                                 }
-                                Toast.makeText(this@MainActivity, result.message, Toast.LENGTH_SHORT).show()
+                                loadingDialog.dismiss()
+                                Toast.makeText(this@MainActivity, "회원탈퇴가 완료되었습니다.", Toast.LENGTH_SHORT).show()
                                 startActivity(Intent(this@MainActivity, InitialActivity::class.java))
-                                dialog.dismiss()
                                 finish()
                             }
                         }
@@ -148,7 +143,7 @@ class MainActivity : AppCompatActivity(), CommonDialogInterface, LogoutDialogInt
         }
 
     override fun onCancleBtnClick() {
-        dialog.cancel()
+        resignDialog.cancel()
     }
 
     override fun onClickLogout() {
@@ -162,5 +157,18 @@ class MainActivity : AppCompatActivity(), CommonDialogInterface, LogoutDialogInt
 
     override fun onCancelLogout() {
         logoutDialog.dismiss()
+    }
+
+    override fun onBackPressed() {
+        exitDialog.show()
+
+    }
+
+    override fun onCheckExitBtnClick() {
+        ActivityCompat.finishAffinity(this)
+    }
+
+    override fun onCancleExitBtnClick() {
+        exitDialog.dismiss()
     }
 }

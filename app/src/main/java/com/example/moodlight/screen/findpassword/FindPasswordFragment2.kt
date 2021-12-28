@@ -93,7 +93,7 @@ class FindPasswordFragment2 : Fragment() {
                         if (response.isSuccessful) {
                             CoroutineScope(Dispatchers.IO).launch {
                                 val user = UserDatabase.getInstance(requireContext())!!.userDao().getUserFromUserLoginTable()
-                                UserDatabase.getInstance(requireContext())!!.userDao().updateLoginTable(UserData(user[0].loginID ,user[0].id, viewModel.rePassword.value.toString(), user[0].likeAlarm, user[0].commentAlarm))
+                                UserDatabase.getInstance(requireContext())!!.userDao().updateLoginTable(UserData(user[0].loginID ,user[0].id, viewModel.rePassword.value.toString()))
                                 val user1 = UserDatabase.getInstance(requireContext())!!.userDao().getPassword()
                                 Log.d(TAG, "onResponse: $user1")
                             }
